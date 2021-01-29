@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/welease/projects/ft_containers/ft_list.h
+iostream
+-
+memory
+-
+
+/Users/welease/projects/ft_containers/main.cpp
+list
+-
+iostream
+-
+ft_list.h
+/Users/welease/projects/ft_containers/ft_list.h
+
