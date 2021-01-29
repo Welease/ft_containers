@@ -16,5 +16,9 @@ int main(){
 	//for (std::list<int>::iterator i = list1.begin(); i != list1.end(); ++i){
 	//	std::cout << *i << std::endl;
 	//}
+	std::list<int> f(3, 34);
+	std::cout << f.back() << std::endl;
 
+	ft::list<int> d(3, 34);
+	std::cout << d.back() << std::endl;
 }

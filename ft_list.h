@@ -96,16 +96,13 @@ namespace ft
 
 		size_type size() const { _size;};
 
-		size_type max_size() const {std::numeric_limits<value_type>::max() / sizeof(value_type);};
-		if (sizeof(value_type) == 1)
-		(size_t)(-1) / 2;
-		else
-		(size_t)(-1) / sizeof(value_type);
-		reference front();
+		size_type max_size() const {std::numeric_limits<value_type>::max() / sizeof(value_type) / (sizeof(value_type) == 1 ? 2 : 1);};
+		
+		reference front(){return *(this->begin());}; //todo maybe is not correct
 
-		const_reference front() const;
+		const_reference front() const {return *(this->begin());}; //todo maybe too
 
-		reference back();
+		reference back(){return ;};
 
 		const_reference back() const;
 
@@ -349,6 +346,7 @@ namespace ft
 			_ptr_alloc.deallocate(node);
 		}
 
+		value_type getContent(t_node *node){return node->content;}
 	};
 
 }
