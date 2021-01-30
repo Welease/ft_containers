@@ -176,4 +176,153 @@ int main(){
 	//for (ft::list<int>::iterator i = t1.begin(); i != t1.end(); ++i){
 	//	std::cout << *i << std::endl;
 	//}
+
+
+	//std::list<int> mylist;
+	//std::list<int>::iterator it1,it2;
+//
+	//for (int i=1; i<10; ++i) mylist.push_back(i*10);
+//
+	//it1 = it2 = mylist.begin(); // ^^
+	//advance(it2,6);            // ^                 ^
+	//++it1;                      //    ^              ^
+//
+	//it1 = mylist.erase (it1);   // 10 30 40 50 60 70 80 90
+	//it2 = mylist.erase (it2);   // 10 30 40 50 60 80 90
+	//std::cout << *it1 << std::endl;
+	//++it1;                      //       ^        ^
+	//--it2;                      //       ^     ^
+	//mylist.erase (it1,it2);     // 10 30 60 80 90
+	//std::cout << *(mylist.erase(mylist.begin(), mylist.begin())) << std::endl;
+	//std::cout << "mylist contains:";
+	//for (it1=mylist.begin(); it1!=mylist.end(); ++it1)
+	//	std::cout << ' ' << *it1;
+	//std::cout << '\n';
+//
+//
+	//ft::list<int> mylist1;
+	//ft::list<int>::iterator it11,it21;
+//
+	//for (int i=1; i<10; ++i) mylist1.push_back(i*10);
+//
+	//it11 = it21 = mylist1.begin(); // ^^
+	//advance(it21,6);            // ^                 ^
+	//++it11;                      //    ^              ^
+//
+	//it11 = mylist1.erase (it11);   // 10 30 40 50 60 70 80 90
+	//it21 = mylist1.erase (it21);   // 10 30 40 50 60 80 90
+	//std::cout <<  *it11 << std::endl;
+ 	//++it11;                      //       ^        ^
+	//--it21;                      //       ^     ^
+	//mylist1.erase (it11,it21);     // 10 30 60 80 90
+	//std::cout << *(mylist1.erase(mylist1.begin(), mylist1.begin())) << std::endl;
+	//std::cout << "mylist contains:";
+	//for (it11=mylist1.begin(); it11!=mylist1.end(); ++it11)
+	//	std::cout << ' ' << *it11;
+	//std::cout << '\n';
+
+
+	//std::list<int> first (3,100);   // three ints with a value of 100
+	//std::list<int> second (5,200);  // five ints with a value of 200
+//
+	//first.swap(second);
+//
+	//std::cout << "first contains:";
+	//for (std::list<int>::iterator it=first.begin(); it!=first.end(); it++)
+	//	std::cout << ' ' << *it;
+	//std::cout << '\n';
+//
+	//std::cout << "second contains:";
+	//for (std::list<int>::iterator it=second.begin(); it!=second.end(); it++)
+	//	std::cout << ' ' << *it;
+	//std::cout << "\n\n\n";
+//
+//
+	//ft::list<int> first1 (3,100);   // three ints with a value of 100
+	//ft::list<int> second1(5,200);  // five ints with a value of 200
+	//first1.swap(second1);
+//
+	//std::cout << "first1 contains:";
+	//for (ft::list<int>::iterator it=first1.begin(); it!=first1.end(); it++)
+	//	std::cout << ' ' << *it;
+	//std::cout << '\n';
+//
+	//std::cout << "second1 contains:";
+	//for (ft::list<int>::iterator it=second1.begin(); it!=second1.end(); it++)
+	//	std::cout << ' ' << *it;
+	//std::cout << '\n';
+
+	//std::list<int> mylist;
+//
+	//// set some initial content:
+	//for (int i=1; i<10; ++i) mylist.push_back(i);
+//
+	//mylist.resize(5);
+	//mylist.resize(8,100);
+	//mylist.resize(12);
+//
+	//std::cout << "mylist contains:";
+	//for (std::list<int>::iterator it=mylist.begin(); it!=mylist.end(); ++it)
+	//	std::cout << ' ' << *it;
+//
+	//std::cout << "\n\n\n";
+//
+//
+	//ft::list<int> mylist11;
+//
+	//// set some initial content:
+	//for (int i=1; i<10; ++i) mylist11.push_back(i);
+//
+	//mylist11.resize(5);
+	//mylist11.resize(8,100);
+	//mylist11.resize(12);
+//
+	//std::cout << "mylist contains:";
+	//for (ft::list<int>::iterator it=mylist11.begin(); it!=mylist11.end(); ++it)
+	//	std::cout << ' ' << *it;
+//
+	//std::cout << '\n';
+
+
+	std::list<int> mylist;
+	std::list<int>::iterator it;
+
+	mylist.push_back (100);
+	mylist.push_back (200);
+	mylist.push_back (300);
+
+	std::cout << "mylist contains:";
+	for (it=mylist.begin(); it!=mylist.end(); ++it)
+		std::cout << ' ' << *it;
+	std::cout << '\n';
+
+	mylist.clear();
+	mylist.push_back (1101);
+	mylist.push_back (2202);
+
+	std::cout << "mylist contains:";
+	for (it=mylist.begin(); it!=mylist.end(); ++it)
+		std::cout << ' ' << *it;
+	std::cout << '\n';
+
+	std::list<int> mylist34;
+	std::list<int>::iterator it34;
+
+	mylist34.push_back (100);
+	mylist34.push_back (200);
+	mylist34.push_back (300);
+
+	std::cout << "mylist contains:";
+	for (it=mylist34.begin(); it!=mylist34.end(); ++it)
+		std::cout << ' ' << *it;
+	std::cout << '\n';
+
+	mylist34.clear();
+	mylist34.push_back (1101);
+	mylist34.push_back (2202);
+
+	std::cout << "mylist contains:";
+	for (it=mylist34.begin(); it!=mylist34.end(); ++it)
+		std::cout << ' ' << *it;
+	std::cout << '\n';
 }

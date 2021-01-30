@@ -51,27 +51,32 @@ namespace ft
 		list(InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type(),
 			 typename ft::enable_if<std::__is_input_iterator<InputIterator>::value>::type* = 0){
 			createAbstractNode();
-			InputIterator i = first;
-			while (i != last){
-				push_back(i.getNode());
-				i++;
+			while (first != last){
+				push_back(*first);
+				++first;
 			}
 		};
 
-		list(const list &x){
+		list(const list &x) : _size(0){
+			createAbstractNode();
 			*this = x;
 		};
 
 		~list(){
-		//	for (iterator = *this->begin(); )//todo destruct
+			clearList();
+			_alloc.deallocate(_abstractNode->content, 1);
+			_ptr_alloc.deallocate(_abstractNode, 1);
 		};
 
 		list &operator=(const list &x){
-			if (*this != x){
-				for (iterator i = *this->begin(); i != *this->end(); i++){
-					deleteNode(i._node);
+			if (this != &x){
+				clearList();
+				_size = x._size;
+				size_type s = x._size;
+				t_node *tmp = x._abstractNode->next;
+				for (; s > 0; s--){
+					push_back(*tmp->content);
 				}
-				*this = list(x.begin(), x.end());
 			}
 			return *this;
 		}
@@ -110,12 +115,17 @@ namespace ft
 		void assign(InputIterator first, InputIterator last,
 			  typename ft::enable_if<std::__is_input_iterator<InputIterator>::value>::type* = 0){
 			clearList();
-			*this = list(first, last);
+			while (first != last){
+				push_back(*first);
+				++first;
+			}
 		};
 
 		void assign(size_type n, const value_type &val){
 			clearList();
-			*this = list(n, val);
+			while (n--){
+				push_back(val);
+			}
 		};
 
 		void push_front(const value_type &val){
@@ -138,7 +148,7 @@ namespace ft
 
 		void push_back (const value_type& val){
 			t_node *tmp = _abstractNode->prev;
-			t_node *newNode = addNode(_abstractNode, tmp);
+			t_node *newNode = addNode();
 			_abstractNode->prev = newNode;
 			tmp->next = newNode;
 			fillContent(newNode, val, _abstractNode, tmp);
@@ -150,6 +160,7 @@ namespace ft
 			tmp->prev->next = _abstractNode;
 			_abstractNode->prev = tmp->prev;
 			deleteNode(tmp);
+			_size--;
 		};
 
 		iterator insert(iterator position, const value_type &val){
@@ -201,15 +212,43 @@ namespace ft
 			prevNode->next = nextNode;
 			nextNode->prev = prevNode;
 			deleteNode(tmp.getNode());
+			return iterator(nextNode);
 		};
 
-		iterator erase(iterator first, iterator last);
+		iterator erase(iterator first, iterator last){
+			iterator tmp = first;
+			iterator i;
+			if (tmp == last)
+				return (iterator(tmp));
+			while (tmp != last){
+				i = erase(tmp);
+				tmp++;
+			}
+			return i;
+		};
 
-		void swap(list &x);
+		void swap(list &x){
+			t_node *tmp = x._abstractNode;
+			x._abstractNode = this->_abstractNode;
+			this->_abstractNode = tmp;
+		};
 
-		void resize(size_type n, value_type val = value_type());
+		void resize(size_type n, value_type val = value_type()){
+			if (n > _size){
+				while (_size != n){
+					push_back(val);
+				}
+			}
+			else {
+				while (_size != n){
+					pop_back();
+				}
+			}
+		};
 
-		void clear();
+		void clear(){
+			clearList();
+		};
 
 		void splice(iterator position, list &x);
 
@@ -277,7 +316,6 @@ namespace ft
 
 			virtual iterator &operator--(){ //pref
 				_node = _node->prev;
-				//std::cout << *_node->content << std::endl;
 				return *this;
 			}
 
@@ -302,15 +340,13 @@ namespace ft
 			const_iterator(){ _node = nullptr; }
 
 			const_iterator &operator=(iterator const &iterator1){
-				if (this != &iterator1){
-					_node = iterator1._element;
-				}
+				_node = iterator1.getNode();
 				return *this;
 			}
 
 			const_iterator &operator=(const_iterator const &iterator1){
 				if (this != &iterator1){
-					_node = iterator1._element;
+					_node = iterator1._node;
 				}
 				return *this;
 			}
@@ -333,7 +369,7 @@ namespace ft
 				return *this;
 			}
 			virtual const_iterator operator++(int){ //post
-				iterator tmp(*this);
+				iterator tmp(this->_node);
 				_node = _node->next;
 				return tmp;
 			}
@@ -342,7 +378,7 @@ namespace ft
 				return *this;
 			}
 			virtual const_iterator operator--(int){ //post
-				iterator tmp(*this);
+				iterator tmp(this->_node);
 				_node = _node->prev;
 				return tmp;
 			}
@@ -431,11 +467,13 @@ namespace ft
 		value_type getContent(t_node *node){return node->content;}
 
 		void clearList(){
-			for (iterator i = *this->begin(); i != *this->end(); i++){
-				deleteNode(i._node);
+			t_node *tmp = _abstractNode->next;
+			t_node *t;
+			for (; _size > 0; --_size){
+				t = tmp->next;
+				deleteNode(tmp);
+				tmp = t;
 			}
-			_alloc.deallocate(_abstractNode->content);
-			_ptr_alloc.deallocate(_abstractNode);
 		}
 
 		void createAbstractNode(){
