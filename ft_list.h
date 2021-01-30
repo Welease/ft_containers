@@ -36,42 +36,42 @@ namespace ft
 		typedef typename allocator_type::const_pointer const_pointer;
 
 		explicit list(const allocator_type &alloc = allocator_type()) : _alloc(alloc), _size(0){
-			_abstractNode = addNode(_abstractNode, _abstractNode);
-			_abstractNode->content = nullptr;
+			createAbstractNode();
 		};
 
 		explicit list(size_type n, const value_type &val = value_type(), const allocator_type &alloc = allocator_type()){
-			//*this = list(alloc);
-			_abstractNode = addNode(_abstractNode, _abstractNode);
-			_abstractNode->content = nullptr;
-			_size = n;
+			createAbstractNode();
 			_alloc = alloc;
-			t_node *tmp = _abstractNode;
 			for (size_t i = 0; i < n; ++i){
-				tmp->next = addNode(_abstractNode, tmp);
-				fillContent(tmp->next, val);
-				tmp = tmp->next;
+				this->push_front(val);
 			}
 		};
+
 		template<class InputIterator>
 		list(InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type(),
 			 typename ft::enable_if<std::__is_input_iterator<InputIterator>::value>::type* = 0){
-
+			createAbstractNode();
+			InputIterator i = first;
+			while (i != last){
+				push_back(i.getNode());
+				i++;
+			}
 		};
 
-		list(const list &x);
+		list(const list &x){
+			*this = x;
+		};
 
 		~list(){
-		//	for (iterator = *this->begin(); )
+		//	for (iterator = *this->begin(); )//todo destruct
 		};
 
 		list &operator=(const list &x){
 			if (*this != x){
-				iterator i = this->begin();
-				while (i != this->end()){
+				for (iterator i = *this->begin(); i != *this->end(); i++){
 					deleteNode(i._node);
-					i++;
 				}
+				*this = list(x.begin(), x.end());
 			}
 			return *this;
 		}
@@ -92,37 +92,116 @@ namespace ft
 
 		const_reverse_iterator rend() const {return const_reverse_iterator(_abstractNode);}
 
-		bool empty() const { _size != 0;};
+		bool empty() const {return _size == 0;};
 
-		size_type size() const { _size;};
+		size_type size() const { return _size;};
 
 		size_type max_size() const {std::numeric_limits<value_type>::max() / sizeof(value_type) / (sizeof(value_type) == 1 ? 2 : 1);};
 		
-		reference front(){return *(this->begin());}; //todo maybe is not correct
+		reference front(){return *(this->begin());};
 
-		const_reference front() const {return *(this->begin());}; //todo maybe too
+		const_reference front() const {return *(this->begin());};
 
-		reference back(){return ;};
+		reference back(){return *(--(this->end()));};
 
-		const_reference back() const;
-
-		template<class InputIterator>
-		void assign(InputIterator first, InputIterator last);
-
-		void assign(size_type n, const value_type &val);
-
-		void push_front(const value_type &val);
-
-		void pop_front();
-
-		iterator insert(iterator position, const value_type &val);
-
-		void insert(iterator position, size_type n, const value_type &val);
+		const_reference back() const{return *(--(this->end()));};
 
 		template<class InputIterator>
-		void insert(iterator position, InputIterator first, InputIterator last);
+		void assign(InputIterator first, InputIterator last,
+			  typename ft::enable_if<std::__is_input_iterator<InputIterator>::value>::type* = 0){
+			clearList();
+			*this = list(first, last);
+		};
 
-		iterator erase(iterator position);
+		void assign(size_type n, const value_type &val){
+			clearList();
+			*this = list(n, val);
+		};
+
+		void push_front(const value_type &val){
+			t_node *tmp = _abstractNode->next;
+			t_node *newNode = addNode();
+			_abstractNode->next = newNode;
+			tmp->prev = newNode;
+			fillContent(newNode, val, tmp, _abstractNode);
+			_size++;
+		};
+
+		void pop_front(){
+			t_node *oldBegin = this->begin().getNode();
+			t_node *newBegin = oldBegin->next;
+			_abstractNode->next = newBegin;
+			newBegin->prev = _abstractNode;
+			deleteNode(oldBegin);
+			_size--;
+		};
+
+		void push_back (const value_type& val){
+			t_node *tmp = _abstractNode->prev;
+			t_node *newNode = addNode(_abstractNode, tmp);
+			_abstractNode->prev = newNode;
+			tmp->next = newNode;
+			fillContent(newNode, val, _abstractNode, tmp);
+			this->_size++;
+		};
+
+		void pop_back(){
+			t_node *tmp = _abstractNode->prev;
+			tmp->prev->next = _abstractNode;
+			_abstractNode->prev = tmp->prev;
+			deleteNode(tmp);
+		};
+
+		iterator insert(iterator position, const value_type &val){
+			iterator tmp = this->begin();
+			while (tmp != position && tmp != this->end()){
+				tmp++;
+			}
+			if (tmp == this->end()){
+				*position = val;
+				return position;
+			}
+			t_node *newNode = addNode();
+			t_node *nextNode = tmp.getNode();
+			t_node *prevNode = nextNode->prev;
+			nextNode->prev = newNode;
+			prevNode->next = newNode;
+			fillContent(newNode, val, nextNode, prevNode);
+			_size++;
+			return iterator(newNode);
+		};
+
+		void insert(iterator position, size_type n, const value_type &val){
+			while (n--){
+				insert(position, val);
+			}
+		};
+
+		template<class InputIterator>
+		void insert(iterator position, InputIterator first, InputIterator last,
+					typename ft::enable_if<std::__is_input_iterator<InputIterator>::value>::type* = 0){
+			InputIterator i = first;
+			iterator tmp = position;
+			while (i != last){
+				tmp = insert(tmp, *i);
+				i++;
+			}
+		};
+
+		iterator erase(iterator position){
+			iterator tmp = this->begin();
+			while (tmp != position && tmp != this->end()){
+				tmp++;
+			}
+			if (tmp == this->end()){
+				return position;
+			}
+			t_node *prevNode = tmp.getNode()->prev;
+			t_node *nextNode = prevNode->next->next;
+			prevNode->next = nextNode;
+			nextNode->prev = prevNode;
+			deleteNode(tmp.getNode());
+		};
 
 		iterator erase(iterator first, iterator last);
 
@@ -198,6 +277,7 @@ namespace ft
 
 			virtual iterator &operator--(){ //pref
 				_node = _node->prev;
+				//std::cout << *_node->content << std::endl;
 				return *this;
 			}
 
@@ -222,16 +302,14 @@ namespace ft
 			const_iterator(){ _node = nullptr; }
 
 			const_iterator &operator=(iterator const &iterator1){
-				if (this != &iterator1)
-				{
+				if (this != &iterator1){
 					_node = iterator1._element;
 				}
 				return *this;
 			}
 
 			const_iterator &operator=(const_iterator const &iterator1){
-				if (this != &iterator1)
-				{
+				if (this != &iterator1){
 					_node = iterator1._element;
 				}
 				return *this;
@@ -328,25 +406,44 @@ namespace ft
 		allocator_type _alloc;        // Распределитель для значений типа T
 		PtrAllocator _ptr_alloc;  // Распределитель для значений типа T*
 
-		t_node *addNode(t_node *next, t_node *prev){
+		t_node *addNode(){
 			t_node *node = _ptr_alloc.allocate(1);
-			node->next = next;
-			node->prev = prev;
 			node->content = _alloc.allocate(1);
  			return node;
 		}
 
-		void fillContent(t_node *node, value_type const & value){
+		void fillContent(t_node *node, value_type const & value, t_node *next, t_node *prev){
+			node->next = next;
+			node->prev = prev;
 			_alloc.construct(node->content, value);
 		}
 
 		void deleteNode(t_node *node){
-			_alloc.destruct(node->content);
-			_alloc.deallocate(node->content);
-			_ptr_alloc.deallocate(node);
+			_alloc.destroy(node->content);
+			_alloc.deallocate(node->content, 1);
+			_ptr_alloc.deallocate(node, 1);
+		}
+
+		void changeConnection(t_node *nodePrev, t_node *nodeNext){
+			nodeNext->prev = nodePrev;
 		}
 
 		value_type getContent(t_node *node){return node->content;}
+
+		void clearList(){
+			for (iterator i = *this->begin(); i != *this->end(); i++){
+				deleteNode(i._node);
+			}
+			_alloc.deallocate(_abstractNode->content);
+			_ptr_alloc.deallocate(_abstractNode);
+		}
+
+		void createAbstractNode(){
+			_abstractNode = addNode();
+			_abstractNode->content = nullptr;
+			_abstractNode->next = _abstractNode;
+			_abstractNode->prev = _abstractNode;
+		}
 	};
 
 }
