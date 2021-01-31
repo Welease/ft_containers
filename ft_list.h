@@ -164,13 +164,17 @@ namespace ft
 		};
 
 		iterator insert(iterator position, const value_type &val){
-			iterator tmp = this->begin();
-			while (tmp != position && tmp != this->end()){
-				tmp++;
-			}
-			if (tmp == this->end()){
-				*position = val;
-				return position;
+			iterator tmp = position;
+			if (position != end())
+			{
+				iterator tmp = this->begin();
+				while (tmp != position && tmp != this->end()){
+					tmp++;
+				}
+				if (tmp == this->end() && _size != 0){
+					//*position = val; //todo maybe it's really important string
+					return position;
+				}
 			}
 			t_node *newNode = addNode();
 			t_node *nextNode = tmp.getNode();
@@ -212,6 +216,7 @@ namespace ft
 			prevNode->next = nextNode;
 			nextNode->prev = prevNode;
 			deleteNode(tmp.getNode());
+			_size--;
 			return iterator(nextNode);
 		};
 
@@ -223,6 +228,7 @@ namespace ft
 			while (tmp != last){
 				i = erase(tmp);
 				tmp++;
+				_size--;
 			}
 			return i;
 		};
@@ -250,33 +256,122 @@ namespace ft
 			clearList();
 		};
 
-		void splice(iterator position, list &x);
+		void splice(iterator position, list &x){
+			iterator i = x.begin();
+			for (; x._size != 0;){
+				this->insert(position, *i);
+				++i;
+				x.pop_front();
+			}
+		};
 
-		void splice(iterator position, list &x, iterator i);
+		void splice(iterator position, list &x, iterator i){
+			this->insert(position, *i);
+			x.erase(i);
+		};
 
-		void splice(iterator position, list &x, iterator first, iterator last);
+		void splice(iterator position, list &x, iterator first, iterator last){
+			iterator tmp;
+			while (first != last){
+				this->insert(position, *first);
+				tmp = ++first;
+				x.erase(--first);
+				first = tmp;
+			}
+		};
 
-		void remove(const value_type &val);
+		void remove(const value_type &val){
+			for (iterator i = this->begin(); i != this->end();){
+				if  (*i == val){
+					i = erase(i);
+				}
+				else
+					++i;
+			}
+		};
 
 		template<class Predicate>
-		void remove_if(Predicate pred);
+		void remove_if(Predicate pred){
+			for (iterator i = this->begin(); i != this->end();){
+				if (pred(*i))
+					erase(i);
+				else
+					++i;
+			}
+		};
 
-		void unique();
+		void unique(){
+			iterator tmp = begin();
+			for (iterator i = ++begin(); i != end();){
+				if (*i == *(tmp.getNode()->content)){
+					i = erase(i);
+					i++;
+				}
+				else
+					++i;
+			}
+		};
 
 		template<class BinaryPredicate>
-		void unique(BinaryPredicate binary_pred);
+		void unique(BinaryPredicate binary_pred){
+			iterator tmp = begin();
+			for (iterator i = ++begin(); i != end();){
+				if (binary_pred(*i, *(tmp.getNode()->content))){
+					i = erase(i);
+				}
+				else
+					++i;
+			}
+		};
 
-		void merge(list &x);
+		void merge(list &x){
+			merge(x, _ascedingOrder());
+		};
 
 		template<class Compare>
-		void merge(list &x, Compare comp);
+		void merge(list &x, Compare comp){
+			if (this == &x)
+				return;
+			iterator thIt = this->begin();
+			iterator xIt = x.begin();
+			size_type i = x._size;
+			while (i){
+				if (thIt == end()){
+					splice(thIt, x, xIt, x.end());
+					break;
+				}
+				if (comp(*xIt, *thIt)){
+					thIt = insert(thIt, *xIt);
+					x.pop_front();
+					i--;
+					xIt++;
+				}
+				thIt++;
+			}
+		};
 
-		void sort();
+		void sort(){
+			sort(_ascedingOrder());
+		};
 
 		template<class Compare>
-		void sort(Compare comp);
+		void sort(Compare comp){
+			mergeSort(&(_abstractNode->next));
+			connectionsRecovery();
+		};
 
-		void reverse();
+		void reverse(){
+			t_node *tmp1;
+			t_node *tmp = _abstractNode->next;
+			_abstractNode->next = _abstractNode->prev;
+			_abstractNode->prev = tmp;
+			while (tmp != _abstractNode){
+				tmp1 = tmp->next;
+				tmp->next = tmp->prev;
+				tmp->prev = tmp1;
+				tmp = tmp1;
+			}
+		};
 
 		class iterator : public std::iterator<std::bidirectional_iterator_tag, value_type>
 		{
@@ -467,13 +562,9 @@ namespace ft
 		value_type getContent(t_node *node){return node->content;}
 
 		void clearList(){
-			t_node *tmp = _abstractNode->next;
-			t_node *t;
-			for (; _size > 0; --_size){
-				t = tmp->next;
-				deleteNode(tmp);
-				tmp = t;
-			}
+			erase(begin(), end());
+			_abstractNode->next = _abstractNode;
+			_abstractNode->prev = _abstractNode;
 		}
 
 		void createAbstractNode(){
@@ -482,6 +573,75 @@ namespace ft
 			_abstractNode->next = _abstractNode;
 			_abstractNode->prev = _abstractNode;
 		}
+
+		struct _ascedingOrder{
+			bool operator()(value_type const &first, value_type const &second)
+			{ return first < second; }
+		};
+
+		void mergeSort(t_node **begin){
+			t_node *head = *begin;
+			t_node *a;
+			t_node *b;
+
+			if (head == _abstractNode || head->next == _abstractNode)
+				return;
+			nodeSplit(head, &a, &b);
+			mergeSort(&a);
+			mergeSort(&b);
+			*begin = sortedMerge(a, b);
+		}
+
+		t_node *sortedMerge(t_node *a, t_node *b){
+			t_node *res = _abstractNode;
+
+			if (a == _abstractNode)
+				return b;
+			else if (b == _abstractNode)
+				return a;
+
+			if (*(a->content) <= *(b->content)){
+				res = a;
+				res->next = sortedMerge(a->next, b);
+			}
+			else{
+				res = b;
+				res->next = sortedMerge(a, b->next);
+			}
+			return res;
+		}
+
+		void nodeSplit(t_node *src, t_node **front, t_node **back){
+			t_node *fast;
+			t_node *slow;
+			slow = src;
+			fast = src->next;
+
+			while (fast != _abstractNode)
+			{
+				fast = fast->next;
+				if (fast != _abstractNode)
+				{
+					slow = slow->next;
+					fast = fast->next;
+				}
+			}
+				*front = src;
+				*back = slow->next;
+				slow->next = _abstractNode;
+		}
+
+		void connectionsRecovery(){
+			t_node *tmp = _abstractNode->next;
+			t_node *prevNode = _abstractNode;
+
+			while (tmp != _abstractNode){
+				tmp->prev = prevNode;
+				prevNode = tmp;
+				tmp = tmp->next;
+			}
+			_abstractNode->prev = prevNode;
+		};
 	};
 
 }
