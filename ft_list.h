@@ -8,32 +8,27 @@ template<typename value_type> struct ListNode {
 	value_type *content;
 };
 
-namespace ft
-{
+namespace ft {
 	template<bool Cond, class T = void> struct enable_if {};
 	template<class T> struct enable_if<true, T> { typedef T type; };
 
 	template<class T, class Alloc = std::allocator<T> >
-	class list
-	{
+	class list {
+
 	public:
-		typedef T value_type;
-		typedef Alloc allocator_type;
-		typedef size_t size_type;
-		typedef ptrdiff_t difference_type;
 
-		class iterator;
-
-		class const_iterator;
-
-		class reverse_iterator;
-
-		class const_reverse_iterator;
-
-		typedef typename allocator_type::reference reference;
-		typedef typename allocator_type::const_reference const_reference;
-		typedef typename allocator_type::pointer pointer;
-		typedef typename allocator_type::const_pointer const_pointer;
+		typedef T 											value_type;
+		typedef Alloc 										allocator_type;
+		typedef size_t 										size_type;
+		typedef ptrdiff_t 									difference_type;
+		class 												iterator;
+		class 												const_iterator;
+		class 												reverse_iterator;
+		class 												const_reverse_iterator;
+		typedef typename allocator_type::reference 			reference;
+		typedef typename allocator_type::const_reference 	const_reference;
+		typedef typename allocator_type::pointer 			pointer;
+		typedef typename allocator_type::const_pointer 		const_pointer;
 
 		explicit list(const allocator_type &alloc = allocator_type()) : _alloc(alloc), _size(0){
 			createAbstractNode();
@@ -105,11 +100,11 @@ namespace ft
 		
 		reference front(){return *(this->begin());};
 
-		const_reference front() const {return *(this->begin());};
+		const_reference front() const { return *(this->begin()); };
 
 		reference back(){return *(--(this->end()));};
 
-		const_reference back() const{return *(--(this->end()));};
+		const_reference back() const{ return *(--(this->end())); };
 
 		template<class InputIterator>
 		void assign(InputIterator first, InputIterator last,
@@ -123,9 +118,8 @@ namespace ft
 
 		void assign(size_type n, const value_type &val){
 			clearList();
-			while (n--){
+			while (n--)
 				push_back(val);
-			}
 		};
 
 		void push_front(const value_type &val){
@@ -617,8 +611,7 @@ namespace ft
 			slow = src;
 			fast = src->next;
 
-			while (fast != _abstractNode)
-			{
+			while (fast != _abstractNode) {
 				fast = fast->next;
 				if (fast != _abstractNode)
 				{

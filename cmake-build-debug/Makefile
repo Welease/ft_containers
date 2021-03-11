@@ -59,10 +59,10 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /private/var/folders/zz/zyxvpxvq6csfxvn_n003vd8w00yv_7/T/AppTranslocation/A326D85B-1183-42A7-A4FF-03FC09A4FE1A/d/CLion.app/Contents/bin/cmake/mac/bin/cmake
+CMAKE_COMMAND = /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake
 
 # The command to remove a file.
-RM = /private/var/folders/zz/zyxvpxvq6csfxvn_n003vd8w00yv_7/T/AppTranslocation/A326D85B-1183-42A7-A4FF-03FC09A4FE1A/d/CLion.app/Contents/bin/cmake/mac/bin/cmake -E rm -f
+RM = /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E rm -f
 
 # Escaping for special characters.
 EQUALS = =
@@ -79,7 +79,7 @@ CMAKE_BINARY_DIR = /Users/welease/projects/ft_containers/cmake-build-debug
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/private/var/folders/zz/zyxvpxvq6csfxvn_n003vd8w00yv_7/T/AppTranslocation/A326D85B-1183-42A7-A4FF-03FC09A4FE1A/d/CLion.app/Contents/bin/cmake/mac/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -90,7 +90,7 @@ rebuild_cache/fast: rebuild_cache
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	/private/var/folders/zz/zyxvpxvq6csfxvn_n003vd8w00yv_7/T/AppTranslocation/A326D85B-1183-42A7-A4FF-03FC09A4FE1A/d/CLion.app/Contents/bin/cmake/mac/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+	/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -131,44 +131,164 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named ft_containers
+# Target rules for targets named ft_vector
 
 # Build rule for target.
-ft_containers: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ft_containers
-.PHONY : ft_containers
+ft_vector: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ft_vector
+.PHONY : ft_vector
 
 # fast build rule for target.
-ft_containers/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_containers.dir/build.make CMakeFiles/ft_containers.dir/build
-.PHONY : ft_containers/fast
+ft_vector/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_vector.dir/build.make CMakeFiles/ft_vector.dir/build
+.PHONY : ft_vector/fast
 
-main.o: main.cpp.o
+#=============================================================================
+# Target rules for targets named ft_stack
 
-.PHONY : main.o
+# Build rule for target.
+ft_stack: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ft_stack
+.PHONY : ft_stack
+
+# fast build rule for target.
+ft_stack/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_stack.dir/build.make CMakeFiles/ft_stack.dir/build
+.PHONY : ft_stack/fast
+
+#=============================================================================
+# Target rules for targets named ft_queue
+
+# Build rule for target.
+ft_queue: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ft_queue
+.PHONY : ft_queue
+
+# fast build rule for target.
+ft_queue/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_queue.dir/build.make CMakeFiles/ft_queue.dir/build
+.PHONY : ft_queue/fast
+
+#=============================================================================
+# Target rules for targets named ft_list
+
+# Build rule for target.
+ft_list: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ft_list
+.PHONY : ft_list
+
+# fast build rule for target.
+ft_list/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_list.dir/build.make CMakeFiles/ft_list.dir/build
+.PHONY : ft_list/fast
+
+listMain.o: listMain.cpp.o
+
+.PHONY : listMain.o
 
 # target to build an object file
-main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_containers.dir/build.make CMakeFiles/ft_containers.dir/main.cpp.o
-.PHONY : main.cpp.o
+listMain.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_list.dir/build.make CMakeFiles/ft_list.dir/listMain.cpp.o
+.PHONY : listMain.cpp.o
 
-main.i: main.cpp.i
+listMain.i: listMain.cpp.i
 
-.PHONY : main.i
+.PHONY : listMain.i
 
 # target to preprocess a source file
-main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_containers.dir/build.make CMakeFiles/ft_containers.dir/main.cpp.i
-.PHONY : main.cpp.i
+listMain.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_list.dir/build.make CMakeFiles/ft_list.dir/listMain.cpp.i
+.PHONY : listMain.cpp.i
 
-main.s: main.cpp.s
+listMain.s: listMain.cpp.s
 
-.PHONY : main.s
+.PHONY : listMain.s
 
 # target to generate assembly for a file
-main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_containers.dir/build.make CMakeFiles/ft_containers.dir/main.cpp.s
-.PHONY : main.cpp.s
+listMain.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_list.dir/build.make CMakeFiles/ft_list.dir/listMain.cpp.s
+.PHONY : listMain.cpp.s
+
+queueMain.o: queueMain.cpp.o
+
+.PHONY : queueMain.o
+
+# target to build an object file
+queueMain.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_queue.dir/build.make CMakeFiles/ft_queue.dir/queueMain.cpp.o
+.PHONY : queueMain.cpp.o
+
+queueMain.i: queueMain.cpp.i
+
+.PHONY : queueMain.i
+
+# target to preprocess a source file
+queueMain.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_queue.dir/build.make CMakeFiles/ft_queue.dir/queueMain.cpp.i
+.PHONY : queueMain.cpp.i
+
+queueMain.s: queueMain.cpp.s
+
+.PHONY : queueMain.s
+
+# target to generate assembly for a file
+queueMain.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_queue.dir/build.make CMakeFiles/ft_queue.dir/queueMain.cpp.s
+.PHONY : queueMain.cpp.s
+
+stackMain.o: stackMain.cpp.o
+
+.PHONY : stackMain.o
+
+# target to build an object file
+stackMain.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_stack.dir/build.make CMakeFiles/ft_stack.dir/stackMain.cpp.o
+.PHONY : stackMain.cpp.o
+
+stackMain.i: stackMain.cpp.i
+
+.PHONY : stackMain.i
+
+# target to preprocess a source file
+stackMain.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_stack.dir/build.make CMakeFiles/ft_stack.dir/stackMain.cpp.i
+.PHONY : stackMain.cpp.i
+
+stackMain.s: stackMain.cpp.s
+
+.PHONY : stackMain.s
+
+# target to generate assembly for a file
+stackMain.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_stack.dir/build.make CMakeFiles/ft_stack.dir/stackMain.cpp.s
+.PHONY : stackMain.cpp.s
+
+vectorMain.o: vectorMain.cpp.o
+
+.PHONY : vectorMain.o
+
+# target to build an object file
+vectorMain.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_vector.dir/build.make CMakeFiles/ft_vector.dir/vectorMain.cpp.o
+.PHONY : vectorMain.cpp.o
+
+vectorMain.i: vectorMain.cpp.i
+
+.PHONY : vectorMain.i
+
+# target to preprocess a source file
+vectorMain.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_vector.dir/build.make CMakeFiles/ft_vector.dir/vectorMain.cpp.i
+.PHONY : vectorMain.cpp.i
+
+vectorMain.s: vectorMain.cpp.s
+
+.PHONY : vectorMain.s
+
+# target to generate assembly for a file
+vectorMain.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_vector.dir/build.make CMakeFiles/ft_vector.dir/vectorMain.cpp.s
+.PHONY : vectorMain.cpp.s
 
 # Help Target
 help:
@@ -178,10 +298,22 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... ft_containers"
-	@echo "... main.o"
-	@echo "... main.i"
-	@echo "... main.s"
+	@echo "... ft_list"
+	@echo "... ft_queue"
+	@echo "... ft_stack"
+	@echo "... ft_vector"
+	@echo "... listMain.o"
+	@echo "... listMain.i"
+	@echo "... listMain.s"
+	@echo "... queueMain.o"
+	@echo "... queueMain.i"
+	@echo "... queueMain.s"
+	@echo "... stackMain.o"
+	@echo "... stackMain.i"
+	@echo "... stackMain.s"
+	@echo "... vectorMain.o"
+	@echo "... vectorMain.i"
+	@echo "... vectorMain.s"
 .PHONY : help
 
 

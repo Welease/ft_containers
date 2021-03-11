@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/welease/projects/ft_containers/ft_vector.h
+iostream
+-
+memory
+-
+queue
+/Users/welease/projects/ft_containers/queue
+
+/Users/welease/projects/ft_containers/vectorMain.cpp
+vector
+-
+ft_vector.h
+/Users/welease/projects/ft_containers/ft_vector.h
+

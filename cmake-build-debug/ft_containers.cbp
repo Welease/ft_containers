@@ -27,6 +27,48 @@
 					<DistClean command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
+			<Target title="ft_vector">
+				<Option output="/Users/welease/projects/ft_containers/cmake-build-debug/ft_vector" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/welease/projects/ft_containers/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 ft_vector"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="ft_vector/fast">
+				<Option output="/Users/welease/projects/ft_containers/cmake-build-debug/ft_vector" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/welease/projects/ft_containers/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 ft_vector/fast"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
 			<Target title="edit_cache">
 				<Option working_dir="/Users/welease/projects/ft_containers/cmake-build-debug"/>
 				<Option type="4"/>
@@ -37,8 +79,8 @@
 					<DistClean command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
-			<Target title="ft_containers">
-				<Option output="/Users/welease/projects/ft_containers/cmake-build-debug/ft_containers" prefix_auto="0" extension_auto="0"/>
+			<Target title="ft_stack">
+				<Option output="/Users/welease/projects/ft_containers/cmake-build-debug/ft_stack" prefix_auto="0" extension_auto="0"/>
 				<Option working_dir="/Users/welease/projects/ft_containers/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
@@ -52,14 +94,14 @@
 					<Add directory="/Library/Frameworks"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 ft_containers"/>
+					<Build command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 ft_stack"/>
 					<CompileFile command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
 					<Clean command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 					<DistClean command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
-			<Target title="ft_containers/fast">
-				<Option output="/Users/welease/projects/ft_containers/cmake-build-debug/ft_containers" prefix_auto="0" extension_auto="0"/>
+			<Target title="ft_stack/fast">
+				<Option output="/Users/welease/projects/ft_containers/cmake-build-debug/ft_stack" prefix_auto="0" extension_auto="0"/>
 				<Option working_dir="/Users/welease/projects/ft_containers/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
@@ -73,7 +115,91 @@
 					<Add directory="/Library/Frameworks"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 ft_containers/fast"/>
+					<Build command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 ft_stack/fast"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="ft_queue">
+				<Option output="/Users/welease/projects/ft_containers/cmake-build-debug/ft_queue" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/welease/projects/ft_containers/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 ft_queue"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="ft_queue/fast">
+				<Option output="/Users/welease/projects/ft_containers/cmake-build-debug/ft_queue" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/welease/projects/ft_containers/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 ft_queue/fast"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="ft_list">
+				<Option output="/Users/welease/projects/ft_containers/cmake-build-debug/ft_list" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/welease/projects/ft_containers/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 ft_list"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="ft_list/fast">
+				<Option output="/Users/welease/projects/ft_containers/cmake-build-debug/ft_list" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/welease/projects/ft_containers/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 ft_list/fast"/>
 					<CompileFile command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
 					<Clean command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 					<DistClean command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
@@ -81,10 +207,28 @@
 			</Target>
 		</Build>
 		<Unit filename="/Users/welease/projects/ft_containers/ft_list.h">
-			<Option target="ft_containers"/>
+			<Option target="ft_list"/>
 		</Unit>
-		<Unit filename="/Users/welease/projects/ft_containers/main.cpp">
-			<Option target="ft_containers"/>
+		<Unit filename="/Users/welease/projects/ft_containers/ft_queue.h">
+			<Option target="ft_queue"/>
+		</Unit>
+		<Unit filename="/Users/welease/projects/ft_containers/ft_stack.h">
+			<Option target="ft_stack"/>
+		</Unit>
+		<Unit filename="/Users/welease/projects/ft_containers/ft_vector.h">
+			<Option target="ft_vector"/>
+		</Unit>
+		<Unit filename="/Users/welease/projects/ft_containers/listMain.cpp">
+			<Option target="ft_list"/>
+		</Unit>
+		<Unit filename="/Users/welease/projects/ft_containers/queueMain.cpp">
+			<Option target="ft_queue"/>
+		</Unit>
+		<Unit filename="/Users/welease/projects/ft_containers/stackMain.cpp">
+			<Option target="ft_stack"/>
+		</Unit>
+		<Unit filename="/Users/welease/projects/ft_containers/vectorMain.cpp">
+			<Option target="ft_vector"/>
 		</Unit>
 		<Unit filename="/Users/welease/projects/ft_containers/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
