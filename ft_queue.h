@@ -8,7 +8,7 @@
 #include "ft_list.h"
 
 namespace ft {
-	template <class T, class Container = list<T> >
+	template <class T, class Container = list <T> >
 	class queue {
 
 	public:
@@ -36,7 +36,7 @@ namespace ft {
 
 		void pop() { _queue.pop_front(); };
 
-		container_type getContainer() const { return _queue; }
+		container_type getQueue() const { return _queue; }
 
 	private:
 		container_type _queue;
@@ -51,27 +51,27 @@ namespace ft {
 }
 
 template <class T, class Container> bool ft::operator==(const ft::queue<T,Container>& lhs, const ft::queue<T,Container>& rhs) {
-	return lhs.getContainer() == rhs.getContainer();
+	return lhs.getQueue() == rhs.getQueue();
 }
 
 template <class T, class Container> bool ft::operator!=(const ft::queue<T,Container>& lhs, const ft::queue<T,Container>& rhs) {
-	return lhs.getContainer() != rhs.getContainer();
+	return lhs.getQueue() != rhs.getQueue();
 }
 
 template <class T, class Container> bool ft::operator<(const ft::queue<T,Container>& lhs, const ft::queue<T,Container>& rhs) {
-	return lhs.getContainer() < rhs.getContainer();
+	return lhs.getQueue() < rhs.getQueue();
 }
 
 template <class T, class Container> bool ft::operator<=(const ft::queue<T,Container>& lhs, const ft::queue<T,Container>& rhs) {
-	return lhs.getContainer() <= rhs.getContainer();
+	return lhs.getQueue() <= rhs.getQueue();
 }
 
 template <class T, class Container> bool ft::operator> (const ft::queue<T,Container>& lhs, const ft::queue<T,Container>& rhs) {
-	return lhs.getContainer() > rhs.getContainer();
+	return lhs.getQueue() > rhs.getQueue();
 }
 
 template <class T, class Container> bool ft::operator>=(const ft::queue<T,Container>& lhs, const ft::queue<T,Container>& rhs) {
-	return  lhs.getContainer() >= rhs.getContainer();
+	return  lhs.getQueue() >= rhs.getQueue();
 }
 
 #endif //FT_CONTAINERS_FT_QUEUE_H

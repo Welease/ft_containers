@@ -54,26 +54,12 @@ int main ()
 //		std::cout << ' ' << *it;
 //	std::cout << '\n';
 
-	std::list<int> l;
-	l.push_back(3);
-	l.push_back(3);
-	l.push_back(4);
-	l.push_back(5);
+	std::list<std::string> f1;
+	std::list<std::string> f2;
+	f1.push_back("a");
+	f1.push_back("a");
+	f1.push_back("a");
 
-	l.unique();
-
-	ft::list<int> b;
-	b.push_back(3);
-	b.push_back(3);
-	b.push_back(4);
-	b.push_back(5);
-
-	b.unique();
-
-	for (std::list<int>::iterator it = l.begin(); it != l.end(); ++it)
-		std::cout << ' ' << *it;
-	std::cout << std::endl;
-
-	for (ft::list<int>::iterator it = b.begin(); it != b.end(); ++it)
-		std::cout << ' ' << *it;
+	f2.push_back("z");
+	std::cout << (f1 < f2)  << std::endl;
 }

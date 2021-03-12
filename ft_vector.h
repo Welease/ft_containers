@@ -68,6 +68,7 @@ namespace ft {
 			}
 			iterator operator+(difference_type const & dt) const { return iterator(_pointer + dt); }
 			iterator operator-(difference_type const & dt) const { return iterator(_pointer - dt); }
+
 			iterator operator+=(difference_type const & dt) {
 				_pointer += dt;
 				return *this;
@@ -92,7 +93,7 @@ namespace ft {
 			bool  operator<(const_iterator const & dt) const { return this->_pointer  < dt.getPointer(); }
 			bool  operator>(const_iterator const & dt) const { return this->_pointer  > dt.getPointer(); }
 
-			value_type & operator[]( difference_type const & index ) const { return *(this->_pointer + index); }
+			value_type & operator[]( const_reference const & index ) const { return _pointer[index]; }
 			value_type & operator*() const { return *this->_pointer; }
 			value_type * operator->() const { return this->_pointer; }
 
@@ -108,7 +109,7 @@ namespace ft {
 			pointer _pointer;
 
 		public:
-			const_iterator() { this->_ptr = nullptr; }
+			const_iterator() { this->_pointer = nullptr; }
 
 			~const_iterator() {}
 
@@ -150,6 +151,7 @@ namespace ft {
 				this->operator--();
 				return tmp;
 			}
+
 
 			const_iterator operator+(difference_type const & dt) const { return const_iterator(_pointer + dt); }
 			const_iterator operator-(difference_type const & dt) const { return const_iterator(_pointer - dt); }
@@ -194,6 +196,7 @@ namespace ft {
 			~reverse_iterator() {};
 			reverse_iterator (reverse_iterator const & iter ) { *this = iter; }
 			reverse_iterator(pointer ptr) { this->_pointer = ptr; }
+
 			reverse_iterator & operator=(reverse_iterator const & iter) {
 				if (this != &iter)
 					_pointer = iter._pointer;
@@ -218,21 +221,40 @@ namespace ft {
 				return temp;
 			}
 
+			reverse_iterator &operator+=(difference_type count) {
+				_pointer -= count;
+				return *this;
+			};
+
+			reverse_iterator &operator-=(difference_type count) {
+				_pointer += count;
+				return *this;
+			};
+
+			reverse_iterator operator+(difference_type count) const { return reverse_iterator(_pointer - count); };
+			reverse_iterator operator-(difference_type count) const { return reverse_iterator(_pointer + count); };
+			difference_type operator+(reverse_iterator &i) const { return _pointer - i._pointer; }
+			difference_type operator-(reverse_iterator &i) const { return _pointer + i._pointer; }
+
 			bool operator==(reverse_iterator const & dt) const {return this->_pointer == dt._pointer; }
 			bool operator!=(reverse_iterator const & dt) const { return this->_pointer != dt._pointer; }
-			bool operator<=(reverse_iterator const & dt) const { return this->_pointer <= dt._pointer; }
-			bool operator>=(reverse_iterator const & dt) const { return this->_pointer >= dt._pointer; }
-			bool  operator<(reverse_iterator const & dt) const { return this->_pointer < dt._pointer; }
-			bool  operator>(reverse_iterator const & dt) const { return this->_pointer > dt._pointer; }
+			bool operator<=(reverse_iterator const & dt) const { return this->_pointer >= dt._pointer; }
+			bool operator>=(reverse_iterator const & dt) const { return this->_pointer <= dt._pointer; }
+			bool  operator<(reverse_iterator const & dt) const { return this->_pointer > dt._pointer; }
+			bool  operator>(reverse_iterator const & dt) const { return this->_pointer < dt._pointer; }
 
 			bool operator==(const_reverse_iterator const & dt) const { return this->_pointer == dt.getPointer(); }
 			bool operator!=(const_reverse_iterator const & dt) const { return this->_pointer != dt.getPointer(); }
-			bool operator<=(const_reverse_iterator const & dt) const { return this->_pointer <= dt.getPointer(); }
-			bool operator>=(const_reverse_iterator const & dt) const { return this->_pointer >= dt.getPointer(); }
-			bool  operator<(const_reverse_iterator const & dt) const { return this->_pointer  < dt.getPointer(); }
-			bool  operator>(const_reverse_iterator const & dt) const { return this->_pointer  > dt.getPointer(); }
+			bool operator<=(const_reverse_iterator const & dt) const { return this->_pointer >= dt.getPointer(); }
+			bool operator>=(const_reverse_iterator const & dt) const { return this->_pointer <= dt.getPointer(); }
+			bool  operator<(const_reverse_iterator const & dt) const { return this->_pointer < dt.getPointer(); }
+			bool  operator>(const_reverse_iterator const & dt) const { return this->_pointer > dt.getPointer(); }
+
 			value_type & operator*() const { return *this->_pointer; }
 			value_type * operator->() const { return this->_pointer; }
+			const_reference operator[](const_reference ref) const { return *(_pointer - ref); };
+
+			pointer getPointer() const { return _pointer; }
 		};
 
 
@@ -242,6 +264,7 @@ namespace ft {
 		public:
 			const_reverse_iterator() : _pointer(nullptr) {}
 			~const_reverse_iterator() {};
+			const_reverse_iterator (reverse_iterator const & iter ) { *this = iter; }
 			const_reverse_iterator (const_reverse_iterator const & iter ) { *this = iter; }
 			const_reverse_iterator(pointer ptr) { this->_pointer = ptr; }
 			const_reverse_iterator & operator=(const_reverse_iterator const & iter) {
@@ -249,6 +272,12 @@ namespace ft {
 					_pointer = iter._pointer;
 				return *this;
 			}
+
+			const_reverse_iterator & operator=(reverse_iterator const & iter) {
+				_pointer = iter.getPointer();
+				return *this;
+			}
+
 			const_reverse_iterator & operator++() {
 				this->_pointer--;
 				return *this;
@@ -258,29 +287,49 @@ namespace ft {
 				return *this;
 			}
 			const_reverse_iterator operator++(int) {
-				reverse_iterator temp = *this;
-				this->operator--();
-				return temp;
-			}
-			const_reverse_iterator operator--(int) {
-				reverse_iterator temp = *this;
+				const_reverse_iterator temp = *this;
 				this->operator++();
 				return temp;
 			}
+			const_reverse_iterator operator--(int) {
+				const_reverse_iterator temp = *this;
+				this->operator--();
+				return temp;
+			}
 
-			bool operator==(reverse_iterator const & dt) const {return this->_pointer == dt._pointer; }
-			bool operator!=(reverse_iterator const & dt) const { return this->_pointer != dt._pointer; }
-			bool operator<=(reverse_iterator const & dt) const { return this->_pointer <= dt._pointer; }
-			bool operator>=(reverse_iterator const & dt) const { return this->_pointer >= dt._pointer; }
-			bool  operator<(reverse_iterator const & dt) const { return this->_pointer < dt._pointer; }
-			bool  operator>(reverse_iterator const & dt) const { return this->_pointer > dt._pointer; }
+			const_reverse_iterator operator+(difference_type val) const { return const_reverse_iterator(_pointer - val); };
+			const_reverse_iterator operator-(difference_type val) const { return const_reverse_iterator(_pointer + val); };
+			difference_type operator+(const_reverse_iterator &it) const { return _pointer - it._it; }
+			difference_type operator-(const_reverse_iterator &it) const { return _pointer + it._it; }
+			const_reverse_iterator &operator+=(difference_type count) {
+				_pointer -= count;
+				return *this;
+			};
+
+			const_reverse_iterator &operator-=(difference_type count) {
+				_pointer += count;
+				return *this;
+			};
+
+			const_reference operator[](const_reference cr) { return *(_pointer - cr); };
+			const_reference operator*() { return *this->_pointer; }
+			const_pointer operator->() { return this->_pointer; }
+
+			bool operator==(reverse_iterator const & dt) const {return this->_pointer == dt.getPointer(); }
+			bool operator!=(reverse_iterator const & dt) const { return this->_pointer != dt.getPointer(); }
+			bool operator<=(reverse_iterator const & dt) const { return this->_pointer >= dt.getPointer(); }
+			bool operator>=(reverse_iterator const & dt) const { return this->_pointer <= dt.getPointer(); }
+			bool  operator<(reverse_iterator const & dt) const { return this->_pointer > dt.getPointer(); }
+			bool  operator>(reverse_iterator const & dt) const { return this->_pointer < dt.getPointer(); }
 
 			bool operator==(const_reverse_iterator const & dt) const { return this->_pointer == dt.getPointer(); }
 			bool operator!=(const_reverse_iterator const & dt) const { return this->_pointer != dt.getPointer(); }
-			bool operator<=(const_reverse_iterator const & dt) const { return this->_pointer <= dt.getPointer(); }
-			bool operator>=(const_reverse_iterator const & dt) const { return this->_pointer >= dt.getPointer(); }
-			bool  operator<(const_reverse_iterator const & dt) const { return this->_pointer  < dt.getPointer(); }
-			bool  operator>(const_reverse_iterator const & dt) const { return this->_pointer  > dt.getPointer(); }
+			bool operator<=(const_reverse_iterator const & dt) const { return this->_pointer >= dt.getPointer(); }
+			bool operator>=(const_reverse_iterator const & dt) const { return this->_pointer <= dt.getPointer(); }
+			bool  operator<(const_reverse_iterator const & dt) const { return this->_pointer > dt.getPointer(); }
+			bool  operator>(const_reverse_iterator const & dt) const { return this->_pointer < dt.getPointer(); }
+
+			pointer getPointer() const { return _pointer; }
 		};
 
 		explicit vector (const allocator_type& alloc = allocator_type()) : _size(0), _capacity(0), _mass(nullptr), _alloc(alloc){}
@@ -336,7 +385,7 @@ namespace ft {
 
 		void resize (size_type n, value_type val = value_type ()) {
 			if (_size != n)
-				n > _size ? insert(end(), _size - n, val) : erase(iterator(_mass + n), end());
+				n > _size ? insert(end(), _size - n, val) : (void)erase(iterator(_mass + n), end());
 		}
 
 		size_type capacity() const { return _capacity; }
@@ -357,14 +406,14 @@ namespace ft {
 			_mass = newMass;
 		};
 
-		reference operator[] (size_type n) { return _mass + n; }
+		reference operator[] (size_type n) { return _mass[n]; }
 
 		const_reference operator[] (size_type n) const { return _mass + n; };
 
 		reference at (size_type n) {
 			if (n >= _size)
 				throw std::out_of_range("incorrect index(out of range)");
-			return _mass + n;
+			return _mass[n];
 		}
 
 		const_reference at (size_type n) const {

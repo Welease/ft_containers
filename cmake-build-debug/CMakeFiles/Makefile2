@@ -77,11 +77,12 @@ all: CMakeFiles/ft_vector.dir/all
 all: CMakeFiles/ft_stack.dir/all
 all: CMakeFiles/ft_queue.dir/all
 all: CMakeFiles/ft_list.dir/all
+all: unit_tests/all
 
 .PHONY : all
 
 # The main recursive "preinstall" target.
-preinstall:
+preinstall: unit_tests/preinstall
 
 .PHONY : preinstall
 
@@ -90,8 +91,89 @@ clean: CMakeFiles/ft_vector.dir/clean
 clean: CMakeFiles/ft_stack.dir/clean
 clean: CMakeFiles/ft_queue.dir/clean
 clean: CMakeFiles/ft_list.dir/clean
+clean: unit_tests/clean
 
 .PHONY : clean
+
+#=============================================================================
+# Directory level rules for directory unit_tests
+
+# Recursive "all" directory target.
+unit_tests/all: unit_tests/CMakeFiles/Google_Tests_run.dir/all
+unit_tests/all: unit_tests/lib/all
+
+.PHONY : unit_tests/all
+
+# Recursive "preinstall" directory target.
+unit_tests/preinstall: unit_tests/lib/preinstall
+
+.PHONY : unit_tests/preinstall
+
+# Recursive "clean" directory target.
+unit_tests/clean: unit_tests/CMakeFiles/Google_Tests_run.dir/clean
+unit_tests/clean: unit_tests/lib/clean
+
+.PHONY : unit_tests/clean
+
+#=============================================================================
+# Directory level rules for directory unit_tests/lib
+
+# Recursive "all" directory target.
+unit_tests/lib/all: unit_tests/lib/googlemock/all
+
+.PHONY : unit_tests/lib/all
+
+# Recursive "preinstall" directory target.
+unit_tests/lib/preinstall: unit_tests/lib/googlemock/preinstall
+
+.PHONY : unit_tests/lib/preinstall
+
+# Recursive "clean" directory target.
+unit_tests/lib/clean: unit_tests/lib/googlemock/clean
+
+.PHONY : unit_tests/lib/clean
+
+#=============================================================================
+# Directory level rules for directory unit_tests/lib/googlemock
+
+# Recursive "all" directory target.
+unit_tests/lib/googlemock/all: unit_tests/lib/googlemock/CMakeFiles/gmock.dir/all
+unit_tests/lib/googlemock/all: unit_tests/lib/googlemock/CMakeFiles/gmock_main.dir/all
+unit_tests/lib/googlemock/all: unit_tests/lib/googletest/all
+
+.PHONY : unit_tests/lib/googlemock/all
+
+# Recursive "preinstall" directory target.
+unit_tests/lib/googlemock/preinstall: unit_tests/lib/googletest/preinstall
+
+.PHONY : unit_tests/lib/googlemock/preinstall
+
+# Recursive "clean" directory target.
+unit_tests/lib/googlemock/clean: unit_tests/lib/googlemock/CMakeFiles/gmock.dir/clean
+unit_tests/lib/googlemock/clean: unit_tests/lib/googlemock/CMakeFiles/gmock_main.dir/clean
+unit_tests/lib/googlemock/clean: unit_tests/lib/googletest/clean
+
+.PHONY : unit_tests/lib/googlemock/clean
+
+#=============================================================================
+# Directory level rules for directory unit_tests/lib/googletest
+
+# Recursive "all" directory target.
+unit_tests/lib/googletest/all: unit_tests/lib/googletest/CMakeFiles/gtest_main.dir/all
+unit_tests/lib/googletest/all: unit_tests/lib/googletest/CMakeFiles/gtest.dir/all
+
+.PHONY : unit_tests/lib/googletest/all
+
+# Recursive "preinstall" directory target.
+unit_tests/lib/googletest/preinstall:
+
+.PHONY : unit_tests/lib/googletest/preinstall
+
+# Recursive "clean" directory target.
+unit_tests/lib/googletest/clean: unit_tests/lib/googletest/CMakeFiles/gtest_main.dir/clean
+unit_tests/lib/googletest/clean: unit_tests/lib/googletest/CMakeFiles/gtest.dir/clean
+
+.PHONY : unit_tests/lib/googletest/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/ft_vector.dir
@@ -100,7 +182,7 @@ clean: CMakeFiles/ft_list.dir/clean
 CMakeFiles/ft_vector.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_vector.dir/build.make CMakeFiles/ft_vector.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_vector.dir/build.make CMakeFiles/ft_vector.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/welease/projects/ft_containers/cmake-build-debug/CMakeFiles --progress-num=7,8 "Built target ft_vector"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/welease/projects/ft_containers/cmake-build-debug/CMakeFiles --progress-num=9,10 "Built target ft_vector"
 .PHONY : CMakeFiles/ft_vector.dir/all
 
 # Build rule for subdir invocation for target.
@@ -127,7 +209,7 @@ CMakeFiles/ft_vector.dir/clean:
 CMakeFiles/ft_stack.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_stack.dir/build.make CMakeFiles/ft_stack.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_stack.dir/build.make CMakeFiles/ft_stack.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/welease/projects/ft_containers/cmake-build-debug/CMakeFiles --progress-num=5,6 "Built target ft_stack"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/welease/projects/ft_containers/cmake-build-debug/CMakeFiles --progress-num=7,8 "Built target ft_stack"
 .PHONY : CMakeFiles/ft_stack.dir/all
 
 # Build rule for subdir invocation for target.
@@ -154,7 +236,7 @@ CMakeFiles/ft_stack.dir/clean:
 CMakeFiles/ft_queue.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_queue.dir/build.make CMakeFiles/ft_queue.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_queue.dir/build.make CMakeFiles/ft_queue.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/welease/projects/ft_containers/cmake-build-debug/CMakeFiles --progress-num=3,4 "Built target ft_queue"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/welease/projects/ft_containers/cmake-build-debug/CMakeFiles --progress-num=5,6 "Built target ft_queue"
 .PHONY : CMakeFiles/ft_queue.dir/all
 
 # Build rule for subdir invocation for target.
@@ -181,7 +263,7 @@ CMakeFiles/ft_queue.dir/clean:
 CMakeFiles/ft_list.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_list.dir/build.make CMakeFiles/ft_list.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_list.dir/build.make CMakeFiles/ft_list.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/welease/projects/ft_containers/cmake-build-debug/CMakeFiles --progress-num=1,2 "Built target ft_list"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/welease/projects/ft_containers/cmake-build-debug/CMakeFiles --progress-num=3,4 "Built target ft_list"
 .PHONY : CMakeFiles/ft_list.dir/all
 
 # Build rule for subdir invocation for target.
@@ -200,6 +282,143 @@ ft_list: CMakeFiles/ft_list.dir/rule
 CMakeFiles/ft_list.dir/clean:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_list.dir/build.make CMakeFiles/ft_list.dir/clean
 .PHONY : CMakeFiles/ft_list.dir/clean
+
+#=============================================================================
+# Target rules for target unit_tests/CMakeFiles/Google_Tests_run.dir
+
+# All Build rule for target.
+unit_tests/CMakeFiles/Google_Tests_run.dir/all: unit_tests/lib/googletest/CMakeFiles/gtest_main.dir/all
+unit_tests/CMakeFiles/Google_Tests_run.dir/all: unit_tests/lib/googletest/CMakeFiles/gtest.dir/all
+	$(MAKE) $(MAKESILENT) -f unit_tests/CMakeFiles/Google_Tests_run.dir/build.make unit_tests/CMakeFiles/Google_Tests_run.dir/depend
+	$(MAKE) $(MAKESILENT) -f unit_tests/CMakeFiles/Google_Tests_run.dir/build.make unit_tests/CMakeFiles/Google_Tests_run.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/welease/projects/ft_containers/cmake-build-debug/CMakeFiles --progress-num=1,2 "Built target Google_Tests_run"
+.PHONY : unit_tests/CMakeFiles/Google_Tests_run.dir/all
+
+# Build rule for subdir invocation for target.
+unit_tests/CMakeFiles/Google_Tests_run.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/welease/projects/ft_containers/cmake-build-debug/CMakeFiles 6
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 unit_tests/CMakeFiles/Google_Tests_run.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/welease/projects/ft_containers/cmake-build-debug/CMakeFiles 0
+.PHONY : unit_tests/CMakeFiles/Google_Tests_run.dir/rule
+
+# Convenience name for target.
+Google_Tests_run: unit_tests/CMakeFiles/Google_Tests_run.dir/rule
+
+.PHONY : Google_Tests_run
+
+# clean rule for target.
+unit_tests/CMakeFiles/Google_Tests_run.dir/clean:
+	$(MAKE) $(MAKESILENT) -f unit_tests/CMakeFiles/Google_Tests_run.dir/build.make unit_tests/CMakeFiles/Google_Tests_run.dir/clean
+.PHONY : unit_tests/CMakeFiles/Google_Tests_run.dir/clean
+
+#=============================================================================
+# Target rules for target unit_tests/lib/googlemock/CMakeFiles/gmock.dir
+
+# All Build rule for target.
+unit_tests/lib/googlemock/CMakeFiles/gmock.dir/all: unit_tests/lib/googletest/CMakeFiles/gtest.dir/all
+	$(MAKE) $(MAKESILENT) -f unit_tests/lib/googlemock/CMakeFiles/gmock.dir/build.make unit_tests/lib/googlemock/CMakeFiles/gmock.dir/depend
+	$(MAKE) $(MAKESILENT) -f unit_tests/lib/googlemock/CMakeFiles/gmock.dir/build.make unit_tests/lib/googlemock/CMakeFiles/gmock.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/welease/projects/ft_containers/cmake-build-debug/CMakeFiles --progress-num=11,12 "Built target gmock"
+.PHONY : unit_tests/lib/googlemock/CMakeFiles/gmock.dir/all
+
+# Build rule for subdir invocation for target.
+unit_tests/lib/googlemock/CMakeFiles/gmock.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/welease/projects/ft_containers/cmake-build-debug/CMakeFiles 4
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 unit_tests/lib/googlemock/CMakeFiles/gmock.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/welease/projects/ft_containers/cmake-build-debug/CMakeFiles 0
+.PHONY : unit_tests/lib/googlemock/CMakeFiles/gmock.dir/rule
+
+# Convenience name for target.
+gmock: unit_tests/lib/googlemock/CMakeFiles/gmock.dir/rule
+
+.PHONY : gmock
+
+# clean rule for target.
+unit_tests/lib/googlemock/CMakeFiles/gmock.dir/clean:
+	$(MAKE) $(MAKESILENT) -f unit_tests/lib/googlemock/CMakeFiles/gmock.dir/build.make unit_tests/lib/googlemock/CMakeFiles/gmock.dir/clean
+.PHONY : unit_tests/lib/googlemock/CMakeFiles/gmock.dir/clean
+
+#=============================================================================
+# Target rules for target unit_tests/lib/googlemock/CMakeFiles/gmock_main.dir
+
+# All Build rule for target.
+unit_tests/lib/googlemock/CMakeFiles/gmock_main.dir/all: unit_tests/lib/googlemock/CMakeFiles/gmock.dir/all
+unit_tests/lib/googlemock/CMakeFiles/gmock_main.dir/all: unit_tests/lib/googletest/CMakeFiles/gtest.dir/all
+	$(MAKE) $(MAKESILENT) -f unit_tests/lib/googlemock/CMakeFiles/gmock_main.dir/build.make unit_tests/lib/googlemock/CMakeFiles/gmock_main.dir/depend
+	$(MAKE) $(MAKESILENT) -f unit_tests/lib/googlemock/CMakeFiles/gmock_main.dir/build.make unit_tests/lib/googlemock/CMakeFiles/gmock_main.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/welease/projects/ft_containers/cmake-build-debug/CMakeFiles --progress-num=13,14 "Built target gmock_main"
+.PHONY : unit_tests/lib/googlemock/CMakeFiles/gmock_main.dir/all
+
+# Build rule for subdir invocation for target.
+unit_tests/lib/googlemock/CMakeFiles/gmock_main.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/welease/projects/ft_containers/cmake-build-debug/CMakeFiles 6
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 unit_tests/lib/googlemock/CMakeFiles/gmock_main.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/welease/projects/ft_containers/cmake-build-debug/CMakeFiles 0
+.PHONY : unit_tests/lib/googlemock/CMakeFiles/gmock_main.dir/rule
+
+# Convenience name for target.
+gmock_main: unit_tests/lib/googlemock/CMakeFiles/gmock_main.dir/rule
+
+.PHONY : gmock_main
+
+# clean rule for target.
+unit_tests/lib/googlemock/CMakeFiles/gmock_main.dir/clean:
+	$(MAKE) $(MAKESILENT) -f unit_tests/lib/googlemock/CMakeFiles/gmock_main.dir/build.make unit_tests/lib/googlemock/CMakeFiles/gmock_main.dir/clean
+.PHONY : unit_tests/lib/googlemock/CMakeFiles/gmock_main.dir/clean
+
+#=============================================================================
+# Target rules for target unit_tests/lib/googletest/CMakeFiles/gtest_main.dir
+
+# All Build rule for target.
+unit_tests/lib/googletest/CMakeFiles/gtest_main.dir/all: unit_tests/lib/googletest/CMakeFiles/gtest.dir/all
+	$(MAKE) $(MAKESILENT) -f unit_tests/lib/googletest/CMakeFiles/gtest_main.dir/build.make unit_tests/lib/googletest/CMakeFiles/gtest_main.dir/depend
+	$(MAKE) $(MAKESILENT) -f unit_tests/lib/googletest/CMakeFiles/gtest_main.dir/build.make unit_tests/lib/googletest/CMakeFiles/gtest_main.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/welease/projects/ft_containers/cmake-build-debug/CMakeFiles --progress-num=17,18 "Built target gtest_main"
+.PHONY : unit_tests/lib/googletest/CMakeFiles/gtest_main.dir/all
+
+# Build rule for subdir invocation for target.
+unit_tests/lib/googletest/CMakeFiles/gtest_main.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/welease/projects/ft_containers/cmake-build-debug/CMakeFiles 4
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 unit_tests/lib/googletest/CMakeFiles/gtest_main.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/welease/projects/ft_containers/cmake-build-debug/CMakeFiles 0
+.PHONY : unit_tests/lib/googletest/CMakeFiles/gtest_main.dir/rule
+
+# Convenience name for target.
+gtest_main: unit_tests/lib/googletest/CMakeFiles/gtest_main.dir/rule
+
+.PHONY : gtest_main
+
+# clean rule for target.
+unit_tests/lib/googletest/CMakeFiles/gtest_main.dir/clean:
+	$(MAKE) $(MAKESILENT) -f unit_tests/lib/googletest/CMakeFiles/gtest_main.dir/build.make unit_tests/lib/googletest/CMakeFiles/gtest_main.dir/clean
+.PHONY : unit_tests/lib/googletest/CMakeFiles/gtest_main.dir/clean
+
+#=============================================================================
+# Target rules for target unit_tests/lib/googletest/CMakeFiles/gtest.dir
+
+# All Build rule for target.
+unit_tests/lib/googletest/CMakeFiles/gtest.dir/all:
+	$(MAKE) $(MAKESILENT) -f unit_tests/lib/googletest/CMakeFiles/gtest.dir/build.make unit_tests/lib/googletest/CMakeFiles/gtest.dir/depend
+	$(MAKE) $(MAKESILENT) -f unit_tests/lib/googletest/CMakeFiles/gtest.dir/build.make unit_tests/lib/googletest/CMakeFiles/gtest.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/welease/projects/ft_containers/cmake-build-debug/CMakeFiles --progress-num=15,16 "Built target gtest"
+.PHONY : unit_tests/lib/googletest/CMakeFiles/gtest.dir/all
+
+# Build rule for subdir invocation for target.
+unit_tests/lib/googletest/CMakeFiles/gtest.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/welease/projects/ft_containers/cmake-build-debug/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 unit_tests/lib/googletest/CMakeFiles/gtest.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/welease/projects/ft_containers/cmake-build-debug/CMakeFiles 0
+.PHONY : unit_tests/lib/googletest/CMakeFiles/gtest.dir/rule
+
+# Convenience name for target.
+gtest: unit_tests/lib/googletest/CMakeFiles/gtest.dir/rule
+
+.PHONY : gtest
+
+# clean rule for target.
+unit_tests/lib/googletest/CMakeFiles/gtest.dir/clean:
+	$(MAKE) $(MAKESILENT) -f unit_tests/lib/googletest/CMakeFiles/gtest.dir/build.make unit_tests/lib/googletest/CMakeFiles/gtest.dir/clean
+.PHONY : unit_tests/lib/googletest/CMakeFiles/gtest.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

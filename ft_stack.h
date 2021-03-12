@@ -32,7 +32,7 @@ namespace ft {
 
 		void pop() { _stack.pop_back(); };
 
-		container_type getContainer() const { return _stack; }
+		container_type getStack() const { return _stack; }
 
 	private:
 		container_type _stack;
@@ -46,27 +46,27 @@ namespace ft {
 };
 
 template <class T, class Container> bool ft::operator==(const ft::stack<T,Container>& lhs, const ft::stack<T,Container>& rhs) {
-	return lhs.getContainer() == rhs.getContainer();
+	return lhs.getStack() == rhs.getStack();
 }
 
 template <class T, class Container> bool ft::operator!=(const ft::stack<T,Container>& lhs, const ft::stack<T,Container>& rhs) {
-	return lhs.getContainer() != rhs.getContainer();
+	return lhs.getStack() != rhs.getStack();
 }
 
 template <class T, class Container> bool ft::operator< (const ft::stack<T,Container>& lhs, const ft::stack<T,Container>& rhs) {
-	return lhs.getContainer() < rhs.getContainer();
+	return lhs.getStack() < rhs.getStack();
 }
 
 template <class T, class Container> bool ft::operator<=(const ft::stack<T,Container>& lhs, const ft::stack<T,Container>& rhs) {
-	return lhs.getContainer() <= rhs.getContainer();
+	return lhs.getStack() <= rhs.getStack();
 }
 
 template <class T, class Container> bool ft::operator> (const ft::stack<T,Container>& lhs, const ft::stack<T,Container>& rhs) {
-	return lhs.getContainer() > rhs.getContainer();
+	return lhs.getStack() > rhs.getStack();
 }
 
 template <class T, class Container> bool ft::operator>=(const ft::stack<T,Container>& lhs, const ft::stack<T,Container>& rhs) {
-	return lhs.getContainer() >= rhs.getContainer();
+	return lhs.getStack() >= rhs.getStack();
 }
 
 

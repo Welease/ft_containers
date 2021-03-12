@@ -10,3 +10,6 @@ add_executable(ft_vector ft_vector.h vectorMain.cpp)
 add_executable(ft_queue ft_queue.h queueMain.cpp)
 
 add_executable(ft_stack ft_stack.h stackMain.cpp)
+
+add_library(testlib INTERFACE)
+add_subdirectory(unit_tests)
