@@ -11,7 +11,9 @@
 /* ************************************************************************** */
 
 #include "gtest/gtest.h"
+#include "../ft_vector.h"
 #include "../ft_stack.h"
+
 #include <stack>
 #include <string>
 

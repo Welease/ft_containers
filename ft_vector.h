@@ -5,10 +5,8 @@
 #ifndef FT_CONTAINERS_FT_VECTOR_H
 #define FT_CONTAINERS_FT_VECTOR_H
 #include <memory>
-
+#include "ft.h"
 namespace ft {
-	template<bool Cond, class T = void> struct enable_if {};
-	template<class T> struct enable_if<true, T> { typedef T type; };
 	template< class T, class Alloc = std::allocator<T> >
 	class vector {
 
@@ -39,10 +37,9 @@ namespace ft {
 			pointer _pointer;
 
 		public:
-			iterator() : _pointer(nullptr) {}
 			~iterator() {}
 			iterator (iterator const & iter) { *this = iter; }
-			iterator(pointer ptr) { this->_pointer = ptr; }
+			iterator(pointer ptr = nullptr) : _pointer(ptr) { }
 			iterator & operator=( iterator const & iter ) {
 				if (this != &iter)
 					_pointer = iter._pointer;
@@ -343,18 +340,11 @@ namespace ft {
 
 		template <class InputIterator>
 		vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(),
-				typename ft::enable_if<std::__is_input_iterator<InputIterator>::value>::type* = 0) {
-			InputIterator tmp = first;
-			size_type count = 0;
-			while (tmp != last){
-				tmp++;
-				count++;
+				typename ft::enable_if<std::__is_input_iterator<InputIterator>::value>::type* = 0) : _mass(nullptr), _alloc(alloc), _size(0), _capacity(0) {
+			iterator i = begin();
+			while (last-- != first) {
+				i = insert(i, *last);
 			}
-			_mass = _alloc.allocate(count);
-			for (size_type i = 0; i < count + 1; ++i)
-				_alloc.construct(_mass + i, *first++);
-			_size = count;
-			_capacity = count;
 		}
 
 		vector (const vector& x) : _size(x._size), _capacity(x._size), _alloc(x._alloc){
@@ -362,6 +352,12 @@ namespace ft {
 			for (size_type i = 0; i < x._size; ++i)
 				_alloc.construct(_mass + i, *(x._mass + i));
 		}
+
+		vector& operator= (const vector& x) {
+			clear();
+			insert(begin(), x.begin(), x.end());
+			return *this;
+		};
 
 		iterator begin() { return iterator(_mass); }
 
@@ -384,8 +380,10 @@ namespace ft {
 		size_type 	max_size() const { return std::numeric_limits<size_type>::max() / sizeof(_mass); };
 
 		void resize (size_type n, value_type val = value_type ()) {
-			if (_size != n)
-				n > _size ? insert(end(), _size - n, val) : (void)erase(iterator(_mass + n), end());
+			if (n > _size)
+				insert(end(), n - _size, val);
+			if (n < _size)
+				erase(iterator(end().getPointer() - (_size - n)), end());
 		}
 
 		size_type capacity() const { return _capacity; }
@@ -393,6 +391,8 @@ namespace ft {
 		bool empty() const { return !_size; }
 
 		void 		reserve (size_type n) {
+			if (n > max_size())
+				throw std::length_error("wrong arg in reserve");
 			if (_capacity > n)
 				return;
 			pointer newMass = _alloc.allocate(n);
@@ -446,13 +446,25 @@ namespace ft {
 		void pop_back() { erase(--end()); }
 
 		iterator insert (iterator position, const value_type& val) {
-			pointer ptr = position.getPointer();
-			if (_size + 1  > _capacity)
-				reserve(_capacity * 2);
-			std::memmove(ptr + 1, ptr, static_cast<size_type>((_mass + _size - 1 - ptr)) * sizeof(value_type));
-			_alloc.construct(ptr, val);
-			++_size;
-			return iterator(ptr);
+			pointer pos = position.getPointer();
+			if (!_capacity) {
+				_mass = _alloc.allocate(1);
+				_alloc.construct(_mass, val);
+				_size = 1;
+				_capacity = 1;
+				pos = begin().getPointer();
+			}
+			else {
+				if (_size + 1 > _capacity) {
+					difference_type index = end().getPointer() - pos;
+					reserve(_capacity * 2);
+					pos = end().getPointer() - index;
+				}
+				std::memmove(pos + 1, pos, static_cast<size_type>((end().getPointer() - pos)) * sizeof(value_type));
+				_alloc.construct(pos, val);
+				_size += 1;
+			}
+			return iterator(pos);
 		};
 
 		void insert (iterator position, size_type n, const value_type& val) {
@@ -462,7 +474,7 @@ namespace ft {
 				reserve((_size + n) * 2);
 				ptr =  end().getPointer() - tmp;
 			}
-			std::memmove(ptr + n, ptr, static_cast<size_type>((_mass + _size - 1 - ptr)) * sizeof(value_type));
+			std::memmove(ptr + n, ptr, static_cast<size_type>((end().getPointer() - ptr)) * sizeof(value_type));
 			for (size_type i = 0; i != n; ++i) {
 				_alloc.construct(ptr + i, val);
 			}
@@ -481,7 +493,7 @@ namespace ft {
 		iterator erase (iterator position) {
 			pointer ptr = position.getPointer();
 			_alloc.destroy(ptr);
-			std::memmove(ptr, ptr + 1, static_cast<size_type>(abs(_mass + _size - 1 - ptr - 1)) * sizeof(value_type));
+			std::memmove(ptr, ptr + 1, static_cast<size_type>(abs((end().getPointer() - ptr))) * sizeof(value_type));
 			--this->_size;
 			return iterator(ptr);
 		};
@@ -516,46 +528,37 @@ namespace ft {
 		};
 
 	};
-	template <class T, class Alloc> bool operator==(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs);
-	template <class T, class Alloc> bool operator!=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs);
-	template <class T, class Alloc> bool operator<(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs);
-	template <class T, class Alloc> bool operator<=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs);
-	template <class T, class Alloc> bool operator>(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
-	template <class T, class Alloc> bool operator>=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
-}
+	template <class T, class Alloc> bool operator==(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) {
+		typename ft::vector<T, Alloc>::const_iterator lEnd = lhs.end();
+		typename ft::vector<T, Alloc>::const_iterator rBegin = rhs.begin();
 
-template <class T, class Alloc>bool ft::operator== (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs){
-	typename ft::vector<T, Alloc>::const_iterator lEnd = lhs.end();
-	typename ft::vector<T, Alloc>::const_iterator rBegin = rhs.begin();
-
-	if (lhs.size() != rhs.size())
-		return false;
-	for (typename ft::vector<T, Alloc>::const_iterator i = lhs.begin(); i != lEnd; ++i)
-		if (*i != *rBegin++)
+		if (lhs.size() != rhs.size())
 			return false;
-	return true;
-}
+		for (typename ft::vector<T, Alloc>::const_iterator i = lhs.begin(); i != lEnd; ++i)
+			if (*i != *rBegin++)
+				return false;
+		return true;
+	}
 
-template <class T, class Alloc> bool operator!=(const ft::vector<T, Alloc> &lhs, const ft::vector<T, Alloc> &rhs) { return !(lhs == rhs); };
+	template <class T, class Alloc> bool operator!=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) { return !(lhs == rhs); };
+	template <class T, class Alloc> bool operator<(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) {
+		typename ft::vector<T, Alloc>::const_iterator lBegin = lhs.begin();
+		typename ft::vector<T, Alloc>::const_iterator rBegin = rhs.begin();
 
-
-template <class T, class Alloc> bool ft::operator<(const ft::vector<T, Alloc> &lhs, const ft::vector<T, Alloc> &rhs) {
-	typename ft::vector<T, Alloc>::const_iterator lBegin = lhs.begin();
-	typename ft::vector<T, Alloc>::const_iterator rBegin = rhs.begin();
-
-	for (; lBegin != lhs.end() && rBegin != rhs.end(); ++lBegin, ++rBegin)
-		if (*lBegin < *rBegin)
+		while (lBegin != lhs.end() && rBegin != rhs.end()){
+			if (*lBegin < *rBegin)
+				return true;
+			++lBegin;
+			++rBegin;
+		}
+		if (lBegin == lhs.end() && rBegin != rhs.end())
 			return true;
+		return false;
+	};
 
-	if (lBegin != lhs.end() || rBegin != rhs.end()) return false;
-
-	return true;
-};
-
-template <class T, class Alloc> bool ft::operator<=(const ft::vector<T, Alloc> &lhs, const ft::vector<T, Alloc> &rhs) { return !(rhs < lhs); };
-
-template <class T, class Alloc> bool ft::operator>(const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs) { return (rhs < lhs); };
-
-template <class T, class Alloc> bool ft::operator>=(const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs) { return !(lhs < rhs); };
+	template <class T, class Alloc> bool operator<=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) { return !(rhs < lhs); };
+	template <class T, class Alloc> bool operator>(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) { return (rhs < lhs); };
+	template <class T, class Alloc> bool operator>=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) { return !(lhs < rhs); };
+}
 
 #endif //FT_CONTAINERS_FT_VECTOR_H

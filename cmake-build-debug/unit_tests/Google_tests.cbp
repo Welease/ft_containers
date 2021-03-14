@@ -268,6 +268,12 @@
 		<Unit filename="/Users/welease/projects/ft_containers/unit_tests/lib/googletest/src/gtest_main.cc">
 			<Option target="gtest_main"/>
 		</Unit>
+		<Unit filename="/Users/welease/projects/ft_containers/unit_tests/list.cpp">
+			<Option target="Google_Tests_run"/>
+		</Unit>
+		<Unit filename="/Users/welease/projects/ft_containers/unit_tests/stack.cpp">
+			<Option target="Google_Tests_run"/>
+		</Unit>
 		<Unit filename="/Users/welease/projects/ft_containers/unit_tests/vector.cpp">
 			<Option target="Google_Tests_run"/>
 		</Unit>

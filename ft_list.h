@@ -2,6 +2,7 @@
 #define FT_CONTAINERS_FT_LIST_H
 #include <iostream>
 #include <memory>
+#include "ft.h"
 template<typename value_type> struct ListNode {
 	struct ListNode *prev;
 	struct ListNode *next;
@@ -9,10 +10,8 @@ template<typename value_type> struct ListNode {
 };
 
 namespace ft {
-	template<bool Cond, class T = void> struct enable_if {};
-	template<class T> struct enable_if<true, T> { typedef T type; };
-
 	template<class T, class Alloc = std::allocator<T> >
+
 	class list {
 
 	public:

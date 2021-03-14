@@ -5,7 +5,7 @@ add_subdirectory(lib)
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
 set(TEST_FILES
-        vector.cpp)
+        stack.cpp list.cpp vector.cpp stack.cpp)
 
 add_executable(Google_Tests_run ${TEST_FILES})
 

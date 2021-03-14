@@ -4,7 +4,7 @@ project(ft_containers)
 set(CMAKE_CXX_STANDARD 98)
 
 add_executable(ft_list
-        listMain.cpp ft_list.h)
+        listMain.cpp ft_map.h)
 add_executable(ft_vector ft_vector.h vectorMain.cpp)
 
 add_executable(ft_queue ft_queue.h queueMain.cpp)
