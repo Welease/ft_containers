@@ -6,6 +6,12 @@
 
 #IncludeRegexTransform: 
 
+/Users/welease/projects/ft_containers/ft.h
+
+/Users/welease/projects/ft_containers/ft_map.h
+ft.h
+/Users/welease/projects/ft_containers/ft.h
+
 /Users/welease/projects/ft_containers/listMain.cpp
 list
 -
@@ -15,4 +21,6 @@ math.h
 -
 map
 -
+ft_map.h
+/Users/welease/projects/ft_containers/ft_map.h
 

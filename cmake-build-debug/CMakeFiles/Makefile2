@@ -182,7 +182,7 @@ unit_tests/lib/googletest/clean: unit_tests/lib/googletest/CMakeFiles/gtest.dir/
 CMakeFiles/ft_vector.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_vector.dir/build.make CMakeFiles/ft_vector.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_vector.dir/build.make CMakeFiles/ft_vector.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/welease/projects/ft_containers/cmake-build-debug/CMakeFiles --progress-num=11,12 "Built target ft_vector"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/welease/projects/ft_containers/cmake-build-debug/CMakeFiles --progress-num=9,10 "Built target ft_vector"
 .PHONY : CMakeFiles/ft_vector.dir/all
 
 # Build rule for subdir invocation for target.
@@ -209,7 +209,7 @@ CMakeFiles/ft_vector.dir/clean:
 CMakeFiles/ft_stack.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_stack.dir/build.make CMakeFiles/ft_stack.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_stack.dir/build.make CMakeFiles/ft_stack.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/welease/projects/ft_containers/cmake-build-debug/CMakeFiles --progress-num=9,10 "Built target ft_stack"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/welease/projects/ft_containers/cmake-build-debug/CMakeFiles --progress-num=7,8 "Built target ft_stack"
 .PHONY : CMakeFiles/ft_stack.dir/all
 
 # Build rule for subdir invocation for target.
@@ -236,7 +236,7 @@ CMakeFiles/ft_stack.dir/clean:
 CMakeFiles/ft_queue.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_queue.dir/build.make CMakeFiles/ft_queue.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_queue.dir/build.make CMakeFiles/ft_queue.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/welease/projects/ft_containers/cmake-build-debug/CMakeFiles --progress-num=7,8 "Built target ft_queue"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/welease/projects/ft_containers/cmake-build-debug/CMakeFiles --progress-num=5,6 "Built target ft_queue"
 .PHONY : CMakeFiles/ft_queue.dir/all
 
 # Build rule for subdir invocation for target.
@@ -263,7 +263,7 @@ CMakeFiles/ft_queue.dir/clean:
 CMakeFiles/ft_list.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_list.dir/build.make CMakeFiles/ft_list.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_list.dir/build.make CMakeFiles/ft_list.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/welease/projects/ft_containers/cmake-build-debug/CMakeFiles --progress-num=5,6 "Built target ft_list"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/welease/projects/ft_containers/cmake-build-debug/CMakeFiles --progress-num=3,4 "Built target ft_list"
 .PHONY : CMakeFiles/ft_list.dir/all
 
 # Build rule for subdir invocation for target.
@@ -291,12 +291,12 @@ unit_tests/CMakeFiles/Google_Tests_run.dir/all: unit_tests/lib/googletest/CMakeF
 unit_tests/CMakeFiles/Google_Tests_run.dir/all: unit_tests/lib/googletest/CMakeFiles/gtest.dir/all
 	$(MAKE) $(MAKESILENT) -f unit_tests/CMakeFiles/Google_Tests_run.dir/build.make unit_tests/CMakeFiles/Google_Tests_run.dir/depend
 	$(MAKE) $(MAKESILENT) -f unit_tests/CMakeFiles/Google_Tests_run.dir/build.make unit_tests/CMakeFiles/Google_Tests_run.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/welease/projects/ft_containers/cmake-build-debug/CMakeFiles --progress-num=1,2,3,4 "Built target Google_Tests_run"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/welease/projects/ft_containers/cmake-build-debug/CMakeFiles --progress-num=1,2 "Built target Google_Tests_run"
 .PHONY : unit_tests/CMakeFiles/Google_Tests_run.dir/all
 
 # Build rule for subdir invocation for target.
 unit_tests/CMakeFiles/Google_Tests_run.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/welease/projects/ft_containers/cmake-build-debug/CMakeFiles 8
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/welease/projects/ft_containers/cmake-build-debug/CMakeFiles 6
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 unit_tests/CMakeFiles/Google_Tests_run.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/welease/projects/ft_containers/cmake-build-debug/CMakeFiles 0
 .PHONY : unit_tests/CMakeFiles/Google_Tests_run.dir/rule
@@ -318,7 +318,7 @@ unit_tests/CMakeFiles/Google_Tests_run.dir/clean:
 unit_tests/lib/googlemock/CMakeFiles/gmock.dir/all: unit_tests/lib/googletest/CMakeFiles/gtest.dir/all
 	$(MAKE) $(MAKESILENT) -f unit_tests/lib/googlemock/CMakeFiles/gmock.dir/build.make unit_tests/lib/googlemock/CMakeFiles/gmock.dir/depend
 	$(MAKE) $(MAKESILENT) -f unit_tests/lib/googlemock/CMakeFiles/gmock.dir/build.make unit_tests/lib/googlemock/CMakeFiles/gmock.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/welease/projects/ft_containers/cmake-build-debug/CMakeFiles --progress-num=13,14 "Built target gmock"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/welease/projects/ft_containers/cmake-build-debug/CMakeFiles --progress-num=11,12 "Built target gmock"
 .PHONY : unit_tests/lib/googlemock/CMakeFiles/gmock.dir/all
 
 # Build rule for subdir invocation for target.
@@ -346,7 +346,7 @@ unit_tests/lib/googlemock/CMakeFiles/gmock_main.dir/all: unit_tests/lib/googlemo
 unit_tests/lib/googlemock/CMakeFiles/gmock_main.dir/all: unit_tests/lib/googletest/CMakeFiles/gtest.dir/all
 	$(MAKE) $(MAKESILENT) -f unit_tests/lib/googlemock/CMakeFiles/gmock_main.dir/build.make unit_tests/lib/googlemock/CMakeFiles/gmock_main.dir/depend
 	$(MAKE) $(MAKESILENT) -f unit_tests/lib/googlemock/CMakeFiles/gmock_main.dir/build.make unit_tests/lib/googlemock/CMakeFiles/gmock_main.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/welease/projects/ft_containers/cmake-build-debug/CMakeFiles --progress-num=15,16 "Built target gmock_main"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/welease/projects/ft_containers/cmake-build-debug/CMakeFiles --progress-num=13,14 "Built target gmock_main"
 .PHONY : unit_tests/lib/googlemock/CMakeFiles/gmock_main.dir/all
 
 # Build rule for subdir invocation for target.
@@ -373,7 +373,7 @@ unit_tests/lib/googlemock/CMakeFiles/gmock_main.dir/clean:
 unit_tests/lib/googletest/CMakeFiles/gtest_main.dir/all: unit_tests/lib/googletest/CMakeFiles/gtest.dir/all
 	$(MAKE) $(MAKESILENT) -f unit_tests/lib/googletest/CMakeFiles/gtest_main.dir/build.make unit_tests/lib/googletest/CMakeFiles/gtest_main.dir/depend
 	$(MAKE) $(MAKESILENT) -f unit_tests/lib/googletest/CMakeFiles/gtest_main.dir/build.make unit_tests/lib/googletest/CMakeFiles/gtest_main.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/welease/projects/ft_containers/cmake-build-debug/CMakeFiles --progress-num=19,20 "Built target gtest_main"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/welease/projects/ft_containers/cmake-build-debug/CMakeFiles --progress-num=17,18 "Built target gtest_main"
 .PHONY : unit_tests/lib/googletest/CMakeFiles/gtest_main.dir/all
 
 # Build rule for subdir invocation for target.
@@ -400,7 +400,7 @@ unit_tests/lib/googletest/CMakeFiles/gtest_main.dir/clean:
 unit_tests/lib/googletest/CMakeFiles/gtest.dir/all:
 	$(MAKE) $(MAKESILENT) -f unit_tests/lib/googletest/CMakeFiles/gtest.dir/build.make unit_tests/lib/googletest/CMakeFiles/gtest.dir/depend
 	$(MAKE) $(MAKESILENT) -f unit_tests/lib/googletest/CMakeFiles/gtest.dir/build.make unit_tests/lib/googletest/CMakeFiles/gtest.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/welease/projects/ft_containers/cmake-build-debug/CMakeFiles --progress-num=17,18 "Built target gtest"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/welease/projects/ft_containers/cmake-build-debug/CMakeFiles --progress-num=15,16 "Built target gtest"
 .PHONY : unit_tests/lib/googletest/CMakeFiles/gtest.dir/all
 
 # Build rule for subdir invocation for target.

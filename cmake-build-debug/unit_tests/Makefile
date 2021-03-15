@@ -191,86 +191,32 @@ Google_Tests_run/fast:
 	cd /Users/welease/projects/ft_containers/cmake-build-debug && $(MAKE) $(MAKESILENT) -f unit_tests/CMakeFiles/Google_Tests_run.dir/build.make unit_tests/CMakeFiles/Google_Tests_run.dir/build
 .PHONY : Google_Tests_run/fast
 
-list.o: list.cpp.o
+map.o: map.cpp.o
 
-.PHONY : list.o
-
-# target to build an object file
-list.cpp.o:
-	cd /Users/welease/projects/ft_containers/cmake-build-debug && $(MAKE) $(MAKESILENT) -f unit_tests/CMakeFiles/Google_Tests_run.dir/build.make unit_tests/CMakeFiles/Google_Tests_run.dir/list.cpp.o
-.PHONY : list.cpp.o
-
-list.i: list.cpp.i
-
-.PHONY : list.i
-
-# target to preprocess a source file
-list.cpp.i:
-	cd /Users/welease/projects/ft_containers/cmake-build-debug && $(MAKE) $(MAKESILENT) -f unit_tests/CMakeFiles/Google_Tests_run.dir/build.make unit_tests/CMakeFiles/Google_Tests_run.dir/list.cpp.i
-.PHONY : list.cpp.i
-
-list.s: list.cpp.s
-
-.PHONY : list.s
-
-# target to generate assembly for a file
-list.cpp.s:
-	cd /Users/welease/projects/ft_containers/cmake-build-debug && $(MAKE) $(MAKESILENT) -f unit_tests/CMakeFiles/Google_Tests_run.dir/build.make unit_tests/CMakeFiles/Google_Tests_run.dir/list.cpp.s
-.PHONY : list.cpp.s
-
-stack.o: stack.cpp.o
-
-.PHONY : stack.o
+.PHONY : map.o
 
 # target to build an object file
-stack.cpp.o:
-	cd /Users/welease/projects/ft_containers/cmake-build-debug && $(MAKE) $(MAKESILENT) -f unit_tests/CMakeFiles/Google_Tests_run.dir/build.make unit_tests/CMakeFiles/Google_Tests_run.dir/stack.cpp.o
-.PHONY : stack.cpp.o
+map.cpp.o:
+	cd /Users/welease/projects/ft_containers/cmake-build-debug && $(MAKE) $(MAKESILENT) -f unit_tests/CMakeFiles/Google_Tests_run.dir/build.make unit_tests/CMakeFiles/Google_Tests_run.dir/map.cpp.o
+.PHONY : map.cpp.o
 
-stack.i: stack.cpp.i
+map.i: map.cpp.i
 
-.PHONY : stack.i
-
-# target to preprocess a source file
-stack.cpp.i:
-	cd /Users/welease/projects/ft_containers/cmake-build-debug && $(MAKE) $(MAKESILENT) -f unit_tests/CMakeFiles/Google_Tests_run.dir/build.make unit_tests/CMakeFiles/Google_Tests_run.dir/stack.cpp.i
-.PHONY : stack.cpp.i
-
-stack.s: stack.cpp.s
-
-.PHONY : stack.s
-
-# target to generate assembly for a file
-stack.cpp.s:
-	cd /Users/welease/projects/ft_containers/cmake-build-debug && $(MAKE) $(MAKESILENT) -f unit_tests/CMakeFiles/Google_Tests_run.dir/build.make unit_tests/CMakeFiles/Google_Tests_run.dir/stack.cpp.s
-.PHONY : stack.cpp.s
-
-vector.o: vector.cpp.o
-
-.PHONY : vector.o
-
-# target to build an object file
-vector.cpp.o:
-	cd /Users/welease/projects/ft_containers/cmake-build-debug && $(MAKE) $(MAKESILENT) -f unit_tests/CMakeFiles/Google_Tests_run.dir/build.make unit_tests/CMakeFiles/Google_Tests_run.dir/vector.cpp.o
-.PHONY : vector.cpp.o
-
-vector.i: vector.cpp.i
-
-.PHONY : vector.i
+.PHONY : map.i
 
 # target to preprocess a source file
-vector.cpp.i:
-	cd /Users/welease/projects/ft_containers/cmake-build-debug && $(MAKE) $(MAKESILENT) -f unit_tests/CMakeFiles/Google_Tests_run.dir/build.make unit_tests/CMakeFiles/Google_Tests_run.dir/vector.cpp.i
-.PHONY : vector.cpp.i
+map.cpp.i:
+	cd /Users/welease/projects/ft_containers/cmake-build-debug && $(MAKE) $(MAKESILENT) -f unit_tests/CMakeFiles/Google_Tests_run.dir/build.make unit_tests/CMakeFiles/Google_Tests_run.dir/map.cpp.i
+.PHONY : map.cpp.i
 
-vector.s: vector.cpp.s
+map.s: map.cpp.s
 
-.PHONY : vector.s
+.PHONY : map.s
 
 # target to generate assembly for a file
-vector.cpp.s:
-	cd /Users/welease/projects/ft_containers/cmake-build-debug && $(MAKE) $(MAKESILENT) -f unit_tests/CMakeFiles/Google_Tests_run.dir/build.make unit_tests/CMakeFiles/Google_Tests_run.dir/vector.cpp.s
-.PHONY : vector.cpp.s
+map.cpp.s:
+	cd /Users/welease/projects/ft_containers/cmake-build-debug && $(MAKE) $(MAKESILENT) -f unit_tests/CMakeFiles/Google_Tests_run.dir/build.make unit_tests/CMakeFiles/Google_Tests_run.dir/map.cpp.s
+.PHONY : map.cpp.s
 
 # Help Target
 help:
@@ -285,15 +231,9 @@ help:
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
 	@echo "... Google_Tests_run"
-	@echo "... list.o"
-	@echo "... list.i"
-	@echo "... list.s"
-	@echo "... stack.o"
-	@echo "... stack.i"
-	@echo "... stack.s"
-	@echo "... vector.o"
-	@echo "... vector.i"
-	@echo "... vector.s"
+	@echo "... map.o"
+	@echo "... map.i"
+	@echo "... map.s"
 .PHONY : help
 
 

@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "gtest/gtest.h"
-#include "map.hpp"
+#include "../ft_map.h"
 #include <map>
 #include <string>
 #include <stdexcept>
