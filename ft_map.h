@@ -116,86 +116,103 @@ private:
 
 	bool _isRed(TreeNode *node) {
 		if (!node)
-			return false;
+			return _black;
 		return node->color == _red;
 	}
 
-		TreeNode *_colorFlip(TreeNode *h) {
-			TreeNode *x = h->right;
-			if (h->right && h->right != _endNode) {
-				x->color = !x->color;
-				if (x->left && x->left != _beginNode)
-					x->left->color = !x->left->color;
-				if (x->right && x->right != _endNode)
-					x->right->color = !x->right->color;
-			}
-			return x;
+		void _colorFlip(TreeNode *h) {
+			if (h->right)
+				h->right->color = !h->right->color;
+			if (h->left)
+				h->left->color = !h->left->color;
+			h->color = !h->color;
 		}
 
 		TreeNode *_rotateLeft(TreeNode* h) {
-			TreeNode *newRoot = h->right;
-			newRoot->parent = nullptr;
-			if (h->parent)
-				link(h->parent, newRoot, h->parent->left == h ? left : right);
-			link(h, newRoot->left, right);
-			link(newRoot, h, left);
-			if (h == _root)
-				_root = newRoot;
-			newRoot->color = h->color;
+			h->right->parent = h->parent;
+			h->parent = h->right;
+			if (h->right->left)
+				h->right->left->parent = h;
+			TreeNode *tmp = h->right->left;
+			h->right->left = h;
+			h->left = tmp;
+			h->parent->color = h->color;
 			h->color = _red;
-			return newRoot;
+			if (h == _root)
+				_root = h->parent;
+			return h->parent;
 		}
 
 		TreeNode *_rotateRight(TreeNode* h) {
-			TreeNode *newRoot = h->left;
-			newRoot->parent = nullptr;
-			if (h->parent)
-				link(h->parent, newRoot, h->parent->left == h ? left : right);
-			link(h, newRoot->right, left);
-			link(newRoot, h, right);
-			if (h == _root)
-				_root = newRoot;
-			newRoot->color = h->color;
+			h->left->parent = h->parent;
+			h->parent = h->left;
+			if (h->left->right)
+				h->left->right->parent = h;
+			TreeNode *tmp = h->left->right;
+			h->left->right = h;
+			h->left = tmp;
+			h->parent->color = h->color;
 			h->color = _red;
-			return newRoot;
+			if (h == _root)
+				_root = h->parent;
+			return h->parent;
+		}
+
+		TreeNode *_balancing(TreeNode *h) {
+			if (h->right && _isRed(h->right))
+				h = _rotateLeft(h);
+			if (h->left && h->left->left && _isRed(h->left) && _isRed(h->left->left))
+				h = _rotateRight(h);
+			if (h->left && h->right && _isRed(h->left) && _isRed(h->right))
+				_colorFlip(h);
+			return h;
+		}
+
+		void _allocRoot(value_type val) {
+			_root = _newNode(nullptr, val, _black);
+			_root->left = _beginNode;
+			_root->right = _endNode;
+			_beginNode->parent = _root;
+			_endNode->parent = _root;
 		}
 
 		std::pair<iterator,bool> _insert(TreeNode *h, value_type val) {
-			if (!h)
-				return std::pair<iterator,bool>(iterator(_newNode(nullptr, val, _black)), true);
-			int cmp1 = _cmp(val.first, h->data->first);
-			int cmp2 = _cmp(h->data->first, val.first);
-			if (!(cmp1 | cmp2)) {
-				h->data->second = val.second;
+			TreeNode *toInsert;
+			std::pair<iterator,bool> ret;
+			bool cmp1 = _cmp(val.first, h->data->first);
+			bool cmp2 = _cmp(h->data->first, val.first);
+			if (!(cmp1 | cmp2))
 				return std::pair<iterator,bool>(iterator(h), false);
-			}
-			else if (cmp1 && !cmp2 && h->left && h->left != _beginNode)
-				return _insert(h->left, val);
-			else if (h->right && h->right != _endNode)
-				return _insert(h->right, val);
-			TreeNode *toInsert = _newNode(h, val, _red);
-			if (cmp1 && !cmp2) {
-				if (h->left == _beginNode)
+			else if (cmp1 && (!h->left ||  h->left == _beginNode)) {
+				toInsert = _newNode(h, val, _red);
+				if (h->left == _beginNode) {
 					link(toInsert, _beginNode, left);
-				link(h, toInsert, left);
+					_beginNode->parent = toInsert;
+				}
+				h->left = toInsert;
+				ret = std::pair<iterator,bool>(iterator(toInsert), true);
 			}
-			else {
-				if (h->right == _endNode)
-					link(toInsert, _endNode, right);
-				link(h, toInsert, right);
+			else if (cmp2 && (!h->right || h->right == _endNode)) {
+				toInsert = _newNode(h, val, _red);
+				if (h->right == _endNode) {
+					toInsert->right = _endNode;
+					_endNode->parent = toInsert;
+				}
+				h->right = toInsert;
+				ret = std::pair<iterator,bool>(iterator(toInsert), true);
 			}
-			if (_isRed(h->right))
-				h = _rotateLeft(h);
-			if (_isRed(h->left) && _isRed(h->left->left))
-				h = _rotateRight(h);
-			if (_isRed(h->left) && _isRed(h->right))
-				_colorFlip(h);
-			return std::pair<iterator,bool>(iterator(toInsert), true);
+			else if (cmp1)
+				return _insert(h->left, val);
+			else
+				return _insert(h->right, val);
+			h = _balancing(h);
+			return ret;
 		}
 
 
 		void link(TreeNode *parent, TreeNode *node, Side side) {
-			side == right ? parent->right = node : parent->left = node;
+			if (parent)
+				side == right ? parent->right = node : parent->left = node;
 			if (node)
 				node->parent = parent;
 		}
@@ -366,9 +383,7 @@ public:
 
 	std::pair<iterator,bool> insert (const value_type& val) {
 		if (_size == 0) {
-			_root = _newNode(nullptr, val, _black);
-			link(_root, _beginNode, left);
-			link(_root, _endNode, right);
+			_allocRoot(val);
 			return std::make_pair(iterator(_root), true);
 		}
 		return _insert(_root, val);
