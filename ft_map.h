@@ -120,60 +120,61 @@ private:
 		return node->color == _red;
 	}
 
-		void _colorFlip(TreeNode *currentNode) {
-			if (currentNode->right != _endNode && currentNode->right)
-				currentNode->right->color = !currentNode->right->color;
-			if (currentNode->left != _beginNode && currentNode->left)
-				currentNode->left->color = !currentNode->left->color;
-			if (currentNode != _root && currentNode)
-				currentNode->color = !currentNode->color;
+		TreeNode *_colorFlip(TreeNode *h) {
+			TreeNode *x = h->right;
+			if (h->right && h->right != _endNode) {
+				x->color = !x->color;
+				if (x->left && x->left != _beginNode)
+					x->left->color = !x->left->color;
+				if (x->right && x->right != _endNode)
+					x->right->color = !x->right->color;
+			}
+			return x;
 		}
 
-		void linkParentWithNewNode(TreeNode* parent, TreeNode* oldNode, TreeNode* newNode) {
-			newNode->parent = nullptr;
-			if (parent)
-				link(parent, newNode, parent->left == oldNode ? left : right);
-		};
-
-		TreeNode *_rotateLeft(TreeNode* currentNode) {
-			TreeNode *rightNode = currentNode->right;
-
-			linkParentWithNewNode(currentNode->parent, currentNode, rightNode);
-			link(currentNode, rightNode->left, right);
-			link(rightNode, currentNode, left);
-			if (currentNode == _root)
-				_root = rightNode;
-
-			rightNode->color = currentNode->color;
-			currentNode->color = _red;
-			return rightNode;
+		TreeNode *_rotateLeft(TreeNode* h) {
+			TreeNode *newRoot = h->right;
+			newRoot->parent = nullptr;
+			if (h->parent)
+				link(h->parent, newRoot, h->parent->left == h ? left : right);
+			link(h, newRoot->left, right);
+			link(newRoot, h, left);
+			if (h == _root)
+				_root = newRoot;
+			newRoot->color = h->color;
+			h->color = _red;
+			return newRoot;
 		}
 
-		TreeNode *_rotateRight(TreeNode* currentNode) {
-			TreeNode *leftNode = currentNode->left;
-
-			linkParentWithNewNode(currentNode->parent, currentNode, leftNode);
-			link(currentNode, leftNode->right, left);
-			link(leftNode, currentNode, right);
-			if (currentNode == _root)
-				_root = leftNode;
-
-			leftNode->color = currentNode->color;
-			currentNode->color = _red;
-			return leftNode;
+		TreeNode *_rotateRight(TreeNode* h) {
+			TreeNode *newRoot = h->left;
+			newRoot->parent = nullptr;
+			if (h->parent)
+				link(h->parent, newRoot, h->parent->left == h ? left : right);
+			link(h, newRoot->right, left);
+			link(newRoot, h, right);
+			if (h == _root)
+				_root = newRoot;
+			newRoot->color = h->color;
+			h->color = _red;
+			return newRoot;
 		}
 
 		std::pair<iterator,bool> _insert(TreeNode *h, value_type val) {
-			int comp = _cmp(val.first, h->data->first) + _cmp(h->data->first, val.first) * 2;
-			if (comp == 0)
+			if (!h)
+				return std::pair<iterator,bool>(iterator(_newNode(nullptr, val, _black)), true);
+			int cmp1 = _cmp(val.first, h->data->first);
+			int cmp2 = _cmp(h->data->first, val.first);
+			if (!(cmp1 | cmp2)) {
+				h->data->second = val.second;
 				return std::pair<iterator,bool>(iterator(h), false);
-			else if (comp == 1 && h->left && h->left != _beginNode)
+			}
+			else if (cmp1 && !cmp2 && h->left && h->left != _beginNode)
 				return _insert(h->left, val);
-			else if (comp == 2 && h->right && h->right != _endNode)
+			else if (h->right && h->right != _endNode)
 				return _insert(h->right, val);
-
 			TreeNode *toInsert = _newNode(h, val, _red);
-			if (comp == 1) {
+			if (cmp1 && !cmp2) {
 				if (h->left == _beginNode)
 					link(toInsert, _beginNode, left);
 				link(h, toInsert, left);
@@ -191,6 +192,7 @@ private:
 				_colorFlip(h);
 			return std::pair<iterator,bool>(iterator(toInsert), true);
 		}
+
 
 		void link(TreeNode *parent, TreeNode *node, Side side) {
 			side == right ? parent->right = node : parent->left = node;
