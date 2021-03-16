@@ -211,6 +211,178 @@ private:
 		return _insert(&((*rootOfSubtree)->right), val);
 	}
 
+		TreeNode *uncle(TreeNode * node) {
+			if (node->parent == NULL or node->parent->parent == NULL)
+				return NULL;
+			if (node->parent->isOnLeft())
+				return node->parent->parent->right;
+			else
+				return node->parent->parent->left;
+		}
+		bool isOnLeft(TreeNode * node) { return node == node->parent->left; }
+
+		TreeNode *_sibling(TreeNode *node) {
+			if (node->parent == NULL)
+				return NULL;
+
+			if (isOnLeft(node))
+				return node->parent->right;
+			return node->parent->left;
+		}
+
+
+		bool hasRedChild(TreeNode * node) {
+			return (node->left != NULL and node->left->color == _red) or
+				   (node->right != NULL and node->right->color == _red);
+		}
+
+		void swapValues(TreeNode *u, TreeNode *v) {
+			value_type *temp = u->data;
+			u->data = v->data;
+			v->data = temp;
+		}
+
+		TreeNode *successor(TreeNode *x) {
+			TreeNode *temp = x;
+			while (temp->left != _beginNode)
+				temp = temp->left;
+			return temp;
+		}
+
+
+		TreeNode *BSTreplace(TreeNode *x) {
+			if (x->left != NULL and x->right != NULL)
+				return successor(x->right);
+			if (x->left == NULL and x->right == NULL)
+				return NULL;
+			if (x->left != NULL && x->left != _beginNode)
+				return x->left;
+			else
+				return x->right;
+		}
+
+		void deleteNode(Node *v) {
+			TreeNode *u = BSTreplace(v);
+			if (u == _beginNode) {
+				std::cout << std::endl;
+				u = _beginNode->parent;
+			}
+			bool uvBlack = ((u == NULL or u->color == _black) and (v->color == _black));
+			TreeNode *parent = v->parent;
+
+			if (u == NULL) {
+				if (v == _root)
+					_root = NULL;
+				else {
+					if (uvBlack)
+						fixDoubleBlack(v);
+					else
+						if (_sibling(v) != NULL)
+							_sibling(v)->color = _red;
+					if (isOnLeft(v))
+						parent->left = NULL;
+					else
+						parent->right = NULL;
+				}
+				_destroyNode(v);
+				return;
+			}
+
+			if (v->left == NULL or v->right == NULL) {
+				if (v == _root) {
+					v->data = u->data;
+					v->left = v->right = NULL;
+					_destroyNode(u);
+				} else {
+					if (isOnLeft(v)) {
+						parent->left = u;
+					} else {
+						parent->right = u;
+					}
+					_destroyNode(v);
+					u->parent = parent;
+					if (uvBlack) {
+						fixDoubleBlack(u);
+					} else {
+						u->color = _black;
+					}
+				}
+				return;
+			}
+			swapValues(u, v);
+			deleteNode(u);
+		}
+
+		void _erase(key_type key) {
+			if (_root == NULL)
+				return;
+			TreeNode *v = find(key).getNode(), *u;
+
+			if (v == _root && _size == 1) {
+				_destroyNode(_root);
+				//_endNode->right = _beginNode;
+				_beginNode->right = _endNode;
+				_endNode->left = _beginNode;
+				return;
+			}
+			if (v == _endNode) {
+				return;
+			}
+
+			deleteNode(v);
+		}
+
+		void fixDoubleBlack(Node *x) {
+			if (x == _root)
+				return;
+
+			TreeNode *sibling = _sibling(x);
+			TreeNode *parent = x->parent;
+			if (sibling == NULL) {
+				fixDoubleBlack(parent);
+			} else {
+				if (sibling->color == _red) {
+					parent->color = _red;
+					sibling->color = _black;
+					if (isOnLeft(sibling)) {
+						_rightRotate(parent);
+					} else {
+						_leftRotate(parent);
+					}
+					fixDoubleBlack(x);
+				} else {
+					if (hasRedChild(sibling)) {
+						if (sibling->left != NULL and sibling->left->color == _red) {
+							if (isOnLeft(sibling)) {
+								sibling->left->color = sibling->color;
+								sibling->color = parent->color;
+								_rightRotate(parent);
+							} else {
+								sibling->left->color = parent->color;
+								_balancing(sibling);
+							}
+						} else {
+							if (isOnLeft(sibling)) {
+								sibling->right->color = parent->color;
+								_balancing(sibling);
+							} else {
+								sibling->right->color = sibling->color;
+								sibling->color = parent->color;
+								_leftRotate(parent);
+							}
+						}
+						parent->color = _black;
+					} else {
+						sibling->color = _red;
+						if (parent->color == _black)
+							fixDoubleBlack(parent);
+						else
+							parent->color = _black;
+					}
+				}
+			}
+		}
+
 public:
 
 	explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : _root(nullptr), _cmp(comp), _alloc(alloc), _size(0){
@@ -346,7 +518,7 @@ public:
 	void erase (iterator position) {};
 
 	size_type erase (const key_type& k){
-		//_erase(find(k).getNode(), k);
+		_erase(k);
 		return 1;
 	};
 

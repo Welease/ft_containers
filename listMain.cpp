@@ -24,8 +24,9 @@ int main()
 	//std::cout << map.size() << std::endl << std::endl;
 	//map.erase(16);
 	std::cout << std::endl << std::endl;
-	//map.erase(40);
+	map.erase(50);
 
+//	map.erase(35);
 	for (ft::map<int, int>::iterator i = map.begin(); i != map.end(); ++i) {
 		std::cout << i->first << std::endl;
 	}
