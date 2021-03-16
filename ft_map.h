@@ -114,113 +114,102 @@ private:
 		--_size;
 	}
 
+	void link(TreeNode *parent, TreeNode *node, Side side) {
+		side == right ? parent->right = node : parent->left = node;
+		if (node)
+			node->parent = parent;
+	}
+
 	bool _isRed(TreeNode *node) {
 		if (!node)
 			return _black;
 		return node->color == _red;
 	}
 
-		void _colorFlip(TreeNode *h) {
-			h->right ? h->right->color = !h->right->color : 0;
-			h->left ? h->left->color = !h->left->color : 0;
-			h->color = !h->color;
+	void _colorFlip(TreeNode *node) {
+		node->right ? node->right->color = !node->right->color : 0;
+		node->left ? node->left->color = !node->left->color : 0;
+		node->color = !node->color;
+		if (node == _root)
+			_root->color = _black;
+	}
+
+	void _lowNode(TreeNode *h, Side s) {
+		TreeNode *tmp = s == left ? h->right->left : h->left->right;
+		s == left ? h->right->left  = h : h->left->right = h;
+		s == left ? h->right = tmp : h->left = tmp;
+	}
+
+	TreeNode	*_leftRotate(TreeNode* node) {
+		node->right->parent = node->parent;
+		node->parent = node->right;
+		if (node->right->left)
+			node->right->left->parent = node;
+		_lowNode(node, left);
+		node->parent->color = node->color;
+		node->color = _red;
+		if (node == _root)
+			_root = node->parent;
+		return node->parent;
+	}
+
+	TreeNode	*_rightRotate(TreeNode* node) {
+		node->left->parent = node->parent;
+		node->parent = node->left;
+		if (node->left->right)
+			node->left->right->parent = node;
+		_lowNode(node, right);
+		node->parent->color = node->color;
+		node->color = _red;
+		if (node == _root)
+			_root = node->parent;
+		return node->parent;
+	}
+
+	TreeNode *_balancing(TreeNode *node) {
+		if (_isRed(node->right))
+			node = _leftRotate(node);
+		if (_isRed(node->left) && _isRed(node->left->left))
+			node = _rightRotate(node);
+		if (_isRed(node->left) && _isRed(node->right))
+			_colorFlip(node);
+		return node;
+	}
+
+	void _allocRoot(value_type val) {
+		_root = _newNode(nullptr, val, _black);
+		_root->left = _beginNode;
+		_root->right = _endNode;
+		_beginNode->parent = _root;
+		_endNode->parent = _root;
+	}
+
+	std::pair<iterator, bool> _insert(TreeNode **rootOfSubtree, const value_type & val) {
+		int cmpResult = _cmp(val.first, (*rootOfSubtree)->data->first) + 2 * _cmp((*rootOfSubtree)->data->first, val.first);
+
+		if (!cmpResult)
+			return std::make_pair((*rootOfSubtree), false);
+
+		if (cmpResult == 1 && ((*rootOfSubtree)->left == nullptr || (*rootOfSubtree)->left == _beginNode)) {
+			TreeNode *toInsert = _newNode((*rootOfSubtree), val, _red);
+			if ((*rootOfSubtree)->left == _beginNode)
+				link(toInsert, _beginNode, left);
+			link((*rootOfSubtree), toInsert, left);
+			*rootOfSubtree = _balancing(*rootOfSubtree);
+			return std::make_pair(iterator(toInsert), true);
 		}
-
-		void _swapNodes(TreeNode *one, TreeNode *two) {
-			TreeNode *tmp = one;
-			one = two;
-			two = tmp;
+		else if (cmpResult == 2 && ((*rootOfSubtree)->right == nullptr || (*rootOfSubtree)->right == _endNode)) {
+			TreeNode *toInsert = _newNode((*rootOfSubtree), val, _red);
+			if ((*rootOfSubtree)->right == _endNode)
+				link(toInsert, _endNode, right);
+			link((*rootOfSubtree), toInsert, right);
+			*rootOfSubtree = _balancing(*rootOfSubtree);
+			return std::make_pair(iterator(toInsert), true);
 		}
-
-		TreeNode	*_rotateLeft(TreeNode* h) {
-			h->right->parent = h->parent;
-			h->parent = h->right;
-			if (h->right->left)
-				h->right->left->parent = h;
-			TreeNode *tmp = h->right->left;
-			h->right->left = h;
-			h->right = tmp;
-			if (h == _root)
-				_root = h->parent;
-			h->parent->color = h->color;
-			h->color = _red;
-			return h->parent;
-		}
-
-		TreeNode	*_rotateRight(TreeNode* h) {
-			h->left->parent = h->parent;
-			h->parent = h->left;
-			if (h->left->right)
-				h->left->right->parent = h;
-			TreeNode *tmp = h->left->right;
-			h->left->right = h;
-			h->left = tmp;
-			h->parent->color = h->color;
-			h->color = _red;
-			if (h == _root)
-				_root = h->parent;
-			return h->parent;
-		}
-
-		TreeNode *_balancing(TreeNode *h) {
-			if (h->right && _isRed(h->right))
-				h = _rotateLeft(h);
-			if (h->left && h->left->left && _isRed(h->left) && _isRed(h->left->left))
-				h = _rotateRight(h);
-			if (h->left && h->right && _isRed(h->left) && _isRed(h->right))
-				_colorFlip(h);
-			if (h == _root && _root->color == _red)
-				_root->color = _black;
-			return h;
-		}
-
-		void _allocRoot(value_type val) {
-			_root = _newNode(nullptr, val, _black);
-			_root->left = _beginNode;
-			_root->right = _endNode;
-			_beginNode->parent = _root;
-			_endNode->parent = _root;
-		}
-
-		std::pair<iterator,bool> _insert(TreeNode *h, value_type val) {
-			std::pair<iterator, bool> ret;
-			int cmpResult =  _cmp(val.first, h->data->first) + 2 * _cmp(h->data->first, val.first);
-			if (cmpResult == 0)
-				return std::pair<iterator, bool>(iterator(h), false);
-
-			if (cmpResult == 1 && (!h->left|| h->left == _beginNode)) {
-				TreeNode *toInsert = _newNode(h, val, _red);
-				if (h->left == _beginNode) {
-					toInsert->left = _beginNode;
-					_beginNode->parent = toInsert;
-				}
-				h->left = toInsert;
-				ret = std::pair<iterator, bool>(iterator(toInsert), true);
-			}
-			else if (cmpResult == 2 && (!h->right || h->right == _endNode)) {
-				TreeNode *toInsert = _newNode(h, val, _red);
-				if (h->right == _endNode) {
-					toInsert->right = _endNode;
-					_endNode->parent = toInsert;
-				}
-				h->right = toInsert;
-				ret = std::pair<iterator, bool>(iterator(toInsert), true);
-			}
-			else if (cmpResult == 1)
-				return _insert( h->left, val);
-			else
-				return _insert( h->right, val);
-			h = _balancing(h);
-			return ret;
-		}
-
-
-		void link(TreeNode *parent, TreeNode *node, Side side) {
-			if (parent)
-				side == right ? parent->right = node : parent->left = node;
-			if (node)
-				node->parent = parent;
-		}
+		else if (cmpResult == 1)
+			return _insert(&((*rootOfSubtree)->left), val);
+		return _insert(&((*rootOfSubtree)->right), val);
+	}
 
 public:
 
@@ -301,7 +290,7 @@ public:
 			_allocRoot(val);
 			return std::make_pair(iterator(_root), true);
 		}
-		return _insert(_root, val);
+		return _insert(&_root, val);
 	}
 
 	iterator insert (iterator position, const value_type& val) {
