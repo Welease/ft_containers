@@ -4,7 +4,7 @@
 
 #ifndef FT_CONTAINERS_FT_MAP_H
 #define FT_CONTAINERS_FT_MAP_H
-
+#include <queue>
 #include "ft.h"
 
 namespace ft {
@@ -120,101 +120,173 @@ private:
 		return node->color == _red;
 	}
 
-	key_type _min() {
-		TreeNode tmp = _root;
-		while (tmp != nullptr)
-			tmp = tmp.left;
-		return tmp ? tmp.key : nullptr;
-	}
-
-	void _put(key_type key, mapped_type mappedType) {
-		if (!key)
-			throw std::exception();
-		if (!mappedType) {
-			_destroyNode(find(key).getNode());
-			return;
+		void _colorFlip(TreeNode *currentNode) {
+			if (currentNode->right != _endNode && currentNode->right)
+				currentNode->right->color = !currentNode->right->color;
+			if (currentNode->left != _beginNode && currentNode->left)
+				currentNode->left->color = !currentNode->left->color;
+			if (currentNode != _root && currentNode)
+				currentNode->color = !currentNode->color;
 		}
-		_root = put(_root, key, mappedType);
-	}
 
-	TreeNode *_colorFlip(TreeNode *h) {
-		TreeNode *x = h->right;
-		if (h->right) {
-			x->color = !x->color;
-			if (x->left)
-				x->left->color = !x->left->color;
-			if (x->right)
-				x->right->color = !x->right->color;
-		}
-		return x;
-	}
+		void linkParentWithNewNode(TreeNode* parent, TreeNode* oldNode, TreeNode* newNode) {
+			newNode->parent = nullptr;
+			if (parent)
+				link(parent, newNode, parent->left == oldNode ? left : right);
+		};
 
-	TreeNode *_rotateLeft(TreeNode* h) {
-		TreeNode *newRoot = h->right;
-		newRoot->parent = nullptr;
-		if (h->parent)
-			link(h->parent, newRoot, h->parent->left == h ? left : right);
-		link(h, newRoot->left, right);
-		link(newRoot, h, left);
-		if (h == _root)
-			_root = newRoot;
-		newRoot->color = h->color;
-		h->color = _red;
-		return newRoot;
-	}
+		TreeNode *_rotateLeft(TreeNode* currentNode) {
+			TreeNode *rightNode = currentNode->right;
 
-	TreeNode *_rotateRight(TreeNode* h) {
-		TreeNode *newRoot = h->left;
-		newRoot->parent = nullptr;
-		if (h->parent)
-			link(h->parent, newRoot, h->parent->left == h ? right : left);
-		link(h, newRoot->right, left);
-		link(newRoot, h, right);
-		if (h == _root)
-			_root = newRoot;
-		newRoot->color = h->color;
-		h->color = _red;
-		return newRoot;
-	}
+			linkParentWithNewNode(currentNode->parent, currentNode, rightNode);
+			link(currentNode, rightNode->left, right);
+			link(rightNode, currentNode, left);
+			if (currentNode == _root)
+				_root = rightNode;
 
-	std::pair<iterator,bool> _insert(TreeNode *h, value_type val) {
-		if (!h)
-			return std::pair<iterator,bool>(iterator(_newNode(nullptr, val, _black)), true);
-		int cmp1 = _cmp(val.first, h->data->first);
-		int cmp2 = _cmp(h->data->first, val.first);
-		if (!(cmp1 | cmp2)) {
-			h->data->second = val.second;
-			return std::pair<iterator,bool>(iterator(h), false);
+			rightNode->color = currentNode->color;
+			currentNode->color = _red;
+			return rightNode;
 		}
-		else if (cmp1 && !cmp2 && h->left && h->left != _beginNode)
-			h->left = (_insert(h->left, val)).first.getNode();
-		else if (h->right && h->right != _endNode)
-			h->right = (_insert(h->right, val)).first.getNode();
-		TreeNode *toInsert = _newNode(h, val, _red);
-		if (cmp1 && !cmp2) {
-			if (h->left == _beginNode)
-				link(toInsert, _beginNode, left);
-			link(h, toInsert, left);
+
+		TreeNode *_rotateRight(TreeNode* currentNode) {
+			TreeNode *leftNode = currentNode->left;
+
+			linkParentWithNewNode(currentNode->parent, currentNode, leftNode);
+			link(currentNode, leftNode->right, left);
+			link(leftNode, currentNode, right);
+			if (currentNode == _root)
+				_root = leftNode;
+
+			leftNode->color = currentNode->color;
+			currentNode->color = _red;
+			return leftNode;
 		}
-		else {
-			if (h->right == _endNode)
-				link(toInsert, _endNode, right);
-			link(h, toInsert, right);
+
+		std::pair<iterator,bool> _insert(TreeNode *h, value_type val) {
+			int comp = _cmp(val.first, h->data->first) + _cmp(h->data->first, val.first) * 2;
+			if (comp == 0)
+				return std::pair<iterator,bool>(iterator(h), false);
+			else if (comp == 1 && h->left && h->left != _beginNode)
+				return _insert(h->left, val);
+			else if (comp == 2 && h->right && h->right != _endNode)
+				return _insert(h->right, val);
+
+			TreeNode *toInsert = _newNode(h, val, _red);
+			if (comp == 1) {
+				if (h->left == _beginNode)
+					link(toInsert, _beginNode, left);
+				link(h, toInsert, left);
+			}
+			else {
+				if (h->right == _endNode)
+					link(toInsert, _endNode, right);
+				link(h, toInsert, right);
+			}
+			if (_isRed(h->right))
+				h = _rotateLeft(h);
+			if (_isRed(h->left) && _isRed(h->left->left))
+				h = _rotateRight(h);
+			if (_isRed(h->left) && _isRed(h->right))
+				_colorFlip(h);
+			return std::pair<iterator,bool>(iterator(toInsert), true);
 		}
-		if (_isRed(h->right))
-			h = _rotateLeft(h);
-		if (_isRed(h->left) && _isRed(h->left->left))
-			h = _rotateRight(h);
-		if (_isRed(h->left) && _isRed(h->right))
+
+		void link(TreeNode *parent, TreeNode *node, Side side) {
+			side == right ? parent->right = node : parent->left = node;
+			if (node)
+				node->parent = parent;
+		}
+
+		TreeNode *_getMinNode(TreeNode *node) {
+			if (node->left)
+				return _getMinNode(node->left);
+			return node;
+		}
+
+		TreeNode *_moveRedLeft(TreeNode *h) {
 			_colorFlip(h);
-		return std::pair<iterator,bool>(iterator(toInsert), true);
-	}
+			if (h->right && _isRed(h->right->left)) {
+				h->right = _rotateRight(h->right);
+				h = _rotateLeft(h);
+				_colorFlip(h);
+			}
+			return h;
+		}
 
-	void link(TreeNode *parent, TreeNode *node, Side side) {
-		side == right ? parent->right = node : parent->left = node;
-		if (node)
-			node->parent = parent;
-	}
+		TreeNode *_moveRedRight(TreeNode *h) {
+			_colorFlip(h);
+			if (h->left && _isRed(h->left->left)) {
+				h = _rotateRight(h);
+				_colorFlip(h);
+			}
+			return h;
+		}
+
+		TreeNode *_erase(TreeNode *h, key_type k) {
+			if (!h)
+				return h;
+			bool cmp1 = _cmp(k, h->data->first);
+			bool cmp2 = _cmp(h->data->first, k);
+			TreeNode *temp = nullptr;
+			if (cmp1 && !cmp2) {
+				if (!_isRed(h->left) && !_isRed(h->left->left))
+					h = _moveRedLeft(h);
+				link(h, _erase(h->left, k), left);
+			}
+			else {
+				if (_isRed(h->left)) {
+					h = _rotateLeft(h);
+					link(h, _erase(h->right, k), right);
+					if (_isRed(h->right))
+						h = _rotateLeft(h);
+					if (_isRed(h->left) && _isRed(h->left->left))
+						h = _rotateRight(h);
+					if (_isRed(h->left) && _isRed(h->right))
+						_colorFlip(h);
+					return h;
+				}
+			}
+			if (((!cmp1 && cmp2) || (!cmp1 && !cmp2))  && (!h->right || h->right == _endNode)) {
+				if (!h->left && h->right  == _endNode)
+					temp = h->right;
+				else
+					temp = h->left;
+				_destroyNode(h);
+				return temp;
+			}
+			if (h->right && !_isRed(h->right) && !_isRed(h->right->left))
+				h = _moveRedRight(h);
+			if (!_cmp(h->data->first, k)) {
+				temp = _getMinNode(h->right);
+				if (_root == h)
+					_root = temp;
+				if (temp->parent != h) {
+					link(temp->parent, h->right, left);
+					link(temp, h->right, right);
+				}
+				if (h->left == _beginNode) {
+					h->left->parent = temp;
+					temp->left = h->left;
+				}
+				else
+					link(temp, h->left, left);
+				temp->parent = nullptr;
+				if (h->parent)
+					link(h->parent, temp, h->parent->left == h ? left : right);
+				_destroyNode(h);
+				h = temp;
+			}
+			else
+				link(h, _erase(h->right, k), right);
+			if (_isRed(h->right))
+				h = _rotateLeft(h);
+			if (_isRed(h->left) && _isRed(h->left->left))
+				h = _rotateRight(h);
+			if (_isRed(h->left) && _isRed(h->right))
+				_colorFlip(h);
+			return h;
+		}
 
 public:
 
@@ -254,11 +326,11 @@ public:
 
 	iterator 					begin() { return _size ? iterator(_beginNode->parent) : iterator(_endNode); }
 
-	const_iterator 				begin() const { return const_iterator(begin()); }
+	const_iterator 				begin() const { return _size ? const_iterator(_beginNode->parent) : const_iterator(_endNode); }
 
 	iterator 					end() { return iterator(_endNode); }
 
-	const_iterator 				end() const { const_iterator(end()); }
+	const_iterator 				end() const {  return const_iterator(_endNode); }
 
 	reverse_iterator 			rbegin() { return _size ? reverse_iterator(_endNode->parent) : reverse_iterator(_beginNode); };
 
@@ -275,20 +347,18 @@ public:
 	size_type 					max_size() const { return std::numeric_limits<size_type>::max() / sizeof(_root); };
 
 	iterator 					find (const key_type& k) {
-		int cmp;
-		TreeNode *tmp = _root;
-		while (tmp != _root) {
-			if (!(cmp = _cmp(tmp->data->first, k)))
-				return iterator(tmp);
-			else if (cmp < 0)
-				tmp = tmp->left;
-			else if (cmp > 0)
-				tmp = tmp->right;
-		}
+		for (iterator i = begin(); i != end(); ++i)
+			if (i.getNode()->data->first == k)
+				return i;
 		return end();
 	}
 
-	const_iterator find (const key_type& k) const { return const_iterator(find(k)); }
+	const_iterator find (const key_type& k) const {
+		for (const_iterator i = begin(); i != end(); ++i)
+			if (i.getNode()->data->first == k)
+				return i;
+		return end();
+	}
 
 	mapped_type& operator[] (const key_type& k) { return (*((this->insert(make_pair(k,mapped_type()))).first)).second; }
 
@@ -315,7 +385,7 @@ public:
 	size_type count (const key_type& k) const {
 		const_iterator i = find(k);
 
-		return i.getNode()->data != nullptr;
+		return i != end();
 	}
 
 	key_compare key_comp() const { return _cmp; }
@@ -354,7 +424,10 @@ public:
 
 	void erase (iterator position) {};
 
-	size_type erase (const key_type& k){return _size;};
+	size_type erase (const key_type& k){
+		_erase(find(k).getNode(), k);
+		return 1;
+	};
 
 	void erase (iterator first, iterator last){};
 
@@ -374,7 +447,7 @@ public:
 		iterator(const iterator &iter) { *this = iter; };
 		iterator & operator++() {
 			if (_node->right) {
-				_node = findMinNode(_node->right);
+				_node = getMinNode(_node->right);
 				return *this;
 			}
 			else if (_node->parent && _node->parent->left == _node) {
@@ -401,7 +474,7 @@ public:
 		};
 		iterator & operator--() {
 			if (_node->left) {
-				_node = findMaxNode(_node->left);
+				_node = getMaxNode(_node->left);
 				return *this;
 			}
 			else if (_node->parent && _node->parent->right == _node) {
@@ -435,15 +508,15 @@ public:
 		TreeNode *getNode() const { return _node; }
 
 	private:
-		TreeNode *findMinNode(TreeNode *node) {
+		TreeNode *getMinNode(TreeNode *node) {
 			if (node->left)
-				return findMinNode(node->left);
+				return getMinNode(node->left);
 			return node;
 		}
 
-		TreeNode *findMaxNode(TreeNode *node) {
+		TreeNode *getMaxNode(TreeNode *node) {
 			if (node->right)
-				return findMaxNode(node->right);
+				return getMaxNode(node->right);
 			return node;
 		}
 	};
@@ -469,7 +542,7 @@ public:
 
 		const_iterator & operator++() {
 			if (_node->right) {
-				_node = findMinNode(_node->right);
+				_node = getMinNode(_node->right);
 				return *this;
 			}
 			else if (_node->parent && _node->parent->left == _node) {
@@ -496,7 +569,7 @@ public:
 		};
 		const_iterator & operator--() {
 			if (_node->left) {
-				_node = findMaxNode(_node->left);
+				_node = getMaxNode(_node->left);
 				return *this;
 			}
 			else if (_node->parent && _node->parent->right == _node) {
@@ -531,15 +604,15 @@ public:
 		TreeNode *getNode() const { return _node; }
 	private:
 
-		TreeNode *findMinNode(TreeNode *node) {
+		TreeNode *getMinNode(TreeNode *node) {
 			if (node->left)
-				return findMinNode(node->left);
+				return getMinNode(node->left);
 			return node;
 		}
 
-		TreeNode *findMaxNode(TreeNode *node) {
+		TreeNode *getMaxNode(TreeNode *node) {
 			if (node->right)
-				return findMaxNode(node->right);
+				return getMaxNode(node->right);
 			return node;
 		}
 	};
@@ -559,7 +632,7 @@ public:
 
 		reverse_iterator & operator++() {
 			if (_node->left) {
-				_node = findMaxNode(_node->left);
+				_node = getMaxNode(_node->left);
 				return *this;
 			}
 			else if (_node->parent && _node->parent->right == _node) {
@@ -567,14 +640,12 @@ public:
 				return *this;
 			}
 			TreeNode *temp = _node;
-			while (temp->parent->left == temp) {
-				temp = temp->parent;
-				if (!temp) {
-					_node = _node->left;
+			while (temp->parent->left == temp)
+				if ((temp = temp->parent) == nullptr) {
+					_node = temp->left;
 					return *this;
 				}
-			}
-			_node = _node->parent;
+			_node = temp->parent;
 			return *this;
 		};
 
@@ -586,7 +657,7 @@ public:
 		};
 		reverse_iterator & operator--() {
 			if (_node->right) {
-				_node = findMinNode(_node->right);
+				_node = getMinNode(_node->right);
 				return *this;
 			}
 			else if (_node->parent && _node->parent->left == _node) {
@@ -623,15 +694,15 @@ public:
 
 		TreeNode *getNode() const { return _node; }
 	private:
-		TreeNode *findMinNode(TreeNode *node) {
+		TreeNode *getMinNode(TreeNode *node) {
 			if (node->left)
-				return findMinNode(node->left);
+				return getMinNode(node->left);
 			return node;
 		}
 
-		TreeNode *findMaxNode(TreeNode *node) {
+		TreeNode *getMaxNode(TreeNode *node) {
 			if (node->right)
-				return findMaxNode(node->right);
+				return getMaxNode(node->right);
 			return node;
 		}
 	};
@@ -658,7 +729,7 @@ public:
 
 		const_reverse_iterator & operator++() {
 			if (_node->left) {
-				_node = findMaxNode(_node->left);
+				_node = getMaxNode(_node->left);
 				return *this;
 			}
 			else if (_node->parent && _node->parent->right == _node) {
@@ -666,14 +737,12 @@ public:
 				return *this;
 			}
 			TreeNode *temp = _node;
-			while (temp->parent->left == temp) {
-				temp = temp->parent;
-				if (!temp) {
-					_node = _node->left;
+			while (temp->parent->left == temp)
+				if ((temp = temp->parent) == nullptr) {
+					_node = temp->left;
 					return *this;
 				}
-			}
-			_node = _node->parent;
+			_node = temp->parent;
 			return *this;
 		};
 
@@ -685,7 +754,7 @@ public:
 
 		const_reverse_iterator & operator--() {
 			if (_node->right) {
-				_node = findMinNode(_node->right);
+				_node = getMinNode(_node->right);
 				return *this;
 			}
 			else if (_node->parent && _node->parent->left == _node) {
@@ -723,15 +792,15 @@ public:
 
 		TreeNode *getNode() const { return _node; }
 	private:
-		TreeNode *findMinNode(TreeNode *node) {
+		TreeNode *getMinNode(TreeNode *node) {
 			if (node->left)
-				return findMinNode(node->left);
+				return getMinNode(node->left);
 			return node;
 		}
 
-		TreeNode *findMaxNode(TreeNode *node) {
+		TreeNode *getMaxNode(TreeNode *node) {
 			if (node->right)
-				return findMaxNode(node->right);
+				return getMaxNode(node->right);
 			return node;
 		}
 	};
