@@ -121,29 +121,33 @@ private:
 	}
 
 		void _colorFlip(TreeNode *h) {
-			if (h->right)
-				h->right->color = !h->right->color;
-			if (h->left)
-				h->left->color = !h->left->color;
+			h->right ? h->right->color = !h->right->color : 0;
+			h->left ? h->left->color = !h->left->color : 0;
 			h->color = !h->color;
 		}
 
-		TreeNode *_rotateLeft(TreeNode* h) {
+		void _swapNodes(TreeNode *one, TreeNode *two) {
+			TreeNode *tmp = one;
+			one = two;
+			two = tmp;
+		}
+
+		TreeNode	*_rotateLeft(TreeNode* h) {
 			h->right->parent = h->parent;
 			h->parent = h->right;
 			if (h->right->left)
 				h->right->left->parent = h;
 			TreeNode *tmp = h->right->left;
 			h->right->left = h;
-			h->left = tmp;
-			h->parent->color = h->color;
-			h->color = _red;
+			h->right = tmp;
 			if (h == _root)
 				_root = h->parent;
+			h->parent->color = h->color;
+			h->color = _red;
 			return h->parent;
 		}
 
-		TreeNode *_rotateRight(TreeNode* h) {
+		TreeNode	*_rotateRight(TreeNode* h) {
 			h->left->parent = h->parent;
 			h->parent = h->left;
 			if (h->left->right)
@@ -165,6 +169,8 @@ private:
 				h = _rotateRight(h);
 			if (h->left && h->right && _isRed(h->left) && _isRed(h->right))
 				_colorFlip(h);
+			if (h == _root && _root->color == _red)
+				_root->color = _black;
 			return h;
 		}
 
@@ -177,34 +183,33 @@ private:
 		}
 
 		std::pair<iterator,bool> _insert(TreeNode *h, value_type val) {
-			TreeNode *toInsert;
-			std::pair<iterator,bool> ret;
-			bool cmp1 = _cmp(val.first, h->data->first);
-			bool cmp2 = _cmp(h->data->first, val.first);
-			if (!(cmp1 | cmp2))
-				return std::pair<iterator,bool>(iterator(h), false);
-			else if (cmp1 && (!h->left ||  h->left == _beginNode)) {
-				toInsert = _newNode(h, val, _red);
+			std::pair<iterator, bool> ret;
+			int cmpResult =  _cmp(val.first, h->data->first) + 2 * _cmp(h->data->first, val.first);
+			if (cmpResult == 0)
+				return std::pair<iterator, bool>(iterator(h), false);
+
+			if (cmpResult == 1 && (!h->left|| h->left == _beginNode)) {
+				TreeNode *toInsert = _newNode(h, val, _red);
 				if (h->left == _beginNode) {
-					link(toInsert, _beginNode, left);
+					toInsert->left = _beginNode;
 					_beginNode->parent = toInsert;
 				}
 				h->left = toInsert;
-				ret = std::pair<iterator,bool>(iterator(toInsert), true);
+				ret = std::pair<iterator, bool>(iterator(toInsert), true);
 			}
-			else if (cmp2 && (!h->right || h->right == _endNode)) {
-				toInsert = _newNode(h, val, _red);
+			else if (cmpResult == 2 && (!h->right || h->right == _endNode)) {
+				TreeNode *toInsert = _newNode(h, val, _red);
 				if (h->right == _endNode) {
 					toInsert->right = _endNode;
 					_endNode->parent = toInsert;
 				}
 				h->right = toInsert;
-				ret = std::pair<iterator,bool>(iterator(toInsert), true);
+				ret = std::pair<iterator, bool>(iterator(toInsert), true);
 			}
-			else if (cmp1)
-				return _insert(h->left, val);
+			else if (cmpResult == 1)
+				return _insert( h->left, val);
 			else
-				return _insert(h->right, val);
+				return _insert( h->right, val);
 			h = _balancing(h);
 			return ret;
 		}
@@ -215,96 +220,6 @@ private:
 				side == right ? parent->right = node : parent->left = node;
 			if (node)
 				node->parent = parent;
-		}
-
-		TreeNode *_getMinNode(TreeNode *node) {
-			if (node->left)
-				return _getMinNode(node->left);
-			return node;
-		}
-
-		TreeNode *_moveRedLeft(TreeNode *h) {
-			_colorFlip(h);
-			if (h->right && _isRed(h->right->left)) {
-				h->right = _rotateRight(h->right);
-				h = _rotateLeft(h);
-				_colorFlip(h);
-			}
-			return h;
-		}
-
-		TreeNode *_moveRedRight(TreeNode *h) {
-			_colorFlip(h);
-			if (h->left && _isRed(h->left->left)) {
-				h = _rotateRight(h);
-				_colorFlip(h);
-			}
-			return h;
-		}
-
-		TreeNode *_erase(TreeNode *h, key_type k) {
-			if (!h)
-				return h;
-			bool cmp1 = _cmp(k, h->data->first);
-			bool cmp2 = _cmp(h->data->first, k);
-			TreeNode *temp = nullptr;
-			if (cmp1 && !cmp2) {
-				if (!_isRed(h->left) && !_isRed(h->left->left))
-					h = _moveRedLeft(h);
-				link(h, _erase(h->left, k), left);
-			}
-			else {
-				if (_isRed(h->left)) {
-					h = _rotateLeft(h);
-					link(h, _erase(h->right, k), right);
-					if (_isRed(h->right))
-						h = _rotateLeft(h);
-					if (_isRed(h->left) && _isRed(h->left->left))
-						h = _rotateRight(h);
-					if (_isRed(h->left) && _isRed(h->right))
-						_colorFlip(h);
-					return h;
-				}
-			}
-			if (((!cmp1 && cmp2) || (!cmp1 && !cmp2))  && (!h->right || h->right == _endNode)) {
-				if (!h->left && h->right  == _endNode)
-					temp = h->right;
-				else
-					temp = h->left;
-				_destroyNode(h);
-				return temp;
-			}
-			if (h->right && !_isRed(h->right) && !_isRed(h->right->left))
-				h = _moveRedRight(h);
-			if (!_cmp(h->data->first, k)) {
-				temp = _getMinNode(h->right);
-				if (_root == h)
-					_root = temp;
-				if (temp->parent != h) {
-					link(temp->parent, h->right, left);
-					link(temp, h->right, right);
-				}
-				if (h->left == _beginNode) {
-					h->left->parent = temp;
-					temp->left = h->left;
-				}
-				else
-					link(temp, h->left, left);
-				temp->parent = nullptr;
-				if (h->parent)
-					link(h->parent, temp, h->parent->left == h ? left : right);
-				_destroyNode(h);
-				h = temp;
-			}
-			else
-				link(h, _erase(h->right, k), right);
-			if (_isRed(h->right))
-				h = _rotateLeft(h);
-			if (_isRed(h->left) && _isRed(h->left->left))
-				h = _rotateRight(h);
-			if (_isRed(h->left) && _isRed(h->right))
-				_colorFlip(h);
-			return h;
 		}
 
 public:
@@ -442,7 +357,7 @@ public:
 	void erase (iterator position) {};
 
 	size_type erase (const key_type& k){
-		_erase(find(k).getNode(), k);
+		//_erase(find(k).getNode(), k);
 		return 1;
 	};
 
@@ -521,7 +436,8 @@ public:
 		bool operator!=(const const_iterator &iter) const { return _node != iter.getNode(); };
 
 		reference operator*() const { return *(_node->data); }
-		pointer operator->() const { return _node->data; }
+		pointer operator->() const {
+			return _node->data; }
 		TreeNode *getNode() const { return _node; }
 
 	private:
@@ -707,7 +623,8 @@ public:
 		bool operator!=(const const_reverse_iterator &iter) const { return _node != iter.getNode(); };
 
 		value_type & operator*() const { return *(_node->data); };
-		value_type * operator->() const { return _node->data; }
+		value_type * operator->() const {
+			return _node->data; }
 
 		TreeNode *getNode() const { return _node; }
 	private:
