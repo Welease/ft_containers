@@ -114,262 +114,309 @@ private:
 		--_size;
 	}
 
-		TreeNode	*_rotateLeft(TreeNode* h) {
-			h->right->parent = h->parent;
-			h->parent = h->right;
-			if (h->right->left) h->right->left->parent = h;
-			TreeNode *tmp = h->right->left;
-			h->right->left = h;
-			h->right = tmp;
-			h->parent->color = h->color;
-			h->color = _red;
-			if (h == _root)
-				_root = h->parent;
-			return h->parent;
-		}
+	void _allocRoot(value_type val) {
+		_root = _newNode(nullptr, val, _black);
+		_root->left = _beginNode;
+		_root->right = _endNode;
+		_beginNode->parent = _root;
+		_endNode->parent = _root;
+	}
 
-		TreeNode	*_rotateRight(TreeNode* h) {
-			h->left->parent = h->parent;
-			h->parent = h->left;
-			if (h->left->right) h->left->right->parent = h;
-			TreeNode *tmp = h->left->right;
-			h->left->right = h;
-			h->left = tmp;
-			h->parent->color = h->color;
-			h->color = _red;
-			if (h == _root)
-				_root = h->parent;
-			return h->parent;
-		}
+	void leftRotate(TreeNode *x) {
+		TreeNode *nParent = x->right;
+		if (x == _root)
+			_root = nParent;
+		moveDown(nParent, x);
+		x->right = nParent->left;
+		if (nParent->left != NULL)
+			nParent->left->parent = x;
+		nParent->left = x;
+	}
+	void rightRotate(TreeNode *x) {
+		TreeNode *nParent = x->left;
+		if (x == _root)
+			_root = nParent;
+		moveDown(nParent, x);
+		x->left = nParent->right;
+		if (nParent->right != NULL)
+			nParent->right->parent = x;
+		nParent->right = x;
+	}
 
-		void	_invertColors(TreeNode* h) {
-			if (h->right)
-				h->right->color = !h->right->color;
-			if (h->left)
-				h->left->color = !h->left->color;
-			h->color = !h->color;
-		}
+	TreeNode *_uncle(TreeNode *x) {
+		if (x->parent == NULL or x->parent->parent == NULL)
+			return NULL;
+		if (isOnLeft(x->parent))
+			return x->parent->parent->right;
+		else
+			return x->parent->parent->left;
+	}
+	bool isOnLeft(TreeNode *x) { return x == x->parent->left; }
 
-		TreeNode	*_moveRedLeft(TreeNode *h) {
-			_invertColors(h);
-			if (h->right && _isRed(h->right->left)) {
-				h->right = _rotateRight(h->right);
-				h = _rotateLeft(h);
-				_invertColors(h);
+	TreeNode *_sibling(TreeNode *x) {
+		if (x->parent == NULL)
+			return NULL;
+		if (isOnLeft(x))
+			return x->parent->right;
+		return x->parent->left;
+	}
+	void moveDown(TreeNode *nParent, TreeNode *x) {
+		if (x->parent != NULL) {
+			if (isOnLeft(x)) {
+				x->parent->left = nParent;
+			} else {
+				x->parent->right = nParent;
 			}
-			return h;
 		}
+		nParent->parent = x->parent;
+		x->parent = nParent;
+	}
+	bool hasRedChild(TreeNode *x) {
+		return (x->left != NULL and x->left->color == _red) or
+		(x->right != NULL and x->right->color == _red);
+	}
 
-		TreeNode	*_moveRedRight(TreeNode *h) {
-			_invertColors(h);
-			if (_isRed(h->left->left)) {
-				h = _rotateRight(h);
-				_invertColors(h);
-			}
-			return h;
+
+	void swapColors(TreeNode *x1, TreeNode *x2) {
+		bool temp = x1->color;
+		x1->color = x2->color;
+		x2->color = temp;
+	}
+	void swapValues(TreeNode *u, TreeNode *v) {
+		value_type *temp = u->data;
+		u->data = v->data;
+		v->data = temp;
+	}
+
+	void fixRedRed(TreeNode *x) {
+		if (x == _root) {
+			x->color = _black;
+			return;
 		}
-
-		TreeNode *_getMinNode(TreeNode *h) const {
-			if (h->left == nullptr)
-				return h;
-			return _getMinNode(h->left);
-		}
-
-		bool _isRed(TreeNode *node) {
-			if (!node)
-				return _black;
-			return node->color == _red;
-		}
-
-		TreeNode	*_fixUp(TreeNode* h) {
-			if (h->right && _isRed(h->right))
-				h = _rotateLeft(h);
-			if (h->left && h->left->left && _isRed(h->left) && _isRed(h->left->left))
-				h = _rotateRight(h);
-			if (h->left && h->right && _isRed(h->left) && _isRed(h->right))
-				_invertColors(h);
-			if (h == _root && _root->color == _red)
-				_root->color = _black;
-			return h;
-		}
-
-		std::pair<iterator, bool> _insert(TreeNode **h, const value_type & val) {
-			TreeNode *tmp;
-			std::pair<iterator, bool> ret;
-
-			bool less = _cmp(val.first, (*h)->data->first);
-			bool greater = _cmp((*h)->data->first, val.first);
-
-			if (!less && !greater) {
-				return std::make_pair(iterator(*h), false); // do not make node, just return this (h.first, false)
-			}
-
-			if (less && ((*h)->left == nullptr || (*h)->left == _beginNode)) {
-				tmp = _newNode((*h), val, _red);
-				if ((*h)->left == _beginNode) {
-					tmp->left = _beginNode;
-					_beginNode->parent = tmp;
+		TreeNode *parent = x->parent, *grandparent = parent->parent;
+		TreeNode *uncle = _uncle(x);
+		if (parent->color != _black) {
+			if (uncle != NULL && uncle->color == _red) {
+				parent->color = _black;
+				uncle->color = _black;
+				grandparent->color = _red;
+				fixRedRed(grandparent);
+			} else {
+				if (isOnLeft(parent)) {
+					if (isOnLeft(x)) {
+						swapColors(parent, grandparent);
+					} else {
+						leftRotate(parent);
+						swapColors(x, grandparent);
+					}
+					rightRotate(grandparent);
+				} else {
+					if (isOnLeft(x)) {
+						rightRotate(parent);
+						swapColors(x, grandparent);
+					} else {
+						swapColors(parent, grandparent);
+					}
+					leftRotate(grandparent);
 				}
-				(*h)->left = tmp;
-				ret = std::make_pair(iterator(tmp), true);
 			}
-			else if (greater && ((*h)->right == nullptr || (*h)->right == _endNode)) {
-				tmp = _newNode((*h), val, _red);
-				if ((*h)->right == _endNode) {
-					tmp->right = _endNode;
-					_endNode->parent = tmp;
-				}
-				(*h)->right = tmp;
-				ret = std::make_pair(iterator(tmp), true);
-			}
-			else if (less) {
-				ret = _insert( &((*h)->left), val);
-			}
-			else {
-				ret = _insert( &((*h)->right), val);
-			}
-			*h = _fixUp(*h);
-			return ret;// here we should return h and true or false
 		}
+	}
 
-		void	_treeEraseNodeBot(TreeNode **h) {
-			TreeNode *right;
-			TreeNode *left;
-			bool ifRightNode = (*h)->right != nullptr;
-			bool ifLeftNode = (*h)->left != nullptr;
+	TreeNode *successor(TreeNode *x) {
+		TreeNode *temp = x;
+		while (temp->left != NULL)
+			temp = temp->left;
+		return temp;
+	}
 
-			if (ifRightNode) {
-				right = (*h)->right;
-				right->parent = (*h)->parent;
+	TreeNode *BSTreplace(TreeNode *x) {
+		if (x->left != NULL and x->right != NULL)
+			return successor(x->right);
+		if (x->left == NULL and x->right == NULL)
+			return NULL;
+		if (x->left != NULL)
+			return x->left;
+		else
+			return x->right;
+	}
+
+	void deleteNode(TreeNode *v) {
+		TreeNode *u = BSTreplace(v);
+		bool uvBlack = ((u == NULL or u->color == _black) and (v->color == _black));
+		TreeNode *parent = v->parent;
+		if (u == NULL) {
+			if (v == _root) {
+				_root = NULL;
+			} else {
+				if (uvBlack) {
+					fixDoubleBlack(v);
+				} else {
+					if (_sibling(v) != NULL)
+						_sibling(v)->color = _red;
+				}
+				if (isOnLeft(v)) {
+					parent->left = NULL;
+				} else {
+					parent->right = NULL;
+				}
 			}
-			if (ifLeftNode) {
-				left = (*h)->left;
-				left->parent = (*h)->parent;
-			}
-			_destroyNode(*h);
-			if (ifRightNode)
-				*h = right;
-			else if (ifLeftNode)
-				*h = left;
-			else
-				*h = nullptr;
+			_destroyNode(v);
+			return;
 		}
-
-		void	_treeEraseMin(TreeNode **h) {
-			if ((*h)->left == nullptr || (*h)->left == _beginNode) {
-				_treeEraseNodeBot(h);
-				return;
+		if (v->left == NULL or v->right == NULL) {
+			if (v == _root) {
+				_alloc.destroy(v->data);
+				_alloc.construct(v->data, *(u->data));
+				v->left = NULL;
+				v->right = NULL;
+				_destroyNode(u);
+			} else {
+				if (isOnLeft(v)) {
+					parent->left = u;
+				} else {
+					parent->right = u;
+				}
+				_destroyNode(v);
+				u->parent = parent;
+				if (uvBlack) {
+					fixDoubleBlack(u);
+				} else {
+					u->color = _black;
+				}
 			}
-
-			if (!_isRed((*h)->left) && !_isRed((*h)->left->left))
-				*h = _moveRedLeft(*h);
-
-			_treeEraseMin(&(*h)->left);
-
-			*h = _fixUp(*h);
+			return;
 		}
-
-		size_type _erase(TreeNode** h, const key_type& k) {
-			if (*h == nullptr)
-				return 0;
-
-			size_type count = 0;
-			bool less = _cmp(k, (*h)->data->first);
-			bool greater = _cmp((*h)->data->first, k);
-
-			if (less) {
-				if ((*h)->left == nullptr || (*h)->left == _beginNode)
-					return 0;
-				if (!_isRed((*h)->left) && !_isRed((*h)->left->left))
-					*h = _moveRedLeft(*h);
-				count = _erase(&(*h)->left, k);
+		swapValues(u, v);
+		deleteNode(u);
+	}
+	void fixDoubleBlack(TreeNode *x) {
+		if (x == _root)
+			return;
+		TreeNode *sibling = _sibling(x);
+		TreeNode * parent = x->parent;
+		if (sibling == NULL) {
+			fixDoubleBlack(parent);
+		} else {
+			if (sibling->color == _red) {
+				parent->color = _red;
+				sibling->color = _black;
+				if (isOnLeft(sibling)) {
+					rightRotate(parent);
+				} else {
+					leftRotate(parent);
+				}
+				fixDoubleBlack(x);
+			} else {
+				if (hasRedChild(sibling)) {
+					if (sibling->left != NULL and sibling->left->color == _red) {
+						if (isOnLeft(sibling)) {
+							sibling->left->color = sibling->color;
+							sibling->color = parent->color;
+							rightRotate(parent);
+						} else {
+							sibling->left->color = parent->color;
+							rightRotate(sibling);
+							leftRotate(parent);
+						}
+					} else {
+						if (isOnLeft(sibling)) {
+							sibling->right->color = parent->color;
+							leftRotate(sibling);
+							rightRotate(parent);
+						} else {
+							sibling->right->color = sibling->color;
+							sibling->color = parent->color;
+							leftRotate(parent);
+						}
+					}
+					parent->color = _black;
+				} else {
+					sibling->color = _red;
+					if (parent->color == _black)
+						fixDoubleBlack(parent);
+					else
+						parent->color = _black;
+				}
 			}
-			else {
-				if (_isRed((*h)->left)) {
-					*h = _rotateRight(*h);
-					count = _erase(&(*h)->right, k);
-					*h = _fixUp(*h);
-					return count;
-				}
+		}
+	}
 
-				if (!greater && ( (*h)->right == nullptr || (*h)->right == _endNode )) {
-					_treeEraseNodeBot(h);
-					return 1;
-				}
-
-				if (greater && ((*h)->right == nullptr || (*h)->right == _endNode))
-					return 0;
-
-				if (!_isRed((*h)->right) && !_isRed((*h)->right->left))
-					*h = _moveRedRight(*h);
-
-				if (!_cmp((*h)->data->first, k)) {
-					_treeEraseCurNodeBySwap(h);
-					count = 1;
-				}
+	TreeNode *search(key_type n) {
+		TreeNode *temp = _root;
+		while (temp != NULL) {
+			if (n < temp->data->first) {
+				if (temp->left == NULL)
+					break;
 				else
-					count = _erase(&(*h)->right, k);
+					temp = temp->left;
+			} else if (n == temp->data->first) {
+				break;
+			} else {
+				if (temp->right == NULL)
+					break;
+				else
+					temp = temp->right;
 			}
-			*h = _fixUp(*h);
-			return count;
 		}
+		return temp;
+	}
 
-		bool	_isRightChild(TreeNode *h) {
-			if (h->parent->right == h)
-				return true;
+	void link(TreeNode *parent, TreeNode *node, Side side) {
+		if (!parent) {
+			return;
+		}
+		side == right ? parent->right = node : parent->left = node;
+		if (node)
+			node->parent = parent;
+	}
+
+	bool _insert(value_type n) {
+		TreeNode *newNode = _newNode(nullptr, n, _red);
+		if (_root == NULL) {
+			newNode->color = _black;
+			_root = newNode;
+		} else {
+			TreeNode *temp = search(n.first);
+			if (temp->data->first == n.first) {
+				_destroyNode(newNode);
+				return false;
+			}
+			newNode->parent = temp;
+			if (n < (*temp->data))
+				temp->left = newNode;
+			else
+				temp->right = newNode;
+			fixRedRed(newNode);
+		}
+		return true;
+	}
+	bool deleteByVal(key_type n) {
+		if (_root == NULL)
+			return false;
+		TreeNode *v = search(n);
+		if (v->data->first != n) {
 			return false;
 		}
+		deleteNode(v);
+		return true;
+	}
 
-		TreeNode *_getMinNodeWithErase(TreeNode **h) {
-			TreeNode *ret;
-			if ((*h)->left == nullptr) {
-				ret = *h;
-				if ((*h)->right != nullptr) {
-					(*h)->right->parent = (*h)->parent;
-					*h = (*h)->right;
-				}
-				else
-					*h = nullptr;
-				return ret;
-			}
-			ret = _getMinNodeWithErase(&(*h)->left);
-			*h = _fixUp(*h);
-			return ret;
+	TreeNode *getMinNode(TreeNode *node) {
+		if (node) {
+			if (node->left)
+				return getMinNode(node->left);
 		}
+		return node;
+	}
 
-		void	_treeEraseCurNodeBySwap(TreeNode **h) {
-			TreeNode *minPtr;
-			TreeNode *toDel;
-
-			minPtr = _getMinNodeWithErase(&(*h)->right);
-			toDel = *h;
-
-			minPtr->color = (*h)->color;
-			minPtr->right = (*h)->right;
-			minPtr->left = (*h)->left;
-			minPtr->parent = (*h)->parent;
-
-			if (minPtr->right) minPtr->right->parent = minPtr;
-			if (minPtr->left) minPtr->left->parent = minPtr;
-			if (minPtr->parent) {
-				if (_isRightChild(*h))
-					minPtr->parent->right = minPtr;
-				else
-					minPtr->parent->left = minPtr;
-			}
-			else {
-				_root = minPtr;
-			}
-			_destroyNode(toDel);
+	TreeNode *getMaxNode(TreeNode *node) {
+		if (node) {
+			if (node->right)
+				return getMaxNode(node->right);
 		}
-
-		void _allocRoot(value_type val) {
-			_root = _newNode(nullptr, val, _black);
-			_root->left = _beginNode;
-			_root->right = _endNode;
-			_beginNode->parent = _root;
-			_endNode->parent = _root;
-		}
+		return node;
+	}
 
 public:
 
@@ -443,15 +490,22 @@ public:
 		return end();
 	}
 
-	mapped_type& operator[] (const key_type& k) { return (*((this->insert(make_pair(k,mapped_type()))).first)).second; }
-
-	std::pair<iterator,bool> insert (const value_type& val) {
-		if (_size == 0) {
-			_allocRoot(val);
-			return std::make_pair(iterator(_root), true);
+	std::pair<iterator, bool> insert (const_reference val) {
+		if (_size) {
+			if (_beginNode->parent)
+				_beginNode->parent->left = nullptr;
+			if (_endNode->parent)
+				_endNode->parent->right = nullptr;
 		}
-		return _insert(&_root, val);
-	}
+		bool ret = _insert(val);
+		TreeNode *tmp = getMaxNode(_root);
+		link(tmp, _endNode, right);
+		tmp = getMinNode(_root);
+		link(tmp, _beginNode, left);
+		return std::make_pair(find(val.first), ret);
+	};
+
+	mapped_type& operator[] (const key_type& k) { return (*((this->insert(make_pair(k,mapped_type()))).first)).second; }
 
 	iterator insert (iterator position, const value_type& val) {
 		static_cast<void>(position);
@@ -470,25 +524,45 @@ public:
 	}
 
 	size_type erase (const key_type& k) {
-		size_type ret = _erase(&_root, k);
-		if (ret != 0)
-			_size -= 1;
-		if (_size == 0)
-			_root = nullptr;
+		if (_size)
+		{
+			if (_beginNode->parent)
+				_beginNode->parent->left = nullptr;
+			if (_endNode->parent)
+				_endNode->parent->right = nullptr;
+		}
+		bool ret = deleteByVal(k);
+		TreeNode *tmp = getMaxNode(_root);
+		link(tmp, _endNode, right);
+		tmp = getMinNode(_root);
+		link(tmp, _beginNode, left);
 		return ret;
 	}
+
+	void erase (iterator position) { erase(position->first); };
 
 	key_compare key_comp() const { return _cmp; }
 
 	value_compare value_comp() const { return value_compare(_cmp); };
 
-	iterator lower_bound (const key_type& k) { return  begin(); }// _treeBound(_root, k, true); }
-
-	const_iterator lower_bound (const key_type& k) const { return const_iterator(_root); }//_treeBound(_root, k, true); }
-
-	iterator upper_bound (const key_type& k) { return  begin(); }// _treeBound(_root, k, false); }
-
-	const_iterator upper_bound (const key_type& k) const { return const_iterator(_root); }//_treeBound(_root, k, false); }
+		iterator 		lower_bound (const key_type& k) {
+			iterator it = begin();
+			for (iterator ite = end(); it != ite && _cmp(it->first, k); ++it) NULL;
+			return it;
+		};
+		const_iterator	lower_bound (const key_type& k) const {
+			iterator it = begin();
+			for (iterator ite = end(); it != ite && _cmp(it->first, k); ++it) NULL;
+			return it;
+		};
+		iterator 		upper_bound (const key_type& k) {
+			iterator it = lower_bound(k);
+			return (it != end() && !_cmp(it->first, k) && !_cmp(k, it->first)) ? ++it : it;
+		};
+		const_iterator	upper_bound (const key_type& k) const {
+			const_iterator it = lower_bound(k);
+			return (it != end() && !_cmp(it->first, k) && !_cmp(k, it->first)) ? ++it : it;
+		};
 
 	std::pair<const_iterator,const_iterator> equal_range (const key_type& k) const { return std::make_pair(lower_bound(k), upper_bound(k)); }
 
@@ -512,10 +586,10 @@ public:
 		x._beginNode = temp;
 	}
 
-	void erase (iterator position) {};
-
-
-	void erase (iterator first, iterator last){};
+	void erase (iterator first, iterator last){
+		while (first != last)
+			erase(first++);
+	};
 
 
 

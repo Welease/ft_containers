@@ -479,36 +479,30 @@ public:
 int main() {
 	RBTree tree;
 
-	tree.insert(20);
-	tree.insert(30);
-	tree.insert(40);
-	tree.insert(35);
-	tree.insert(50);
+	tree.insert(7);
+	tree.insert(3);
+	tree.insert(18);
+	tree.insert(10);
+	tree.insert(22);
+	tree.insert(8);
+	tree.insert(11);
+	tree.insert(26);
+	tree.insert(2);
+	tree.insert(6);
+	tree.insert(13);
 
-	//tree.insert(7);
-	//tree.insert(3);
-	//tree.insert(18);
-	//tree.insert(10);
-	//tree.insert(22);
-	//tree.insert(8);
-	//tree.insert(11);
-	//tree.insert(26);
-	//tree.insert(2);
-	//tree.insert(6);
-	//tree.insert(13);
-//
-	//tree.printInOrder();
-	//tree.printLevelOrder();
-//
-	//cout<<endl<<"Deleting 18, 11, 3, 10, 22"<<endl;
+	tree.printInOrder();
+	tree.printLevelOrder();
 
-	tree.deleteByVal(30);
-	//tree.deleteByVal(11);
-	//tree.deleteByVal(3);
-	//tree.deleteByVal(10);
-	//tree.deleteByVal(22);
-//
-	//tree.printInOrder();
-	//tree.printLevelOrder();
+	cout<<endl<<"Deleting 18, 11, 3, 10, 22"<<endl;
+
+	tree.deleteByVal(18);
+	tree.deleteByVal(11);
+	tree.deleteByVal(3);
+	tree.deleteByVal(10);
+	tree.deleteByVal(22);
+
+	tree.printInOrder();
+	tree.printLevelOrder();
 	return 0;
 }
