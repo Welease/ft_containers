@@ -114,102 +114,262 @@ private:
 		--_size;
 	}
 
-	void link(TreeNode *parent, TreeNode *node, Side side) {
-		side == right ? parent->right = node : parent->left = node;
-		if (node)
-			node->parent = parent;
-	}
-
-	bool _isRed(TreeNode *node) {
-		if (!node)
-			return _black;
-		return node->color == _red;
-	}
-
-	void _colorFlip(TreeNode *node) {
-		node->right ? node->right->color = !node->right->color : 0;
-		node->left ? node->left->color = !node->left->color : 0;
-		node->color = !node->color;
-		if (node == _root)
-			_root->color = _black;
-	}
-
-	void _lowNode(TreeNode *h, Side s) {
-		TreeNode *tmp = s == left ? h->right->left : h->left->right;
-		s == left ? h->right->left  = h : h->left->right = h;
-		s == left ? h->right = tmp : h->left = tmp;
-	}
-
-	TreeNode	*_leftRotate(TreeNode* node) {
-		node->right->parent = node->parent;
-		node->parent = node->right;
-		if (node->right->left)
-			node->right->left->parent = node;
-		_lowNode(node, left);
-		node->parent->color = node->color;
-		node->color = _red;
-		if (node == _root)
-			_root = node->parent;
-		return node->parent;
-	}
-
-	TreeNode	*_rightRotate(TreeNode* node) {
-		node->left->parent = node->parent;
-		node->parent = node->left;
-		if (node->left->right)
-			node->left->right->parent = node;
-		_lowNode(node, right);
-		node->parent->color = node->color;
-		node->color = _red;
-		if (node == _root)
-			_root = node->parent;
-		return node->parent;
-	}
-
-	TreeNode *_balancing(TreeNode *node) {
-		if (_isRed(node->right))
-			node = _leftRotate(node);
-		if (_isRed(node->left) && _isRed(node->left->left))
-			node = _rightRotate(node);
-		if (_isRed(node->left) && _isRed(node->right))
-			_colorFlip(node);
-		return node;
-	}
-
-	void _allocRoot(value_type val) {
-		_root = _newNode(nullptr, val, _black);
-		_root->left = _beginNode;
-		_root->right = _endNode;
-		_beginNode->parent = _root;
-		_endNode->parent = _root;
-	}
-
-	std::pair<iterator, bool> _insert(TreeNode **rootOfSubtree, const value_type & val) {
-		int cmpResult = _cmp(val.first, (*rootOfSubtree)->data->first) + 2 * _cmp((*rootOfSubtree)->data->first, val.first);
-
-		if (!cmpResult)
-			return std::make_pair((*rootOfSubtree), false);
-
-		if (cmpResult == 1 && ((*rootOfSubtree)->left == nullptr || (*rootOfSubtree)->left == _beginNode)) {
-			TreeNode *toInsert = _newNode((*rootOfSubtree), val, _red);
-			if ((*rootOfSubtree)->left == _beginNode)
-				link(toInsert, _beginNode, left);
-			link((*rootOfSubtree), toInsert, left);
-			*rootOfSubtree = _balancing(*rootOfSubtree);
-			return std::make_pair(iterator(toInsert), true);
+		TreeNode	*_rotateLeft(TreeNode* h) {
+			h->right->parent = h->parent;
+			h->parent = h->right;
+			if (h->right->left) h->right->left->parent = h;
+			TreeNode *tmp = h->right->left;
+			h->right->left = h;
+			h->right = tmp;
+			h->parent->color = h->color;
+			h->color = _red;
+			if (h == _root)
+				_root = h->parent;
+			return h->parent;
 		}
-		else if (cmpResult == 2 && ((*rootOfSubtree)->right == nullptr || (*rootOfSubtree)->right == _endNode)) {
-			TreeNode *toInsert = _newNode((*rootOfSubtree), val, _red);
-			if ((*rootOfSubtree)->right == _endNode)
-				link(toInsert, _endNode, right);
-			link((*rootOfSubtree), toInsert, right);
-			*rootOfSubtree = _balancing(*rootOfSubtree);
-			return std::make_pair(iterator(toInsert), true);
+
+		TreeNode	*_rotateRight(TreeNode* h) {
+			h->left->parent = h->parent;
+			h->parent = h->left;
+			if (h->left->right) h->left->right->parent = h;
+			TreeNode *tmp = h->left->right;
+			h->left->right = h;
+			h->left = tmp;
+			h->parent->color = h->color;
+			h->color = _red;
+			if (h == _root)
+				_root = h->parent;
+			return h->parent;
 		}
-		else if (cmpResult == 1)
-			return _insert(&((*rootOfSubtree)->left), val);
-		return _insert(&((*rootOfSubtree)->right), val);
-	}
+
+		void	_invertColors(TreeNode* h) {
+			if (h->right)
+				h->right->color = !h->right->color;
+			if (h->left)
+				h->left->color = !h->left->color;
+			h->color = !h->color;
+		}
+
+		TreeNode	*_moveRedLeft(TreeNode *h) {
+			_invertColors(h);
+			if (h->right && _isRed(h->right->left)) {
+				h->right = _rotateRight(h->right);
+				h = _rotateLeft(h);
+				_invertColors(h);
+			}
+			return h;
+		}
+
+		TreeNode	*_moveRedRight(TreeNode *h) {
+			_invertColors(h);
+			if (_isRed(h->left->left)) {
+				h = _rotateRight(h);
+				_invertColors(h);
+			}
+			return h;
+		}
+
+		TreeNode *_getMinNode(TreeNode *h) const {
+			if (h->left == nullptr)
+				return h;
+			return _getMinNode(h->left);
+		}
+
+		bool _isRed(TreeNode *node) {
+			if (!node)
+				return _black;
+			return node->color == _red;
+		}
+
+		TreeNode	*_fixUp(TreeNode* h) {
+			if (h->right && _isRed(h->right))
+				h = _rotateLeft(h);
+			if (h->left && h->left->left && _isRed(h->left) && _isRed(h->left->left))
+				h = _rotateRight(h);
+			if (h->left && h->right && _isRed(h->left) && _isRed(h->right))
+				_invertColors(h);
+			if (h == _root && _root->color == _red)
+				_root->color = _black;
+			return h;
+		}
+
+		std::pair<iterator, bool> _insert(TreeNode **h, const value_type & val) {
+			TreeNode *tmp;
+			std::pair<iterator, bool> ret;
+
+			bool less = _cmp(val.first, (*h)->data->first);
+			bool greater = _cmp((*h)->data->first, val.first);
+
+			if (!less && !greater) {
+				return std::make_pair(iterator(*h), false); // do not make node, just return this (h.first, false)
+			}
+
+			if (less && ((*h)->left == nullptr || (*h)->left == _beginNode)) {
+				tmp = _newNode((*h), val, _red);
+				if ((*h)->left == _beginNode) {
+					tmp->left = _beginNode;
+					_beginNode->parent = tmp;
+				}
+				(*h)->left = tmp;
+				ret = std::make_pair(iterator(tmp), true);
+			}
+			else if (greater && ((*h)->right == nullptr || (*h)->right == _endNode)) {
+				tmp = _newNode((*h), val, _red);
+				if ((*h)->right == _endNode) {
+					tmp->right = _endNode;
+					_endNode->parent = tmp;
+				}
+				(*h)->right = tmp;
+				ret = std::make_pair(iterator(tmp), true);
+			}
+			else if (less) {
+				ret = _insert( &((*h)->left), val);
+			}
+			else {
+				ret = _insert( &((*h)->right), val);
+			}
+			*h = _fixUp(*h);
+			return ret;// here we should return h and true or false
+		}
+
+		void	_treeEraseNodeBot(TreeNode **h) {
+			TreeNode *right;
+			TreeNode *left;
+			bool ifRightNode = (*h)->right != nullptr;
+			bool ifLeftNode = (*h)->left != nullptr;
+
+			if (ifRightNode) {
+				right = (*h)->right;
+				right->parent = (*h)->parent;
+			}
+			if (ifLeftNode) {
+				left = (*h)->left;
+				left->parent = (*h)->parent;
+			}
+			_destroyNode(*h);
+			if (ifRightNode)
+				*h = right;
+			else if (ifLeftNode)
+				*h = left;
+			else
+				*h = nullptr;
+		}
+
+		void	_treeEraseMin(TreeNode **h) {
+			if ((*h)->left == nullptr || (*h)->left == _beginNode) {
+				_treeEraseNodeBot(h);
+				return;
+			}
+
+			if (!_isRed((*h)->left) && !_isRed((*h)->left->left))
+				*h = _moveRedLeft(*h);
+
+			_treeEraseMin(&(*h)->left);
+
+			*h = _fixUp(*h);
+		}
+
+		size_type _erase(TreeNode** h, const key_type& k) {
+			if (*h == nullptr)
+				return 0;
+
+			size_type count = 0;
+			bool less = _cmp(k, (*h)->data->first);
+			bool greater = _cmp((*h)->data->first, k);
+
+			if (less) {
+				if ((*h)->left == nullptr || (*h)->left == _beginNode)
+					return 0;
+				if (!_isRed((*h)->left) && !_isRed((*h)->left->left))
+					*h = _moveRedLeft(*h);
+				count = _erase(&(*h)->left, k);
+			}
+			else {
+				if (_isRed((*h)->left)) {
+					*h = _rotateRight(*h);
+					count = _erase(&(*h)->right, k);
+					*h = _fixUp(*h);
+					return count;
+				}
+
+				if (!greater && ( (*h)->right == nullptr || (*h)->right == _endNode )) {
+					_treeEraseNodeBot(h);
+					return 1;
+				}
+
+				if (greater && ((*h)->right == nullptr || (*h)->right == _endNode))
+					return 0;
+
+				if (!_isRed((*h)->right) && !_isRed((*h)->right->left))
+					*h = _moveRedRight(*h);
+
+				if (!_cmp((*h)->data->first, k)) {
+					_treeEraseCurNodeBySwap(h);
+					count = 1;
+				}
+				else
+					count = _erase(&(*h)->right, k);
+			}
+			*h = _fixUp(*h);
+			return count;
+		}
+
+		bool	_isRightChild(TreeNode *h) {
+			if (h->parent->right == h)
+				return true;
+			return false;
+		}
+
+		TreeNode *_getMinNodeWithErase(TreeNode **h) {
+			TreeNode *ret;
+			if ((*h)->left == nullptr) {
+				ret = *h;
+				if ((*h)->right != nullptr) {
+					(*h)->right->parent = (*h)->parent;
+					*h = (*h)->right;
+				}
+				else
+					*h = nullptr;
+				return ret;
+			}
+			ret = _getMinNodeWithErase(&(*h)->left);
+			*h = _fixUp(*h);
+			return ret;
+		}
+
+		void	_treeEraseCurNodeBySwap(TreeNode **h) {
+			TreeNode *minPtr;
+			TreeNode *toDel;
+
+			minPtr = _getMinNodeWithErase(&(*h)->right);
+			toDel = *h;
+
+			minPtr->color = (*h)->color;
+			minPtr->right = (*h)->right;
+			minPtr->left = (*h)->left;
+			minPtr->parent = (*h)->parent;
+
+			if (minPtr->right) minPtr->right->parent = minPtr;
+			if (minPtr->left) minPtr->left->parent = minPtr;
+			if (minPtr->parent) {
+				if (_isRightChild(*h))
+					minPtr->parent->right = minPtr;
+				else
+					minPtr->parent->left = minPtr;
+			}
+			else {
+				_root = minPtr;
+			}
+			_destroyNode(toDel);
+		}
+
+		void _allocRoot(value_type val) {
+			_root = _newNode(nullptr, val, _black);
+			_root->left = _beginNode;
+			_root->right = _endNode;
+			_beginNode->parent = _root;
+			_endNode->parent = _root;
+		}
 
 public:
 
@@ -309,6 +469,15 @@ public:
 		return i != end();
 	}
 
+	size_type erase (const key_type& k) {
+		size_type ret = _erase(&_root, k);
+		if (ret != 0)
+			_size -= 1;
+		if (_size == 0)
+			_root = nullptr;
+		return ret;
+	}
+
 	key_compare key_comp() const { return _cmp; }
 
 	value_compare value_comp() const { return value_compare(_cmp); };
@@ -345,10 +514,6 @@ public:
 
 	void erase (iterator position) {};
 
-	size_type erase (const key_type& k){
-		//_erase(find(k).getNode(), k);
-		return 1;
-	};
 
 	void erase (iterator first, iterator last){};
 

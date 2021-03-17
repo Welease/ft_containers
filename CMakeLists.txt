@@ -7,7 +7,7 @@ add_executable(ft_list
         listMain.cpp ft_map.h)
 add_executable(ft_vector ft_vector.h vectorMain.cpp)
 
-add_executable(ft_queue ft_queue.h queueMain.cpp)
+add_executable(test queueMain.cpp)
 
 add_executable(ft_stack ft_stack.h stackMain.cpp)
 

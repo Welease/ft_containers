@@ -76,18 +76,6 @@ CMAKE_BINARY_DIR = /Users/welease/projects/ft_containers/cmake-build-debug
 #=============================================================================
 # Targets provided globally by CMake.
 
-# Special rule for the target install/local
-install/local: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
-	/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
-.PHONY : install/local
-
-# Special rule for the target install/local
-install/local/fast: preinstall/fast
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
-	/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
-.PHONY : install/local/fast
-
 # Special rule for the target install/strip
 install/strip: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
@@ -143,6 +131,18 @@ edit_cache:
 edit_cache/fast: edit_cache
 
 .PHONY : edit_cache/fast
+
+# Special rule for the target install/local
+install/local: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local
+
+# Special rule for the target install/local
+install/local/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -203,17 +203,17 @@ ft_stack/fast:
 .PHONY : ft_stack/fast
 
 #=============================================================================
-# Target rules for targets named ft_queue
+# Target rules for targets named test
 
 # Build rule for target.
-ft_queue: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ft_queue
-.PHONY : ft_queue
+test: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test
+.PHONY : test
 
 # fast build rule for target.
-ft_queue/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_queue.dir/build.make CMakeFiles/ft_queue.dir/build
-.PHONY : ft_queue/fast
+test/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/build
+.PHONY : test/fast
 
 #=============================================================================
 # Target rules for targets named ft_list
@@ -326,7 +326,7 @@ queueMain.o: queueMain.cpp.o
 
 # target to build an object file
 queueMain.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_queue.dir/build.make CMakeFiles/ft_queue.dir/queueMain.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/queueMain.cpp.o
 .PHONY : queueMain.cpp.o
 
 queueMain.i: queueMain.cpp.i
@@ -335,7 +335,7 @@ queueMain.i: queueMain.cpp.i
 
 # target to preprocess a source file
 queueMain.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_queue.dir/build.make CMakeFiles/ft_queue.dir/queueMain.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/queueMain.cpp.i
 .PHONY : queueMain.cpp.i
 
 queueMain.s: queueMain.cpp.s
@@ -344,7 +344,7 @@ queueMain.s: queueMain.cpp.s
 
 # target to generate assembly for a file
 queueMain.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_queue.dir/build.make CMakeFiles/ft_queue.dir/queueMain.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/queueMain.cpp.s
 .PHONY : queueMain.cpp.s
 
 stackMain.o: stackMain.cpp.o
@@ -415,13 +415,13 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... Google_Tests_run"
 	@echo "... ft_list"
-	@echo "... ft_queue"
 	@echo "... ft_stack"
 	@echo "... ft_vector"
 	@echo "... gmock"
 	@echo "... gmock_main"
 	@echo "... gtest"
 	@echo "... gtest_main"
+	@echo "... test"
 	@echo "... listMain.o"
 	@echo "... listMain.i"
 	@echo "... listMain.s"
