@@ -223,16 +223,13 @@ private:
 		}
 	}
 
-	TreeNode *successor(TreeNode *x) {
-		TreeNode *temp = x;
-		while (temp->left != NULL)
-			temp = temp->left;
-		return temp;
-	}
-
-	TreeNode *BSTreplace(TreeNode *x) {
-		if (x->left != NULL and x->right != NULL)
-			return successor(x->right);
+	TreeNode *getReplacingForNode(TreeNode *x) {
+		if (x->left != NULL and x->right != NULL) {
+			TreeNode *temp = x->right;
+			while (temp->left != NULL)
+				temp = temp->left;
+			return temp;
+		}
 		if (x->left == NULL and x->right == NULL)
 			return NULL;
 		if (x->left != NULL)
@@ -241,8 +238,8 @@ private:
 			return x->right;
 	}
 
-	void deleteNode(TreeNode *v) {
-		TreeNode *u = BSTreplace(v);
+	void _erase(TreeNode *v) {
+		TreeNode *u = getReplacingForNode(v);
 		bool uvBlack = ((u == NULL or u->color == _black) and (v->color == _black));
 		TreeNode *parent = v->parent;
 		if (u == NULL) {
@@ -288,7 +285,7 @@ private:
 			return;
 		}
 		swapValues(u, v);
-		deleteNode(u);
+		_erase(u);
 	}
 	void fixDoubleBlack(TreeNode *x) {
 		if (x == _root)
@@ -342,7 +339,7 @@ private:
 		}
 	}
 
-	TreeNode *search(key_type n) {
+	TreeNode *_searchInTreeByKey(key_type n) {
 		TreeNode *temp = _root;
 		while (temp != NULL) {
 			if (n < temp->data->first) {
@@ -377,7 +374,7 @@ private:
 			newNode->color = _black;
 			_root = newNode;
 		} else {
-			TreeNode *temp = search(n.first);
+			TreeNode *temp = _searchInTreeByKey(n.first);
 			if (temp->data->first == n.first) {
 				_destroyNode(newNode);
 				return false;
@@ -394,11 +391,11 @@ private:
 	bool deleteByVal(key_type n) {
 		if (_root == NULL)
 			return false;
-		TreeNode *v = search(n);
+		TreeNode *v = _searchInTreeByKey(n);
 		if (v->data->first != n) {
 			return false;
 		}
-		deleteNode(v);
+		_erase(v);
 		return true;
 	}
 
@@ -436,22 +433,24 @@ public:
 	}
 
 	~map() {
-		//clear();
-		//_ptr_alloc.deallocate(_endNode, 1);
-		//_ptr_alloc.deallocate(_endNode, 1);
+		clear();
+		_ptr_alloc.deallocate(_endNode, 1);
+		_ptr_alloc.deallocate(_beginNode, 1);
 	}
 
 	map& operator= (const map& x) {
 		if (this != &x) {
-			//clear();
-			this->insert(x.begin(), x.end());
+			const_iterator iter = x.begin();
+			clear();
+			while (iter != x.end())
+				insert(*(iter)++);
 		}
 		return *this;
 	}
 
 	void clear() {;
-		//while (_size)
-		//	erase(begin());
+		while (_size)
+			erase(begin());
 	}
 
 	iterator 					begin() { return _size ? iterator(_beginNode->parent) : iterator(_endNode); }
@@ -524,8 +523,7 @@ public:
 	}
 
 	size_type erase (const key_type& k) {
-		if (_size)
-		{
+		if (_size) {
 			if (_beginNode->parent)
 				_beginNode->parent->left = nullptr;
 			if (_endNode->parent)
@@ -546,22 +544,30 @@ public:
 	value_compare value_comp() const { return value_compare(_cmp); };
 
 		iterator 		lower_bound (const key_type& k) {
-			iterator it = begin();
-			for (iterator ite = end(); it != ite && _cmp(it->first, k); ++it) NULL;
-			return it;
+			iterator beg = begin();
+			iterator last = end();
+			while (beg != last && _cmp(beg->first, k))
+				++beg;
+			return beg;
 		};
 		const_iterator	lower_bound (const key_type& k) const {
-			iterator it = begin();
-			for (iterator ite = end(); it != ite && _cmp(it->first, k); ++it) NULL;
-			return it;
+			iterator beg = begin();
+			iterator last = end();
+			while (beg != last && _cmp(beg->first, k))
+				++beg;
+			return beg;
 		};
 		iterator 		upper_bound (const key_type& k) {
-			iterator it = lower_bound(k);
-			return (it != end() && !_cmp(it->first, k) && !_cmp(k, it->first)) ? ++it : it;
+			iterator iter = lower_bound(k);
+			if (iter != end() && !_cmp(iter->first, k) && !_cmp(k, iter->first))
+				++iter;
+			return iter;
 		};
 		const_iterator	upper_bound (const key_type& k) const {
-			const_iterator it = lower_bound(k);
-			return (it != end() && !_cmp(it->first, k) && !_cmp(k, it->first)) ? ++it : it;
+			const_iterator iter = lower_bound(k);
+			if (iter != end() && !_cmp(iter->first, k) && !_cmp(k, iter->first))
+				++iter;
+			return iter;
 		};
 
 	std::pair<const_iterator,const_iterator> equal_range (const key_type& k) const { return std::make_pair(lower_bound(k), upper_bound(k)); }
@@ -590,9 +596,6 @@ public:
 		while (first != last)
 			erase(first++);
 	};
-
-
-
 
 	class iterator : public std::iterator<std::bidirectional_iterator_tag, value_type> {
 	private:

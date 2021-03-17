@@ -342,8 +342,8 @@ unit_tests/lib/googlemock/CMakeFiles/gmock.dir/clean:
 # Target rules for target unit_tests/lib/googlemock/CMakeFiles/gmock_main.dir
 
 # All Build rule for target.
-unit_tests/lib/googlemock/CMakeFiles/gmock_main.dir/all: unit_tests/lib/googletest/CMakeFiles/gtest.dir/all
 unit_tests/lib/googlemock/CMakeFiles/gmock_main.dir/all: unit_tests/lib/googlemock/CMakeFiles/gmock.dir/all
+unit_tests/lib/googlemock/CMakeFiles/gmock_main.dir/all: unit_tests/lib/googletest/CMakeFiles/gtest.dir/all
 	$(MAKE) $(MAKESILENT) -f unit_tests/lib/googlemock/CMakeFiles/gmock_main.dir/build.make unit_tests/lib/googlemock/CMakeFiles/gmock_main.dir/depend
 	$(MAKE) $(MAKESILENT) -f unit_tests/lib/googlemock/CMakeFiles/gmock_main.dir/build.make unit_tests/lib/googlemock/CMakeFiles/gmock_main.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/welease/projects/ft_containers/cmake-build-debug/CMakeFiles --progress-num=11,12 "Built target gmock_main"
