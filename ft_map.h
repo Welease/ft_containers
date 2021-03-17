@@ -4,7 +4,7 @@
 
 #ifndef FT_CONTAINERS_FT_MAP_H
 #define FT_CONTAINERS_FT_MAP_H
-#include <queue>
+
 #include "ft.h"
 
 namespace ft {
@@ -33,17 +33,14 @@ public:
 	typedef size_t 										size_type;
 	typedef ptrdiff_t 									difference_type;
 
-	class value_compare : public std::binary_function<value_type, value_type, bool>
-	{
+	class value_compare : public std::binary_function<value_type, value_type, bool> {
 	public:
 		key_compare cmp;
 
-		explicit value_compare(key_compare c) : cmp(c)
-		{};
+		explicit value_compare(key_compare c) : cmp(c) {};
 	public:
 
-		bool operator()(const value_type &x, const value_type &y) const
-		{ return cmp(x.first, y.first); };
+		bool operator()(const value_type &x, const value_type &y) const { return cmp(x.first, y.first); };
 	};
 
 private:
@@ -114,224 +111,215 @@ private:
 		--_size;
 	}
 
-	void _allocRoot(value_type val) {
-		_root = _newNode(nullptr, val, _black);
-		_root->left = _beginNode;
-		_root->right = _endNode;
-		_beginNode->parent = _root;
-		_endNode->parent = _root;
+	void _rotateLeft(TreeNode *oldRoot) {
+		TreeNode *newRoot = oldRoot->right;
+		if (oldRoot == _root)
+			_root = newRoot;
+		_lowNode(newRoot, oldRoot);
+		oldRoot->right = newRoot->left;
+		if (newRoot->left != NULL)
+			newRoot->left->parent = oldRoot;
+		newRoot->left = oldRoot;
 	}
 
-	void leftRotate(TreeNode *x) {
-		TreeNode *nParent = x->right;
-		if (x == _root)
-			_root = nParent;
-		moveDown(nParent, x);
-		x->right = nParent->left;
-		if (nParent->left != NULL)
-			nParent->left->parent = x;
-		nParent->left = x;
-	}
-	void rightRotate(TreeNode *x) {
-		TreeNode *nParent = x->left;
-		if (x == _root)
-			_root = nParent;
-		moveDown(nParent, x);
-		x->left = nParent->right;
-		if (nParent->right != NULL)
-			nParent->right->parent = x;
-		nParent->right = x;
+	void _rotateRight(TreeNode *oldRoot) {
+		TreeNode *newRoot = oldRoot->left;
+		if (oldRoot == _root)
+			_root = newRoot;
+		_lowNode(newRoot, oldRoot);
+		oldRoot->left = newRoot->right;
+		if (newRoot->right != NULL)
+			newRoot->right->parent = oldRoot;
+		newRoot->right = oldRoot;
 	}
 
-	TreeNode *_uncle(TreeNode *x) {
-		if (x->parent == NULL or x->parent->parent == NULL)
+	TreeNode *_getUncleOfNode(TreeNode *node) {
+		if (node->parent == NULL or node->parent->parent == NULL)
 			return NULL;
-		if (isOnLeft(x->parent))
-			return x->parent->parent->right;
+		if (_isLeftNode(node->parent))
+			return node->parent->parent->right;
 		else
-			return x->parent->parent->left;
+			return node->parent->parent->left;
 	}
-	bool isOnLeft(TreeNode *x) { return x == x->parent->left; }
 
-	TreeNode *_sibling(TreeNode *x) {
-		if (x->parent == NULL)
+	bool _isLeftNode(TreeNode *node) { return node == node->parent->left; }
+
+	TreeNode *_getBrother(TreeNode *node) {
+		if (node->parent == NULL)
 			return NULL;
-		if (isOnLeft(x))
-			return x->parent->right;
-		return x->parent->left;
+		if (_isLeftNode(node))
+			return node->parent->right;
+		return node->parent->left;
 	}
-	void moveDown(TreeNode *nParent, TreeNode *x) {
-		if (x->parent != NULL) {
-			if (isOnLeft(x)) {
-				x->parent->left = nParent;
-			} else {
-				x->parent->right = nParent;
-			}
+
+	void _lowNode(TreeNode *newRoot, TreeNode *oldRoot) {
+		if (oldRoot->parent != NULL)
+			_isLeftNode(oldRoot) ? oldRoot->parent->left = newRoot : oldRoot->parent->right = newRoot;
+		newRoot->parent = oldRoot->parent;
+		oldRoot->parent = newRoot;
+	}
+
+	bool _hasRedChild(TreeNode *x) {
+		return (x->left != NULL && x->left->color == _red) || (x->right != NULL && x->right->color == _red);
+	}
+
+
+	void _colorSwap(TreeNode *node1, TreeNode *node2) {
+		bool temp = node1->color;
+		node1->color = node2->color;
+		node2->color = temp;
+	}
+
+	void _valueSwap(TreeNode *toDel, TreeNode *replNode) {
+		value_type *temp = toDel->data;
+		toDel->data = replNode->data;
+		replNode->data = temp;
+	}
+
+	void _leftSideBalance(TreeNode *node, TreeNode *parentNode, TreeNode *grandparent) {
+		if (_isLeftNode(node))
+			_colorSwap(parentNode, grandparent);
+		else {
+			_rotateLeft(parentNode);
+			_colorSwap(node, grandparent);
 		}
-		nParent->parent = x->parent;
-		x->parent = nParent;
-	}
-	bool hasRedChild(TreeNode *x) {
-		return (x->left != NULL and x->left->color == _red) or
-		(x->right != NULL and x->right->color == _red);
+		_rotateRight(grandparent);
 	}
 
-
-	void swapColors(TreeNode *x1, TreeNode *x2) {
-		bool temp = x1->color;
-		x1->color = x2->color;
-		x2->color = temp;
-	}
-	void swapValues(TreeNode *u, TreeNode *v) {
-		value_type *temp = u->data;
-		u->data = v->data;
-		v->data = temp;
+	void _rightSideBalance(TreeNode *node, TreeNode *parentNode, TreeNode *grandparent) {
+		if (_isLeftNode(node)) {
+			_rotateRight(parentNode);
+			_colorSwap(node, grandparent);
+		}
+		else
+			_colorSwap(parentNode, grandparent);
+		_rotateLeft(grandparent);
 	}
 
-	void fixRedRed(TreeNode *x) {
-		if (x == _root) {
-			x->color = _black;
+	void _redRedNodesHandler(TreeNode *node) {
+		if (node == _root) {
+			node->color = _black;
 			return;
 		}
-		TreeNode *parent = x->parent, *grandparent = parent->parent;
-		TreeNode *uncle = _uncle(x);
-		if (parent->color != _black) {
-			if (uncle != NULL && uncle->color == _red) {
-				parent->color = _black;
-				uncle->color = _black;
+		TreeNode *parentNode = node->parent;
+		TreeNode *grandparent = parentNode->parent;
+		TreeNode *uncleOfNode = _getUncleOfNode(node);
+		if (parentNode->color != _black) {
+			if (uncleOfNode && uncleOfNode->color == _red) {
+				parentNode->color = _black;
+				uncleOfNode->color = _black;
 				grandparent->color = _red;
-				fixRedRed(grandparent);
-			} else {
-				if (isOnLeft(parent)) {
-					if (isOnLeft(x)) {
-						swapColors(parent, grandparent);
-					} else {
-						leftRotate(parent);
-						swapColors(x, grandparent);
-					}
-					rightRotate(grandparent);
-				} else {
-					if (isOnLeft(x)) {
-						rightRotate(parent);
-						swapColors(x, grandparent);
-					} else {
-						swapColors(parent, grandparent);
-					}
-					leftRotate(grandparent);
-				}
+				_redRedNodesHandler(grandparent);
+			}
+			else {
+				_isLeftNode(parentNode)
+					 ? _leftSideBalance(node, parentNode, grandparent)
+					 : _rightSideBalance(node, parentNode, grandparent);
 			}
 		}
 	}
 
 	TreeNode *getReplacingForNode(TreeNode *x) {
-		if (x->left != NULL and x->right != NULL) {
+		if (x->left && x->right) {
 			TreeNode *temp = x->right;
-			while (temp->left != NULL)
+			while (temp->left != nullptr)
 				temp = temp->left;
 			return temp;
 		}
-		if (x->left == NULL and x->right == NULL)
-			return NULL;
-		if (x->left != NULL)
-			return x->left;
-		else
-			return x->right;
+		if (!x->left && !x->right)
+			return nullptr;
+		return x->left ? x->left : x->right;
 	}
 
-	void _erase(TreeNode *v) {
-		TreeNode *u = getReplacingForNode(v);
-		bool uvBlack = ((u == NULL or u->color == _black) and (v->color == _black));
-		TreeNode *parent = v->parent;
-		if (u == NULL) {
-			if (v == _root) {
-				_root = NULL;
-			} else {
-				if (uvBlack) {
-					fixDoubleBlack(v);
-				} else {
-					if (_sibling(v) != NULL)
-						_sibling(v)->color = _red;
-				}
-				if (isOnLeft(v)) {
-					parent->left = NULL;
-				} else {
-					parent->right = NULL;
-				}
+	void _erase(TreeNode *toDelete) {
+		TreeNode *replacingForNode = getReplacingForNode(toDelete);
+		bool isBothNodesBlack = ((replacingForNode == nullptr || replacingForNode->color == _black) && (toDelete->color == _black));
+		TreeNode *parent = toDelete->parent;
+		if (!replacingForNode) {
+			if (toDelete == _root)
+				_root = nullptr;
+			else {
+				if (isBothNodesBlack)
+					_blackBlackNodesHandler(toDelete);
+				else
+					_getBrother(toDelete) ? _getBrother(toDelete)->color = _red : 0;
+				_isLeftNode(toDelete) ? parent->left = nullptr : parent->right = nullptr;
 			}
-			_destroyNode(v);
+			_destroyNode(toDelete);
 			return;
 		}
-		if (v->left == NULL or v->right == NULL) {
-			if (v == _root) {
-				_alloc.destroy(v->data);
-				_alloc.construct(v->data, *(u->data));
-				v->left = NULL;
-				v->right = NULL;
-				_destroyNode(u);
+
+		if (!toDelete->left || !toDelete->right) {
+			if (toDelete == _root) {
+				_alloc.destroy(toDelete->data);
+				_alloc.construct(toDelete->data, *(replacingForNode->data));
+				toDelete->left = nullptr;
+				toDelete->right = nullptr;
+				_destroyNode(replacingForNode);
 			} else {
-				if (isOnLeft(v)) {
-					parent->left = u;
-				} else {
-					parent->right = u;
-				}
-				_destroyNode(v);
-				u->parent = parent;
-				if (uvBlack) {
-					fixDoubleBlack(u);
-				} else {
-					u->color = _black;
-				}
+				_isLeftNode(toDelete) ? parent->left = replacingForNode : parent->right = replacingForNode;
+				_destroyNode(toDelete);
+				replacingForNode->parent = parent;
+				if (isBothNodesBlack)
+					_blackBlackNodesHandler(replacingForNode);
+				else
+					replacingForNode->color = _black;
 			}
 			return;
 		}
-		swapValues(u, v);
-		_erase(u);
+		_valueSwap(replacingForNode, toDelete);
+		_erase(replacingForNode);
 	}
-	void fixDoubleBlack(TreeNode *x) {
+
+	void _doubleBlackWithRedChild(TreeNode *brotherNode, TreeNode *parent) {
+		if (brotherNode->left && brotherNode->left->color == _red) {
+			if (_isLeftNode(brotherNode)) {
+				brotherNode->left->color = brotherNode->color;
+				brotherNode->color = parent->color;
+				_rotateRight(parent);
+			}
+			else {
+				brotherNode->left->color = parent->color;
+				_rotateRight(brotherNode);
+				_rotateLeft(parent);
+			}
+		}
+		else {
+			if (_isLeftNode(brotherNode)) {
+				brotherNode->right->color = parent->color;
+				_rotateLeft(brotherNode);
+				_rotateRight(parent);
+			}
+			else {
+				brotherNode->right->color = brotherNode->color;
+				brotherNode->color = parent->color;
+				_rotateLeft(parent);
+			}
+		}
+		parent->color = _black;
+	}
+
+	void _blackBlackNodesHandler(TreeNode *x) {
 		if (x == _root)
 			return;
-		TreeNode *sibling = _sibling(x);
+		TreeNode *brotherNode = _getBrother(x);
 		TreeNode * parent = x->parent;
-		if (sibling == NULL) {
-			fixDoubleBlack(parent);
-		} else {
-			if (sibling->color == _red) {
+		if (!brotherNode)
+			_blackBlackNodesHandler(parent);
+		else {
+			if (brotherNode->color == _red) {
 				parent->color = _red;
-				sibling->color = _black;
-				if (isOnLeft(sibling)) {
-					rightRotate(parent);
-				} else {
-					leftRotate(parent);
-				}
-				fixDoubleBlack(x);
-			} else {
-				if (hasRedChild(sibling)) {
-					if (sibling->left != NULL and sibling->left->color == _red) {
-						if (isOnLeft(sibling)) {
-							sibling->left->color = sibling->color;
-							sibling->color = parent->color;
-							rightRotate(parent);
-						} else {
-							sibling->left->color = parent->color;
-							rightRotate(sibling);
-							leftRotate(parent);
-						}
-					} else {
-						if (isOnLeft(sibling)) {
-							sibling->right->color = parent->color;
-							leftRotate(sibling);
-							rightRotate(parent);
-						} else {
-							sibling->right->color = sibling->color;
-							sibling->color = parent->color;
-							leftRotate(parent);
-						}
-					}
-					parent->color = _black;
-				} else {
-					sibling->color = _red;
+				brotherNode->color = _black;
+				_isLeftNode(brotherNode) ? _rotateRight(parent) : _rotateLeft(parent);
+				_blackBlackNodesHandler(x);
+			}
+			else {
+				if (_hasRedChild(brotherNode))
+					_doubleBlackWithRedChild(brotherNode, parent);
+				else {
+					brotherNode->color = _red;
 					if (parent->color == _black)
-						fixDoubleBlack(parent);
+						_blackBlackNodesHandler(parent);
 					else
 						parent->color = _black;
 				}
@@ -339,18 +327,21 @@ private:
 		}
 	}
 
-	TreeNode *_searchInTreeByKey(key_type n) {
+	TreeNode *_searchInTreeByKey(key_type key) {
 		TreeNode *temp = _root;
-		while (temp != NULL) {
-			if (n < temp->data->first) {
-				if (temp->left == NULL)
+
+		while (temp != nullptr) {
+			if (key < temp->data->first) {
+				if (temp->left == nullptr)
 					break;
 				else
 					temp = temp->left;
-			} else if (n == temp->data->first) {
+			}
+			else if (key == temp->data->first) {
 				break;
-			} else {
-				if (temp->right == NULL)
+			}
+			else {
+				if (!temp->right)
 					break;
 				else
 					temp = temp->right;
@@ -360,39 +351,40 @@ private:
 	}
 
 	void link(TreeNode *parent, TreeNode *node, Side side) {
-		if (!parent) {
+		if (!parent)
 			return;
-		}
 		side == right ? parent->right = node : parent->left = node;
 		if (node)
 			node->parent = parent;
 	}
 
-	bool _insert(value_type n) {
-		TreeNode *newNode = _newNode(nullptr, n, _red);
-		if (_root == NULL) {
+	bool _insert(value_type key) {
+		TreeNode *newNode = _newNode(nullptr, key, _red);
+		if (_root == nullptr) {
 			newNode->color = _black;
 			_root = newNode;
-		} else {
-			TreeNode *temp = _searchInTreeByKey(n.first);
-			if (temp->data->first == n.first) {
+		}
+		else {
+			TreeNode *temp = _searchInTreeByKey(key.first);
+			if (temp->data->first == key.first) {
 				_destroyNode(newNode);
 				return false;
 			}
 			newNode->parent = temp;
-			if (n < (*temp->data))
+			if (key < (*temp->data))
 				temp->left = newNode;
 			else
 				temp->right = newNode;
-			fixRedRed(newNode);
+			_redRedNodesHandler(newNode);
 		}
 		return true;
 	}
-	bool deleteByVal(key_type n) {
-		if (_root == NULL)
+
+	bool _eraseByKey(key_type key) {
+		if (_root == nullptr)
 			return false;
-		TreeNode *v = _searchInTreeByKey(n);
-		if (v->data->first != n) {
+		TreeNode *v = _searchInTreeByKey(key);
+		if (v->data->first != key) {
 			return false;
 		}
 		_erase(v);
@@ -400,18 +392,14 @@ private:
 	}
 
 	TreeNode *getMinNode(TreeNode *node) {
-		if (node) {
-			if (node->left)
+		if (node && node->left)
 				return getMinNode(node->left);
-		}
 		return node;
 	}
 
 	TreeNode *getMaxNode(TreeNode *node) {
-		if (node) {
-			if (node->right)
+		if (node && node->right)
 				return getMaxNode(node->right);
-		}
 		return node;
 	}
 
@@ -529,7 +517,7 @@ public:
 			if (_endNode->parent)
 				_endNode->parent->right = nullptr;
 		}
-		bool ret = deleteByVal(k);
+		bool ret = _eraseByKey(k);
 		TreeNode *tmp = getMaxNode(_root);
 		link(tmp, _endNode, right);
 		tmp = getMinNode(_root);
@@ -543,32 +531,35 @@ public:
 
 	value_compare value_comp() const { return value_compare(_cmp); };
 
-		iterator 		lower_bound (const key_type& k) {
-			iterator beg = begin();
-			iterator last = end();
-			while (beg != last && _cmp(beg->first, k))
-				++beg;
-			return beg;
-		};
-		const_iterator	lower_bound (const key_type& k) const {
-			iterator beg = begin();
-			iterator last = end();
-			while (beg != last && _cmp(beg->first, k))
-				++beg;
-			return beg;
-		};
-		iterator 		upper_bound (const key_type& k) {
-			iterator iter = lower_bound(k);
-			if (iter != end() && !_cmp(iter->first, k) && !_cmp(k, iter->first))
-				++iter;
-			return iter;
-		};
-		const_iterator	upper_bound (const key_type& k) const {
-			const_iterator iter = lower_bound(k);
-			if (iter != end() && !_cmp(iter->first, k) && !_cmp(k, iter->first))
-				++iter;
-			return iter;
-		};
+	iterator 		lower_bound (const key_type& k) {
+		iterator beg = begin();
+		iterator last = end();
+		while (beg != last && _cmp(beg->first, k))
+			++beg;
+		return beg;
+	};
+
+	const_iterator	lower_bound (const key_type& k) const {
+		iterator beg = begin();
+		iterator last = end();
+		while (beg != last && _cmp(beg->first, k))
+			++beg;
+		return beg;
+	};
+
+	iterator 		upper_bound (const key_type& k) {
+		iterator iter = lower_bound(k);
+		if (iter != end() && !_cmp(iter->first, k) && !_cmp(k, iter->first))
+			++iter;
+		return iter;
+	};
+
+	const_iterator	upper_bound (const key_type& k) const {
+		const_iterator iter = lower_bound(k);
+		if (iter != end() && !_cmp(iter->first, k) && !_cmp(k, iter->first))
+			++iter;
+		return iter;
+	};
 
 	std::pair<const_iterator,const_iterator> equal_range (const key_type& k) const { return std::make_pair(lower_bound(k), upper_bound(k)); }
 
