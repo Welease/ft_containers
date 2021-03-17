@@ -18,6 +18,7 @@
 //	o << "_" << p.first;
 //	return o;
 //}
+
 namespace ft {
 
 	template < class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<std::pair<const Key,T> > >
@@ -187,21 +188,25 @@ private:
 //		replNode->data = tmp;
 //		return replNode;
 
+		std::cout << replNode->data->first << "       " << toDel->data->first << std::endl;
 
 		TreeNode *tmp1 = toDel->right;
 		TreeNode *tmp2 = toDel->left;
 		TreeNode *tmp3 = toDel->parent;
+		TreeNode *tmp4 = replNode->parent;
 
 		Side s;
+		bool ret = false;
+		if (replNode->parent && replNode->parent != toDel)
+			ret = true;
+
 		if (tmp3)
 			s = tmp3->left == toDel ? left : right;
 		bool tmpColor = toDel->color;
 
 		toDel->right = replNode->right;
 		toDel->left = replNode->left;
-		if (toDel->parent != toDel)
-			toDel->parent = replNode;
-		else if (replNode->parent != toDel)
+		if (replNode->parent != toDel)
 			toDel->parent = replNode->parent;
 		else
 			toDel->parent = replNode;
@@ -211,7 +216,9 @@ private:
 			tmp1->parent = replNode;
 		else if (tmp3 != nullptr)
 			tmp1->parent = tmp3;
-		tmp2->parent = replNode;
+		else
+			link(replNode, tmp1, right);
+		link(replNode, tmp2, left);
 		if (tmp3)
 			s == right ? tmp3->right = replNode : tmp3->left = replNode;
 		replNode->color = tmpColor;
@@ -219,7 +226,8 @@ private:
 			replNode->right = tmp1;
 		else
 			replNode->right = toDel;
-		replNode->left = tmp2;
+		if (ret)
+			link(tmp4, toDel, left);
 		replNode->parent = tmp3;
 		if (toDel == _root)
 			_root = replNode;
@@ -488,7 +496,7 @@ public:
 		return *this;
 	}
 
-	void clear() {;
+	void clear() {
 		while (_size)
 			erase(begin());
 	}
@@ -631,9 +639,6 @@ public:
 	}
 
 	size_type erase (const key_type& k) {
-		if (_size == 1 && k == _root->data->first) {
-			std::cout << "HERREEE\n";
-		}
 		if (_size) {
 			if (_beginNode->parent)
 				_beginNode->parent->left = nullptr;
@@ -651,8 +656,6 @@ public:
 	void erase (iterator position) {
 		if (position != iterator(_endNode))
 			erase(position->first);
-		else
-			;
 	};
 
 	key_compare key_comp() const { return _cmp; }

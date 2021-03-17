@@ -1123,17 +1123,17 @@ TEST_F(MapEraseByIteratorTest, eraseAllByEnd) {
 	EXPECT_EQ(f.size(), 0);
 }
 
-//TEST_F(MapEraseByIteratorTest, iteratorValidity) {
-//	its = s.begin();
-//	itf = f.begin();
-//
-//	for (int i = 0; i < 10; ++i) {
-//		s.erase(++s.begin());
-//		f.erase(++f.begin());
-//		EXPECT_EQ(s.size(), f.size());
-//		checkMapsAreEqualIt(itf, f.end(), its, s.end());
-//	}
-//}
+TEST_F(MapEraseByIteratorTest, iteratorValidity) {
+	its = s.begin();
+	itf = f.begin();
+
+	for (int i = 0; i < 10; ++i) {
+		s.erase(++s.begin());
+		f.erase(++f.begin());
+		EXPECT_EQ(s.size(), f.size());
+		checkMapsAreEqualIt(itf, f.end(), its, s.end());
+	}
+}
 
 TEST_F(MapEraseByIteratorTest, iteratorValidity2) {
 	ft::map<char, int> ftmap;

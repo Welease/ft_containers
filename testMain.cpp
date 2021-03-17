@@ -37,47 +37,22 @@ int main() {
 //	}
 //
 //	std::cout << f.size() << " " << s.size() << std::endl;
+//
+//	for (itf = f.begin(); itf != f.end(); ++itf)
+//		std::cout << itf->first << std::endl;
+//	return 0;
+	ft::map<int,int> f;
 
-	std::map<int, int> s;
-	ft::map<int, int>  f;
-	std::map<int, int>::iterator its;
-	ft::map<int,  int>::iterator itf;
-
-	f.insert(std::make_pair(30,0));
-	f.insert(std::make_pair(40,0));
-	f.insert(std::make_pair(50,0));
-	f.insert(std::make_pair(35,0));
-	f.insert(std::make_pair(20,0));
-	f.insert(std::make_pair(9,0));
-	f.insert(std::make_pair(8,0));
-	f.insert(std::make_pair(5,0));
-	f.insert(std::make_pair(4,0));
-
-	s.insert(std::make_pair(30,0));
-	s.insert(std::make_pair(40,0));
-	s.insert(std::make_pair(50,0));
-	s.insert(std::make_pair(35,0));
-	s.insert(std::make_pair(20,0));
-	s.insert(std::make_pair(9,0));
-	s.insert(std::make_pair(8,0));
-	s.insert(std::make_pair(5,0));
-	s.insert(std::make_pair(4,0));
-
-	f._dPrintStrangeTree();
-
-	its = s.begin();
-	itf = f.begin();
-	ft::map<int, int>::iterator tmp;
+	f.insert(std::make_pair(5, 0));
+	f.insert(std::make_pair(10, 0));
+	f.insert(std::make_pair(5, 0));
+	f.insert(std::make_pair(10, 0));f.insert(std::make_pair(5, 0));
+	f.insert(std::make_pair(10, 0));
+	//f._dPrintStrangeTree();
 
 
-	for (int i = 0; i < 7; ++i) {
-//		tmp = ++.begin();
-		s.erase(++s.begin());
-//		f._dPrintStrangeTree();
-	}
 
-	for (; its != s.end(); ++itf)
-		std::cout << itf->first << std::endl;
 
-	return 0;
+	f.erase(5);
+	//f._dPrintStrangeTree();
 }
