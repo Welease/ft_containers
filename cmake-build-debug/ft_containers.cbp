@@ -47,16 +47,6 @@
 					<DistClean command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
-			<Target title="list_install_components">
-				<Option working_dir="/Users/welease/projects/ft_containers/cmake-build-debug"/>
-				<Option type="4"/>
-				<MakeCommands>
-					<Build command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 list_install_components"/>
-					<CompileFile command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-				</MakeCommands>
-			</Target>
 			<Target title="rebuild_cache">
 				<Option working_dir="/Users/welease/projects/ft_containers/cmake-build-debug"/>
 				<Option type="4"/>
@@ -119,43 +109,11 @@
 					<DistClean command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
-			<Target title="map">
-				<Option output="/Users/welease/projects/ft_containers/cmake-build-debug/map" prefix_auto="0" extension_auto="0"/>
+			<Target title="list_install_components">
 				<Option working_dir="/Users/welease/projects/ft_containers/cmake-build-debug"/>
-				<Option object_output="./"/>
-				<Option type="1"/>
-				<Option compiler="gcc"/>
-				<Compiler>
-					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1"/>
-					<Add directory="/usr/local/include"/>
-					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.0/include"/>
-					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
-					<Add directory="/System/Library/Frameworks"/>
-					<Add directory="/Library/Frameworks"/>
-				</Compiler>
+				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 map"/>
-					<CompileFile command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-				</MakeCommands>
-			</Target>
-			<Target title="map/fast">
-				<Option output="/Users/welease/projects/ft_containers/cmake-build-debug/map" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/Users/welease/projects/ft_containers/cmake-build-debug"/>
-				<Option object_output="./"/>
-				<Option type="1"/>
-				<Option compiler="gcc"/>
-				<Compiler>
-					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1"/>
-					<Add directory="/usr/local/include"/>
-					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.0/include"/>
-					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
-					<Add directory="/System/Library/Frameworks"/>
-					<Add directory="/Library/Frameworks"/>
-				</Compiler>
-				<MakeCommands>
-					<Build command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 map/fast"/>
+					<Build command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 list_install_components"/>
 					<CompileFile command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
 					<Clean command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 					<DistClean command="/usr/bin/make -j6 -f &quot;/Users/welease/projects/ft_containers/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
@@ -405,7 +363,6 @@
 		</Unit>
 		<Unit filename="/Users/welease/projects/ft_containers/ft_map.h">
 			<Option target="tests"/>
-			<Option target="map"/>
 		</Unit>
 		<Unit filename="/Users/welease/projects/ft_containers/ft_queue.h">
 			<Option target="tests"/>
@@ -419,9 +376,6 @@
 		<Unit filename="/Users/welease/projects/ft_containers/main.cpp">
 			<Option target="tests"/>
 		</Unit>
-		<Unit filename="/Users/welease/projects/ft_containers/testMain.cpp">
-			<Option target="map"/>
-		</Unit>
 		<Unit filename="/Users/welease/projects/ft_containers/unit_tests/lib/googlemock/src/gmock-all.cc">
 			<Option target="gmock"/>
 		</Unit>
@@ -434,7 +388,22 @@
 		<Unit filename="/Users/welease/projects/ft_containers/unit_tests/lib/googletest/src/gtest_main.cc">
 			<Option target="gtest_main"/>
 		</Unit>
+		<Unit filename="/Users/welease/projects/ft_containers/unit_tests/list.cpp">
+			<Option target="Google_Tests_run"/>
+		</Unit>
 		<Unit filename="/Users/welease/projects/ft_containers/unit_tests/map.cpp">
+			<Option target="Google_Tests_run"/>
+		</Unit>
+		<Unit filename="/Users/welease/projects/ft_containers/unit_tests/queue.cpp">
+			<Option target="Google_Tests_run"/>
+		</Unit>
+		<Unit filename="/Users/welease/projects/ft_containers/unit_tests/stack.cpp">
+			<Option target="Google_Tests_run"/>
+		</Unit>
+		<Unit filename="/Users/welease/projects/ft_containers/unit_tests/test.cpp">
+			<Option target="Google_Tests_run"/>
+		</Unit>
+		<Unit filename="/Users/welease/projects/ft_containers/unit_tests/vector.cpp">
 			<Option target="Google_Tests_run"/>
 		</Unit>
 		<Unit filename="/Users/welease/projects/ft_containers/CMakeLists.txt">

@@ -177,12 +177,12 @@ namespace ft {
 			bool  operator<(iterator const & iterator) const { return this->_pointer  < iterator.getPointer(); }
 			bool  operator>(iterator const & iterator) const { return this->_pointer  > iterator.getPointer(); }
 
-			value_type const & operator[]( difference_type const & index ) const { return *(this->_pointer + index); }
+			const value_type & operator[]( difference_type const & index ) const { return *(this->_pointer + index); }
 			const value_type & operator*() const { return *this->_pointer; }
-			const value_type * operator->() const { return this->_pointer; }
+			const value_type* operator->() const { return this->_pointer; }
 
 			pointer getPointer() const { return _pointer; }
-			};
+		};
 
 
 	class reverse_iterator : public std::reverse_iterator<iterator> {

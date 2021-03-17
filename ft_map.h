@@ -6,18 +6,6 @@
 #define FT_CONTAINERS_FT_MAP_H
 
 #include "ft.h"
-#include <queue>
-#include <iostream>
-#include <algorithm>
-#include <iomanip>
-#include <sstream>
-#  define RED_NODE_OUTPUT(x)  "\x1b[31;1m" + (x) + "\x1b[0m"
-
-//template < class G, class U >
-//std::ostream & operator<<(std::ostream & o, std::pair<G, U> p) {
-//	o << "_" << p.first;
-//	return o;
-//}
 
 namespace ft {
 
@@ -183,52 +171,34 @@ private:
 	}
 
 	TreeNode* _valueSwap(TreeNode *replNode, TreeNode *toDel) {
-//		value_type  *tmp = toDel->data;
-//		toDel->data = replNode->data;
-//		replNode->data = tmp;
-//		return replNode;
+		bool left_or_right;
+		TreeNode *repl_left = replNode->left;
+		TreeNode *repl_right = replNode->right;
 
-		std::cout << replNode->data->first << "       " << toDel->data->first << std::endl;
+		if (replNode->parent != toDel) {
+			TreeNode *repl_parent = replNode->parent;
+			left_or_right = _isLeftNode(replNode);
 
-		TreeNode *tmp1 = toDel->right;
-		TreeNode *tmp2 = toDel->left;
-		TreeNode *tmp3 = toDel->parent;
-		TreeNode *tmp4 = replNode->parent;
+			link(replNode, toDel->right, right);
+			link(replNode, toDel->left, left);
+			(_isLeftNode(toDel)) ? link(toDel->parent, replNode, left) : link(toDel->parent, replNode, right);
 
-		Side s;
-		bool ret = false;
-		if (replNode->parent && replNode->parent != toDel)
-			ret = true;
+			(left_or_right) ? link(repl_parent, toDel, left) : link(repl_parent, toDel, right);
+			link(toDel, repl_left, left);
+			link(toDel, repl_right, right);
+		}
+		else {
+			left_or_right = _isLeftNode(replNode);
+			(!left_or_right) ? link(replNode, toDel->left, left) : link(replNode, toDel->right, right);
 
-		if (tmp3)
-			s = tmp3->left == toDel ? left : right;
-		bool tmpColor = toDel->color;
-
-		toDel->right = replNode->right;
-		toDel->left = replNode->left;
-		if (replNode->parent != toDel)
-			toDel->parent = replNode->parent;
-		else
-			toDel->parent = replNode;
-		toDel->color = replNode->color;
-
-		if (tmp1->parent != toDel)
-			tmp1->parent = replNode;
-		else if (tmp3 != nullptr)
-			tmp1->parent = tmp3;
-		else
-			link(replNode, tmp1, right);
-		link(replNode, tmp2, left);
-		if (tmp3)
-			s == right ? tmp3->right = replNode : tmp3->left = replNode;
-		replNode->color = tmpColor;
-		if (tmp1 != replNode)
-			replNode->right = tmp1;
-		else
-			replNode->right = toDel;
-		if (ret)
-			link(tmp4, toDel, left);
-		replNode->parent = tmp3;
+			if (toDel->parent)
+				_isLeftNode(toDel) ? link(toDel->parent, replNode, left) : link(toDel->parent, replNode, right);
+			else
+				replNode->parent = nullptr;
+			(!left_or_right) ? link(replNode, toDel, right) : link(replNode, toDel, left);
+			link(toDel, repl_right, right);
+			link(toDel, repl_left, left);
+		}
 		if (toDel == _root)
 			_root = replNode;
 		return toDel;
@@ -442,9 +412,8 @@ private:
 		if (_root == nullptr)
 			return false;
 		TreeNode *v = _searchInTreeByKey(key);
-		if (v->data->first != key) {
+		if (v->data->first != key)
 			return false;
-		}
 		_erase(v);
 		return true;
 	}
@@ -499,67 +468,6 @@ public:
 	void clear() {
 		while (_size)
 			erase(begin());
-	}
-
-		void	_dPrintStrangeTreeLine(int width, TreeNode* curNode) {
-			std::stringstream ss;
-			std::string str;
-
-			std::cout.width(width);
-			if (curNode && curNode->data) {
-				ss << *(curNode->data);
-				str = ss.str();
-				if (curNode->color) {
-					str = RED_NODE_OUTPUT(ss.str());
-					width += 11;
-				}
-				std::cout << std::setw(width) << str ;
-			}
-			else if (curNode)
-				std::cout << "EN";
-			else
-				std::cout << "N";
-		}
-
-	void	_dPrintStrangeTree()
-	{
-		TreeNode *root = _root;
-		typename std::queue<typename map<Key, T>::TreeNode*> q;
-		typename map<Key, T>::TreeNode * curNode;
-		bool printTime;
-		int onLine = 1;
-		int needToPrint = 1;
-		int widthSt = 64; // CHANGE HERE 32 / 64 / 128 / 256 etc
-		int width;
-
-		q.push(root);
-		while (!q.empty()) {
-			curNode = q.front();
-			q.pop();
-			printTime = onLine == needToPrint;
-			width = printTime ? (widthSt / onLine / 2) : (widthSt / onLine);
-			_dPrintStrangeTreeLine(width, curNode);
-			--needToPrint;
-			if (curNode) {
-				q.push(curNode->left);
-				q.push(curNode->right);
-			}
-			else {
-				q.push(nullptr);
-				q.push(nullptr);
-			}
-			if (needToPrint == 0) {
-				onLine *= 2;
-				needToPrint = onLine;
-				std::cout << std::endl;
-			}
-			if (onLine == widthSt / 2)
-				break;
-		}
-		std::cout << std::endl;
-		std::cout << std::setfill('.') << std::setw(widthSt) << " " << std::endl;
-		std::cout.fill(' ');
-		std::cout << std::endl;
 	}
 
 	iterator 					begin() {
@@ -975,8 +883,8 @@ public:
 		bool operator==(const const_reverse_iterator &iter) const { return _node == iter.getNode(); };
 		bool operator!=(const const_reverse_iterator &iter) const { return _node != iter.getNode(); };
 
-		value_type & operator*() const { return *(_node->data); };
-		value_type * operator->() const {
+		const value_type & operator*() const { return *(_node->data); };
+		const value_type * operator->() const {
 			return _node->data; }
 
 		TreeNode *getNode() const { return _node; }
@@ -1074,8 +982,8 @@ public:
 		bool operator==(const reverse_iterator &iter) const { return _node == iter.getNode(); };
 		bool operator!=(const reverse_iterator &iter) const { return _node != iter.getNode(); };
 
-		reference operator*() const { return *(this->_node->data); }
-		pointer operator->() const { return this->it->data; }
+		const_reference operator*() const { return *(this->_node->data); }
+		const_pointer operator->() const { return this->it->data; }
 
 		TreeNode *getNode() const { return _node; }
 	private:

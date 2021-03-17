@@ -339,16 +339,6 @@ acxx_demangle.h
 /Users/welease/projects/ft_containers/ft_map.h
 ft.h
 /Users/welease/projects/ft_containers/ft.h
-queue
--
-iostream
--
-algorithm
--
-iomanip
--
-sstream
--
 
 /Users/welease/projects/ft_containers/unit_tests/map.cpp
 gtest/gtest.h

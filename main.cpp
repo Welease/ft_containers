@@ -150,8 +150,4 @@ int main() {
 
 	ret = fl.size() == sl.size();
 	std::cout << ret << std::endl;
-	int a[] = {1,2,3,4,5,6};
-	ft::vector<int> b(a, a + 4);
-	ft::vector<int>::const_iterator it = b.begin() + 2;
-//	*it = 1000;
 }
