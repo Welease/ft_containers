@@ -601,8 +601,8 @@ namespace ft {
 
 		typedef typename allocator_type::template rebind<ListNode<value_type> >::other PtrAllocator;
 
-		allocator_type _alloc;        // Распределитель для значений типа T
-		PtrAllocator _ptr_alloc;  // Распределитель для значений типа T*
+		allocator_type _alloc;
+		PtrAllocator _ptr_alloc;
 
 		t_node *addNode(){
 			t_node *node = _ptr_alloc.allocate(1);

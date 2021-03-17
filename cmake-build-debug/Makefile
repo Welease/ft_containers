@@ -76,6 +76,18 @@ CMAKE_BINARY_DIR = /Users/welease/projects/ft_containers/cmake-build-debug
 #=============================================================================
 # Targets provided globally by CMake.
 
+# Special rule for the target install/local
+install/local: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local
+
+# Special rule for the target install/local
+install/local/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local/fast
+
 # Special rule for the target install/strip
 install/strip: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
@@ -100,16 +112,6 @@ install/fast: preinstall/fast
 	/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -P cmake_install.cmake
 .PHONY : install/fast
 
-# Special rule for the target list_install_components
-list_install_components:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
-.PHONY : list_install_components
-
-# Special rule for the target list_install_components
-list_install_components/fast: list_install_components
-
-.PHONY : list_install_components/fast
-
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
@@ -132,17 +134,15 @@ edit_cache/fast: edit_cache
 
 .PHONY : edit_cache/fast
 
-# Special rule for the target install/local
-install/local: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
-	/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
-.PHONY : install/local
+# Special rule for the target list_install_components
+list_install_components:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
+.PHONY : list_install_components
 
-# Special rule for the target install/local
-install/local/fast: preinstall/fast
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
-	/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
-.PHONY : install/local/fast
+# Special rule for the target list_install_components
+list_install_components/fast: list_install_components
+
+.PHONY : list_install_components/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -177,56 +177,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named ft_vector
+# Target rules for targets named tests
 
 # Build rule for target.
-ft_vector: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ft_vector
-.PHONY : ft_vector
+tests: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests
+.PHONY : tests
 
 # fast build rule for target.
-ft_vector/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_vector.dir/build.make CMakeFiles/ft_vector.dir/build
-.PHONY : ft_vector/fast
-
-#=============================================================================
-# Target rules for targets named ft_stack
-
-# Build rule for target.
-ft_stack: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ft_stack
-.PHONY : ft_stack
-
-# fast build rule for target.
-ft_stack/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_stack.dir/build.make CMakeFiles/ft_stack.dir/build
-.PHONY : ft_stack/fast
-
-#=============================================================================
-# Target rules for targets named test
-
-# Build rule for target.
-test: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test
-.PHONY : test
-
-# fast build rule for target.
-test/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/build
-.PHONY : test/fast
-
-#=============================================================================
-# Target rules for targets named ft_list
-
-# Build rule for target.
-ft_list: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ft_list
-.PHONY : ft_list
-
-# fast build rule for target.
-ft_list/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_list.dir/build.make CMakeFiles/ft_list.dir/build
-.PHONY : ft_list/fast
+tests/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/build
+.PHONY : tests/fast
 
 #=============================================================================
 # Target rules for targets named Google_Tests_run
@@ -293,113 +254,32 @@ gtest/fast:
 	$(MAKE) $(MAKESILENT) -f unit_tests/lib/googletest/CMakeFiles/gtest.dir/build.make unit_tests/lib/googletest/CMakeFiles/gtest.dir/build
 .PHONY : gtest/fast
 
-listMain.o: listMain.cpp.o
+main.o: main.cpp.o
 
-.PHONY : listMain.o
-
-# target to build an object file
-listMain.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_list.dir/build.make CMakeFiles/ft_list.dir/listMain.cpp.o
-.PHONY : listMain.cpp.o
-
-listMain.i: listMain.cpp.i
-
-.PHONY : listMain.i
-
-# target to preprocess a source file
-listMain.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_list.dir/build.make CMakeFiles/ft_list.dir/listMain.cpp.i
-.PHONY : listMain.cpp.i
-
-listMain.s: listMain.cpp.s
-
-.PHONY : listMain.s
-
-# target to generate assembly for a file
-listMain.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_list.dir/build.make CMakeFiles/ft_list.dir/listMain.cpp.s
-.PHONY : listMain.cpp.s
-
-queueMain.o: queueMain.cpp.o
-
-.PHONY : queueMain.o
+.PHONY : main.o
 
 # target to build an object file
-queueMain.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/queueMain.cpp.o
-.PHONY : queueMain.cpp.o
+main.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/main.cpp.o
+.PHONY : main.cpp.o
 
-queueMain.i: queueMain.cpp.i
+main.i: main.cpp.i
 
-.PHONY : queueMain.i
-
-# target to preprocess a source file
-queueMain.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/queueMain.cpp.i
-.PHONY : queueMain.cpp.i
-
-queueMain.s: queueMain.cpp.s
-
-.PHONY : queueMain.s
-
-# target to generate assembly for a file
-queueMain.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/queueMain.cpp.s
-.PHONY : queueMain.cpp.s
-
-stackMain.o: stackMain.cpp.o
-
-.PHONY : stackMain.o
-
-# target to build an object file
-stackMain.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_stack.dir/build.make CMakeFiles/ft_stack.dir/stackMain.cpp.o
-.PHONY : stackMain.cpp.o
-
-stackMain.i: stackMain.cpp.i
-
-.PHONY : stackMain.i
+.PHONY : main.i
 
 # target to preprocess a source file
-stackMain.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_stack.dir/build.make CMakeFiles/ft_stack.dir/stackMain.cpp.i
-.PHONY : stackMain.cpp.i
+main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/main.cpp.i
+.PHONY : main.cpp.i
 
-stackMain.s: stackMain.cpp.s
+main.s: main.cpp.s
 
-.PHONY : stackMain.s
-
-# target to generate assembly for a file
-stackMain.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_stack.dir/build.make CMakeFiles/ft_stack.dir/stackMain.cpp.s
-.PHONY : stackMain.cpp.s
-
-vectorMain.o: vectorMain.cpp.o
-
-.PHONY : vectorMain.o
-
-# target to build an object file
-vectorMain.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_vector.dir/build.make CMakeFiles/ft_vector.dir/vectorMain.cpp.o
-.PHONY : vectorMain.cpp.o
-
-vectorMain.i: vectorMain.cpp.i
-
-.PHONY : vectorMain.i
-
-# target to preprocess a source file
-vectorMain.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_vector.dir/build.make CMakeFiles/ft_vector.dir/vectorMain.cpp.i
-.PHONY : vectorMain.cpp.i
-
-vectorMain.s: vectorMain.cpp.s
-
-.PHONY : vectorMain.s
+.PHONY : main.s
 
 # target to generate assembly for a file
-vectorMain.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_vector.dir/build.make CMakeFiles/ft_vector.dir/vectorMain.cpp.s
-.PHONY : vectorMain.cpp.s
+main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/main.cpp.s
+.PHONY : main.cpp.s
 
 # Help Target
 help:
@@ -414,26 +294,14 @@ help:
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
 	@echo "... Google_Tests_run"
-	@echo "... ft_list"
-	@echo "... ft_stack"
-	@echo "... ft_vector"
 	@echo "... gmock"
 	@echo "... gmock_main"
 	@echo "... gtest"
 	@echo "... gtest_main"
-	@echo "... test"
-	@echo "... listMain.o"
-	@echo "... listMain.i"
-	@echo "... listMain.s"
-	@echo "... queueMain.o"
-	@echo "... queueMain.i"
-	@echo "... queueMain.s"
-	@echo "... stackMain.o"
-	@echo "... stackMain.i"
-	@echo "... stackMain.s"
-	@echo "... vectorMain.o"
-	@echo "... vectorMain.i"
-	@echo "... vectorMain.s"
+	@echo "... tests"
+	@echo "... main.o"
+	@echo "... main.i"
+	@echo "... main.s"
 .PHONY : help
 
 
