@@ -191,33 +191,6 @@ Google_Tests_run/fast:
 	cd /Users/welease/projects/ft_containers/cmake-build-debug && $(MAKE) $(MAKESILENT) -f unit_tests/CMakeFiles/Google_Tests_run.dir/build.make unit_tests/CMakeFiles/Google_Tests_run.dir/build
 .PHONY : Google_Tests_run/fast
 
-list.o: list.cpp.o
-
-.PHONY : list.o
-
-# target to build an object file
-list.cpp.o:
-	cd /Users/welease/projects/ft_containers/cmake-build-debug && $(MAKE) $(MAKESILENT) -f unit_tests/CMakeFiles/Google_Tests_run.dir/build.make unit_tests/CMakeFiles/Google_Tests_run.dir/list.cpp.o
-.PHONY : list.cpp.o
-
-list.i: list.cpp.i
-
-.PHONY : list.i
-
-# target to preprocess a source file
-list.cpp.i:
-	cd /Users/welease/projects/ft_containers/cmake-build-debug && $(MAKE) $(MAKESILENT) -f unit_tests/CMakeFiles/Google_Tests_run.dir/build.make unit_tests/CMakeFiles/Google_Tests_run.dir/list.cpp.i
-.PHONY : list.cpp.i
-
-list.s: list.cpp.s
-
-.PHONY : list.s
-
-# target to generate assembly for a file
-list.cpp.s:
-	cd /Users/welease/projects/ft_containers/cmake-build-debug && $(MAKE) $(MAKESILENT) -f unit_tests/CMakeFiles/Google_Tests_run.dir/build.make unit_tests/CMakeFiles/Google_Tests_run.dir/list.cpp.s
-.PHONY : list.cpp.s
-
 map.o: map.cpp.o
 
 .PHONY : map.o
@@ -245,87 +218,6 @@ map.cpp.s:
 	cd /Users/welease/projects/ft_containers/cmake-build-debug && $(MAKE) $(MAKESILENT) -f unit_tests/CMakeFiles/Google_Tests_run.dir/build.make unit_tests/CMakeFiles/Google_Tests_run.dir/map.cpp.s
 .PHONY : map.cpp.s
 
-queue.o: queue.cpp.o
-
-.PHONY : queue.o
-
-# target to build an object file
-queue.cpp.o:
-	cd /Users/welease/projects/ft_containers/cmake-build-debug && $(MAKE) $(MAKESILENT) -f unit_tests/CMakeFiles/Google_Tests_run.dir/build.make unit_tests/CMakeFiles/Google_Tests_run.dir/queue.cpp.o
-.PHONY : queue.cpp.o
-
-queue.i: queue.cpp.i
-
-.PHONY : queue.i
-
-# target to preprocess a source file
-queue.cpp.i:
-	cd /Users/welease/projects/ft_containers/cmake-build-debug && $(MAKE) $(MAKESILENT) -f unit_tests/CMakeFiles/Google_Tests_run.dir/build.make unit_tests/CMakeFiles/Google_Tests_run.dir/queue.cpp.i
-.PHONY : queue.cpp.i
-
-queue.s: queue.cpp.s
-
-.PHONY : queue.s
-
-# target to generate assembly for a file
-queue.cpp.s:
-	cd /Users/welease/projects/ft_containers/cmake-build-debug && $(MAKE) $(MAKESILENT) -f unit_tests/CMakeFiles/Google_Tests_run.dir/build.make unit_tests/CMakeFiles/Google_Tests_run.dir/queue.cpp.s
-.PHONY : queue.cpp.s
-
-stack.o: stack.cpp.o
-
-.PHONY : stack.o
-
-# target to build an object file
-stack.cpp.o:
-	cd /Users/welease/projects/ft_containers/cmake-build-debug && $(MAKE) $(MAKESILENT) -f unit_tests/CMakeFiles/Google_Tests_run.dir/build.make unit_tests/CMakeFiles/Google_Tests_run.dir/stack.cpp.o
-.PHONY : stack.cpp.o
-
-stack.i: stack.cpp.i
-
-.PHONY : stack.i
-
-# target to preprocess a source file
-stack.cpp.i:
-	cd /Users/welease/projects/ft_containers/cmake-build-debug && $(MAKE) $(MAKESILENT) -f unit_tests/CMakeFiles/Google_Tests_run.dir/build.make unit_tests/CMakeFiles/Google_Tests_run.dir/stack.cpp.i
-.PHONY : stack.cpp.i
-
-stack.s: stack.cpp.s
-
-.PHONY : stack.s
-
-# target to generate assembly for a file
-stack.cpp.s:
-	cd /Users/welease/projects/ft_containers/cmake-build-debug && $(MAKE) $(MAKESILENT) -f unit_tests/CMakeFiles/Google_Tests_run.dir/build.make unit_tests/CMakeFiles/Google_Tests_run.dir/stack.cpp.s
-.PHONY : stack.cpp.s
-
-vector.o: vector.cpp.o
-
-.PHONY : vector.o
-
-# target to build an object file
-vector.cpp.o:
-	cd /Users/welease/projects/ft_containers/cmake-build-debug && $(MAKE) $(MAKESILENT) -f unit_tests/CMakeFiles/Google_Tests_run.dir/build.make unit_tests/CMakeFiles/Google_Tests_run.dir/vector.cpp.o
-.PHONY : vector.cpp.o
-
-vector.i: vector.cpp.i
-
-.PHONY : vector.i
-
-# target to preprocess a source file
-vector.cpp.i:
-	cd /Users/welease/projects/ft_containers/cmake-build-debug && $(MAKE) $(MAKESILENT) -f unit_tests/CMakeFiles/Google_Tests_run.dir/build.make unit_tests/CMakeFiles/Google_Tests_run.dir/vector.cpp.i
-.PHONY : vector.cpp.i
-
-vector.s: vector.cpp.s
-
-.PHONY : vector.s
-
-# target to generate assembly for a file
-vector.cpp.s:
-	cd /Users/welease/projects/ft_containers/cmake-build-debug && $(MAKE) $(MAKESILENT) -f unit_tests/CMakeFiles/Google_Tests_run.dir/build.make unit_tests/CMakeFiles/Google_Tests_run.dir/vector.cpp.s
-.PHONY : vector.cpp.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -339,21 +231,9 @@ help:
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
 	@echo "... Google_Tests_run"
-	@echo "... list.o"
-	@echo "... list.i"
-	@echo "... list.s"
 	@echo "... map.o"
 	@echo "... map.i"
 	@echo "... map.s"
-	@echo "... queue.o"
-	@echo "... queue.i"
-	@echo "... queue.s"
-	@echo "... stack.o"
-	@echo "... stack.i"
-	@echo "... stack.s"
-	@echo "... vector.o"
-	@echo "... vector.i"
-	@echo "... vector.s"
 .PHONY : help
 
 

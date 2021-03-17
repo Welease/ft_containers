@@ -1123,40 +1123,40 @@ TEST_F(MapEraseByIteratorTest, eraseAllByEnd) {
 	EXPECT_EQ(f.size(), 0);
 }
 
-TEST_F(MapEraseByIteratorTest, iteratorValidity) {
-	its = s.begin();
-	itf = f.begin();
-
-	for (int i = 0; i < 10; ++i) {
-		s.erase(++s.begin());
-		f.erase(++f.begin());
-		EXPECT_EQ(s.size(), f.size());
-		checkMapsAreEqualIt(itf, f.end(), its, s.end());
-	}
-}
-
-//TEST_F(MapEraseByIteratorTest, iteratorValidity2) {
-//	ft::map<char, int> ftmap;
-//	ft::map<char,int>::iterator itf;
-//	std::map<char, int> stmap;
-//	std::map<char, int>::iterator its;
+//TEST_F(MapEraseByIteratorTest, iteratorValidity) {
+//	its = s.begin();
+//	itf = f.begin();
 //
-//	ftmap.insert(std::make_pair('a', 123));		stmap.insert(std::make_pair('a', 123));
-//	ftmap.insert(std::make_pair('b', 123));		stmap.insert(std::make_pair('b', 123));
-//	ftmap.insert(std::make_pair('c', 123));		stmap.insert(std::make_pair('c', 123));
-//	ftmap.insert(std::make_pair('d', 123));		stmap.insert(std::make_pair('d', 123));
-//	ftmap.insert(std::make_pair('e', 123));		stmap.insert(std::make_pair('e', 123));
-//	ftmap.insert(std::make_pair('f', 123));		stmap.insert(std::make_pair('f', 123));
-//	ftmap.insert(std::make_pair('g', 123));		stmap.insert(std::make_pair('g', 123));
-//	ftmap.insert(std::make_pair('h', 123));		stmap.insert(std::make_pair('h', 123));
-//	ftmap.insert(std::make_pair('j', 123));		stmap.insert(std::make_pair('j', 123));
-//	ftmap.insert(std::make_pair('k', 123));		stmap.insert(std::make_pair('k', 123));
-//
-//	itf = ftmap.find('c');	its = stmap.find('c');
-//	ftmap.erase('b');		stmap.erase('b');
-//
-//	checkMapsAreEqualIt(itf, ftmap.end(), its, stmap.end());
+//	for (int i = 0; i < 10; ++i) {
+//		s.erase(++s.begin());
+//		f.erase(++f.begin());
+//		EXPECT_EQ(s.size(), f.size());
+//		checkMapsAreEqualIt(itf, f.end(), its, s.end());
+//	}
 //}
+
+TEST_F(MapEraseByIteratorTest, iteratorValidity2) {
+	ft::map<char, int> ftmap;
+	ft::map<char,int>::iterator itf;
+	std::map<char, int> stmap;
+	std::map<char, int>::iterator its;
+
+	ftmap.insert(std::make_pair('a', 123));		stmap.insert(std::make_pair('a', 123));
+	ftmap.insert(std::make_pair('b', 123));		stmap.insert(std::make_pair('b', 123));
+	ftmap.insert(std::make_pair('c', 123));		stmap.insert(std::make_pair('c', 123));
+	ftmap.insert(std::make_pair('d', 123));		stmap.insert(std::make_pair('d', 123));
+	ftmap.insert(std::make_pair('e', 123));		stmap.insert(std::make_pair('e', 123));
+	ftmap.insert(std::make_pair('f', 123));		stmap.insert(std::make_pair('f', 123));
+	ftmap.insert(std::make_pair('g', 123));		stmap.insert(std::make_pair('g', 123));
+	ftmap.insert(std::make_pair('h', 123));		stmap.insert(std::make_pair('h', 123));
+	ftmap.insert(std::make_pair('j', 123));		stmap.insert(std::make_pair('j', 123));
+	ftmap.insert(std::make_pair('k', 123));		stmap.insert(std::make_pair('k', 123));
+
+	itf = ftmap.find('c');	its = stmap.find('c');
+	ftmap.erase('b');		stmap.erase('b');
+
+	checkMapsAreEqualIt(itf, ftmap.end(), its, stmap.end());
+}
 
 class MapClearTest : public testing::Test {
 protected:

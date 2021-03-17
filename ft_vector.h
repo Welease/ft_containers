@@ -178,8 +178,8 @@ namespace ft {
 			bool  operator>(iterator const & iterator) const { return this->_pointer  > iterator.getPointer(); }
 
 			value_type const & operator[]( difference_type const & index ) const { return *(this->_pointer + index); }
-			value_type & operator*() const { return *this->_pointer; }
-			value_type * operator->() const { return this->_pointer; }
+			const value_type & operator*() const { return *this->_pointer; }
+			const value_type * operator->() const { return this->_pointer; }
 
 			pointer getPointer() const { return _pointer; }
 			};

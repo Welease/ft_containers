@@ -1,0 +1,34 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/welease/projects/ft_containers/ft.h
+
+/Users/welease/projects/ft_containers/ft_map.h
+ft.h
+/Users/welease/projects/ft_containers/ft.h
+queue
+-
+iostream
+-
+algorithm
+-
+iomanip
+-
+sstream
+-
+
+/Users/welease/projects/ft_containers/testMain.cpp
+map
+-
+ft_map.h
+/Users/welease/projects/ft_containers/ft_map.h
+iostream
+-
+sstream
+-
+

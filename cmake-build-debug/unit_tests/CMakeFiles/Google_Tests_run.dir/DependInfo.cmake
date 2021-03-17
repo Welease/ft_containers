@@ -4,11 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/Users/welease/projects/ft_containers/unit_tests/list.cpp" "/Users/welease/projects/ft_containers/cmake-build-debug/unit_tests/CMakeFiles/Google_Tests_run.dir/list.cpp.o"
   "/Users/welease/projects/ft_containers/unit_tests/map.cpp" "/Users/welease/projects/ft_containers/cmake-build-debug/unit_tests/CMakeFiles/Google_Tests_run.dir/map.cpp.o"
-  "/Users/welease/projects/ft_containers/unit_tests/queue.cpp" "/Users/welease/projects/ft_containers/cmake-build-debug/unit_tests/CMakeFiles/Google_Tests_run.dir/queue.cpp.o"
-  "/Users/welease/projects/ft_containers/unit_tests/stack.cpp" "/Users/welease/projects/ft_containers/cmake-build-debug/unit_tests/CMakeFiles/Google_Tests_run.dir/stack.cpp.o"
-  "/Users/welease/projects/ft_containers/unit_tests/vector.cpp" "/Users/welease/projects/ft_containers/cmake-build-debug/unit_tests/CMakeFiles/Google_Tests_run.dir/vector.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "AppleClang")
 

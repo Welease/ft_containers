@@ -6,7 +6,18 @@
 #define FT_CONTAINERS_FT_MAP_H
 
 #include "ft.h"
+#include <queue>
+#include <iostream>
+#include <algorithm>
+#include <iomanip>
+#include <sstream>
+#  define RED_NODE_OUTPUT(x)  "\x1b[31;1m" + (x) + "\x1b[0m"
 
+//template < class G, class U >
+//std::ostream & operator<<(std::ostream & o, std::pair<G, U> p) {
+//	o << "_" << p.first;
+//	return o;
+//}
 namespace ft {
 
 	template < class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<std::pair<const Key,T> > >
@@ -170,10 +181,49 @@ private:
 		node2->color = temp;
 	}
 
-	void _valueSwap(TreeNode *toDel, TreeNode *replNode) {
-		value_type *temp = toDel->data;
-		toDel->data = replNode->data;
-		replNode->data = temp;
+	TreeNode* _valueSwap(TreeNode *replNode, TreeNode *toDel) {
+//		value_type  *tmp = toDel->data;
+//		toDel->data = replNode->data;
+//		replNode->data = tmp;
+//		return replNode;
+
+
+		TreeNode *tmp1 = toDel->right;
+		TreeNode *tmp2 = toDel->left;
+		TreeNode *tmp3 = toDel->parent;
+
+		Side s;
+		if (tmp3)
+			s = tmp3->left == toDel ? left : right;
+		bool tmpColor = toDel->color;
+
+		toDel->right = replNode->right;
+		toDel->left = replNode->left;
+		if (toDel->parent != toDel)
+			toDel->parent = replNode;
+		else if (replNode->parent != toDel)
+			toDel->parent = replNode->parent;
+		else
+			toDel->parent = replNode;
+		toDel->color = replNode->color;
+
+		if (tmp1->parent != toDel)
+			tmp1->parent = replNode;
+		else if (tmp3 != nullptr)
+			tmp1->parent = tmp3;
+		tmp2->parent = replNode;
+		if (tmp3)
+			s == right ? tmp3->right = replNode : tmp3->left = replNode;
+		replNode->color = tmpColor;
+		if (tmp1 != replNode)
+			replNode->right = tmp1;
+		else
+			replNode->right = toDel;
+		replNode->left = tmp2;
+		replNode->parent = tmp3;
+		if (toDel == _root)
+			_root = replNode;
+		return toDel;
 	}
 
 	void _leftSideBalance(TreeNode *node, TreeNode *parentNode, TreeNode *grandparent) {
@@ -267,7 +317,7 @@ private:
 			}
 			return;
 		}
-		_valueSwap(replacingForNode, toDelete);
+		replacingForNode = _valueSwap(replacingForNode, toDelete);
 		_erase(replacingForNode);
 	}
 
@@ -403,6 +453,7 @@ private:
 		return node;
 	}
 
+
 public:
 
 	explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : _root(nullptr), _cmp(comp), _alloc(alloc), _size(0){
@@ -426,6 +477,7 @@ public:
 		_ptr_alloc.deallocate(_beginNode, 1);
 	}
 
+
 	map& operator= (const map& x) {
 		if (this != &x) {
 			const_iterator iter = x.begin();
@@ -441,7 +493,75 @@ public:
 			erase(begin());
 	}
 
-	iterator 					begin() { return _size ? iterator(_beginNode->parent) : iterator(_endNode); }
+		void	_dPrintStrangeTreeLine(int width, TreeNode* curNode) {
+			std::stringstream ss;
+			std::string str;
+
+			std::cout.width(width);
+			if (curNode && curNode->data) {
+				ss << *(curNode->data);
+				str = ss.str();
+				if (curNode->color) {
+					str = RED_NODE_OUTPUT(ss.str());
+					width += 11;
+				}
+				std::cout << std::setw(width) << str ;
+			}
+			else if (curNode)
+				std::cout << "EN";
+			else
+				std::cout << "N";
+		}
+
+	void	_dPrintStrangeTree()
+	{
+		TreeNode *root = _root;
+		typename std::queue<typename map<Key, T>::TreeNode*> q;
+		typename map<Key, T>::TreeNode * curNode;
+		bool printTime;
+		int onLine = 1;
+		int needToPrint = 1;
+		int widthSt = 64; // CHANGE HERE 32 / 64 / 128 / 256 etc
+		int width;
+
+		q.push(root);
+		while (!q.empty()) {
+			curNode = q.front();
+			q.pop();
+			printTime = onLine == needToPrint;
+			width = printTime ? (widthSt / onLine / 2) : (widthSt / onLine);
+			_dPrintStrangeTreeLine(width, curNode);
+			--needToPrint;
+			if (curNode) {
+				q.push(curNode->left);
+				q.push(curNode->right);
+			}
+			else {
+				q.push(nullptr);
+				q.push(nullptr);
+			}
+			if (needToPrint == 0) {
+				onLine *= 2;
+				needToPrint = onLine;
+				std::cout << std::endl;
+			}
+			if (onLine == widthSt / 2)
+				break;
+		}
+		std::cout << std::endl;
+		std::cout << std::setfill('.') << std::setw(widthSt) << " " << std::endl;
+		std::cout.fill(' ');
+		std::cout << std::endl;
+	}
+
+	iterator 					begin() {
+		TreeNode *node;
+		if (_size)
+			node = _beginNode->parent;
+		else
+			node = _endNode;
+		return iterator(node);
+	}
 
 	const_iterator 				begin() const { return _size ? const_iterator(_beginNode->parent) : const_iterator(_endNode); }
 
@@ -511,6 +631,9 @@ public:
 	}
 
 	size_type erase (const key_type& k) {
+		if (_size == 1 && k == _root->data->first) {
+			std::cout << "HERREEE\n";
+		}
 		if (_size) {
 			if (_beginNode->parent)
 				_beginNode->parent->left = nullptr;
@@ -525,7 +648,12 @@ public:
 		return ret;
 	}
 
-	void erase (iterator position) { erase(position->first); };
+	void erase (iterator position) {
+		if (position != iterator(_endNode))
+			erase(position->first);
+		else
+			;
+	};
 
 	key_compare key_comp() const { return _cmp; }
 
